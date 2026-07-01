@@ -1,11 +1,11 @@
 // ============================================================
 //  content.js — PUBLISHED Badger Knowledge Base content
-//  Generated 6/30/2026, 3:08:06 PM
+//  Generated 7/1/2026, 6:45:50 PM
 //  Replace this file on your host and re-deploy to update every athlete.
 // ============================================================
 
 window.WKB_PUBLISHED = {
-  "version": "2026-06-30",
+  "version": "2026-07-01",
   "gate": {
     "athlete": "badgers",
     "coach": "coachonly"
@@ -55,6 +55,56 @@ window.WKB_PUBLISHED = {
     }
   ],
   "entries": [
+    {
+      "id": "u-1782943035321",
+      "title": "David Taylor vs. Nick Moore 2014 B1G Finals",
+      "category": "matchstudy",
+      "level": "Fundamental",
+      "author": "Coach Cassioppi",
+      "tags": [],
+      "films": [
+        {
+          "id": "f1782943020578o3y3",
+          "label": "Taylor v. Moore",
+          "role": "Match",
+          "url": "https://youtu.be/kPm5IgIF3eI?si=MAd4s24uXN41cp03",
+          "fileKey": null,
+          "fileName": null,
+          "mime": null
+        }
+      ],
+      "docs": [],
+      "hasVideo": true,
+      "summary": "Very nice chain wrestling by Taylor at 5:03.",
+      "steps": [],
+      "coachNotes": null,
+      "userAdded": true
+    },
+    {
+      "id": "u-1782941784772",
+      "title": "Jason Nolf vs. Isaiah Martinez",
+      "category": "matchstudy",
+      "level": "Fundamental",
+      "author": "Coach Cassioppi",
+      "tags": [],
+      "films": [
+        {
+          "id": "f1782941752225h7mn",
+          "label": "Nolf v. Martinez",
+          "role": "Demo",
+          "url": "https://youtu.be/KYyL23UwLKI?si=kdae9epMkEBzKgoP",
+          "fileKey": null,
+          "fileName": null,
+          "mime": null
+        }
+      ],
+      "docs": [],
+      "hasVideo": true,
+      "summary": "A lot of good action in this match. Nolf falls into a leg attack at the end of the match similar to our reaction to their level change.",
+      "steps": [],
+      "coachNotes": null,
+      "userAdded": true
+    },
     {
       "id": "u-1782244193974",
       "title": "Inside Reach Single",
