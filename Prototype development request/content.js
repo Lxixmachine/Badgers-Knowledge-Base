@@ -1,11 +1,11 @@
 // ============================================================
 //  content.js — PUBLISHED Badger Knowledge Base content
-//  Generated 7/1/2026, 6:45:50 PM
+//  Generated 7/2/2026, 12:02:32 PM
 //  Replace this file on your host and re-deploy to update every athlete.
 // ============================================================
 
 window.WKB_PUBLISHED = {
-  "version": "2026-07-01",
+  "version": "2026-07-02",
   "gate": {
     "athlete": "badgers",
     "coach": "coachonly"
