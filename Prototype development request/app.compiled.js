@@ -1339,9 +1339,1039 @@
   Object.assign(window, { normalizeDocs, docTypeLabel, DocLibrary, DocBuilder });
 })();
 
+/* ====== mindset-curriculum.jsx ====== */
+(() => {
+  const MINDSET_CURRICULUM_UNITS = [
+    {
+      id: "self-knowledge",
+      title: "Self-Knowledge",
+      description: "Build repeatable routines, understand your best performances, and clarify how you want support.",
+      lessons: [
+        {
+          id: "self-knowledge-1",
+          week: 1,
+          title: "Daily and Weekly Mindset Plan",
+          objective: "Create a sustainable routine for daily reflection and weekly preparation.",
+          notice: "Choose only habits that fit your team plan, schedule, health needs, and support system. Outdated phone and text services from the original packet are intentionally omitted.",
+          fields: [
+            { id: "daily-principles", label: "Principles I want to practice out loud", type: "checklist", options: ["I am grateful for the opportunity to wrestle", "I compete with controlled, purposeful pressure", "I can take action while accepting mistakes", "I keep engaging when the work is difficult"] },
+            { id: "daily-actions", label: "Daily mindset actions I will use", type: "checklist", options: ["Review the current lesson", "Complete one safe courage action", "Use motivating media intentionally", "Take three settling breaths before training", "Visualize responding well to adversity", "Review my goal and next action", "Rehearse my best neutral, top, and bottom actions", "Use a short pre-sleep breathing practice", "Follow my approved injury plan if applicable", "Review one clear technical cue"] },
+            { id: "journal-date", label: "Reflection date", type: "date" },
+            { id: "improved", label: "Three ways I improved today", type: "long" },
+            { id: "better", label: "One thing I could handle better", type: "long" },
+            { id: "gratitude", label: "Three things I appreciate", type: "long" },
+            { id: "tomorrow", label: "My next action for tomorrow", type: "long" },
+            { id: "weekly-actions", label: "Weekly plan", type: "checklist", options: ["Check in with a trusted support person", "Review my most recent worksheet", "Scan earlier notes for useful patterns", "Review one coach-approved learning resource", "Rehearse my full pre-match routine"] }
+          ]
+        },
+        {
+          id: "self-knowledge-2",
+          week: 2,
+          title: "Best and Toughest Match Patterns",
+          objective: "Compare thoughts, feelings, and energy before and during strong and difficult performances.",
+          fields: [
+            { id: "best-1", label: "Strong match 1: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "best-2", label: "Strong match 2: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "best-3", label: "Strong match 3: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "best-patterns", label: "Patterns across my strongest matches", type: "long" },
+            { id: "tough-1", label: "Difficult match 1: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "tough-2", label: "Difficult match 2: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "tough-3", label: "Difficult match 3: match, thoughts, feelings, and energy from 1-10", type: "long" },
+            { id: "tough-patterns", label: "Patterns across my difficult matches", type: "long" },
+            { id: "optimal-energy", label: "My useful energy range and signs I am there", type: "short" }
+          ]
+        },
+        {
+          id: "self-knowledge-3",
+          week: 3,
+          title: "Complete Wrestling Game Plan",
+          objective: "Define decisive first choices and reliable answers across neutral, top, and bottom positions.",
+          notice: "Review technical choices with your coach. The goal is clarity, not limiting safe adjustment during live wrestling.",
+          fields: [
+            { id: "neutral-takedowns", label: "My best three takedowns: shot, setup, and finish for each", type: "long" },
+            { id: "tie-responses", label: "My answer to collar ties, blocks, underhooks, two-on-ones, wrist control, and overhooks", type: "long" },
+            { id: "neutral-counters", label: "My scoring response to sweep singles, doubles, high crotches, low singles, and high singles", type: "long" },
+            { id: "front-headlock", label: "My front-headlock plan when I hold it and when my opponent holds it, standing or on the knees", type: "long" },
+            { id: "funk-strategy", label: "My approved funk or leg-pass strategy", type: "long" },
+            { id: "top-first", label: "My first move on top", type: "short" },
+            { id: "top-offense", label: "My best three top sequences: setup, move, and finish", type: "long" },
+            { id: "top-counters", label: "My top response to stand-ups, quad pods, sit-outs, Granbys, switches, and knee slides", type: "long" },
+            { id: "mat-return", label: "My safe, legal mat-return plan", type: "short" },
+            { id: "bottom-first", label: "My first move on bottom", type: "short" },
+            { id: "bottom-backups", label: "My next two bottom choices", type: "long" },
+            { id: "bottom-counters", label: "My response to chops, spirals, ankle rides, legs, crab rides, flat position, wrist rides, bars, and claws", type: "long" },
+            { id: "improvements", label: "Three technical areas to review with my coach", type: "long" }
+          ]
+        },
+        {
+          id: "self-knowledge-4",
+          week: 4,
+          title: "Pre-Match Routine",
+          objective: "Build a detailed full routine and a reliable under-two-minute reset for unexpected timing.",
+          linkedModule: "pre-match"
+        },
+        {
+          id: "self-knowledge-5",
+          week: 5,
+          title: "Match Evaluation",
+          objective: "Evaluate controllable actions before, during, and after a match instead of judging only the result.",
+          linkedModule: "post-match"
+        },
+        {
+          id: "self-knowledge-6",
+          week: 6,
+          title: "Adversity Reset Plan",
+          objective: "Pre-plan a physical reset cue and productive response for common match disruptions.",
+          fields: [
+            { id: "reset-cue", label: "My one reset gesture", type: "short", hint: "Examples: one breath, a head nod, or relaxing my hands." },
+            { id: "bad-call", label: "If I disagree with a referee call, I will...", type: "long" },
+            { id: "crowd", label: "If the crowd is loud or negative, I will...", type: "long" },
+            { id: "mistake", label: "If I make a mistake, I will...", type: "long" },
+            { id: "opponent-score", label: "If my opponent scores or executes well, I will...", type: "long" },
+            { id: "rough-action", label: "If an opponent uses rough or possibly illegal action, I will...", type: "long", hint: "Stay composed, protect yourself, and follow the referee and coach process." },
+            { id: "stalling", label: "If an opponent stalls or backs away, I will...", type: "long" },
+            { id: "poor-result", label: "If I lose or perform below my standard at an event, I will...", type: "long" },
+            { id: "scored-first", label: "If I am scored on first, I will...", type: "long" },
+            { id: "short-time-lead", label: "If I lead with little time left, I will...", type: "long" },
+            { id: "custom-1", label: "Another adversity situation and my response", type: "long" },
+            { id: "custom-2", label: "A second adversity situation and my response", type: "long" },
+            { id: "review", label: "Three reset situations to rehearse with my coach", type: "long" }
+          ]
+        },
+        {
+          id: "self-knowledge-7",
+          week: 7,
+          title: "Focused Thinking",
+          objective: "Replace reactive, outside-focused thinking with specific thoughts about controllable action.",
+          notice: "The original predator-versus-prey metaphor is translated here into focused-versus-reactive thinking while preserving respect for yourself and others.",
+          fields: [
+            { id: "wrestling", label: "Wrestling: reactive thought -> focused response", type: "long" },
+            { id: "school", label: "School: reactive thought -> focused response", type: "long" },
+            { id: "life", label: "Life: reactive thought -> focused response", type: "long" }
+          ]
+        },
+        {
+          id: "self-knowledge-8",
+          week: 8,
+          title: "Energy Conservation Plan",
+          objective: "Identify when and how to recharge without reducing a safe, complete warm-up or match effort.",
+          fields: [
+            { id: "tournaments", label: "Ways I will relax before and between tournament rounds", type: "long" },
+            { id: "duals", label: "Ways I will stay loose before and during dual meets", type: "long" },
+            { id: "competition-day", label: "Ways I will manage energy during the competition day", type: "long" },
+            { id: "during-match", label: "Brief ways I will release tension during match pauses", type: "long" }
+          ]
+        },
+        {
+          id: "self-knowledge-9",
+          week: 9,
+          title: "Why I Love Wrestling",
+          objective: "Reconnect motivation to specific parts of wrestling beyond wins and awards.",
+          fields: [
+            { id: "practice", label: "What I enjoy about practice and workouts", type: "long" },
+            { id: "duals", label: "What I enjoy about dual meets and matches", type: "long" },
+            { id: "tournaments", label: "What I enjoy about tournaments", type: "long" }
+          ]
+        },
+        {
+          id: "self-knowledge-10",
+          week: 10,
+          title: "Parent and Coach Communication",
+          objective: "Clarify which kinds of support and feedback help you compete with a clear mind.",
+          notice: "Sensitive and optional. Share only what feels safe. A trusted adult, counselor, or safeguarding lead can help with difficult family or coach dynamics. Physical contact intended to intimidate or punish is not included as a support option.",
+          sensitive: true,
+          fields: [
+            { id: "parent-focus", label: "Parent or caregiver relationship I am reflecting on", type: "short", sensitive: true },
+            { id: "parent-pressure", label: "Parent or caregiver pressure I currently perceive", type: "checklist", sensitive: true, options: ["Expectations feel hard to meet", "I feel expected to win or perform well", "I feel expected to be the best at many things", "Their standards feel higher than mine", "I notice anger or disappointment when I am not perfect", "Mistakes seem to affect how they treat me"] },
+            { id: "parent-helps", label: "What my parent or caregiver does that helps me mentally", type: "long", sensitive: true },
+            { id: "parent-hurts", label: "What unintentionally makes competition harder for me", type: "long", sensitive: true },
+            { id: "parent-critique", label: "How I prefer corrective feedback", type: "choice", sensitive: true, options: ["Direct and respectful", "Positive framing with clear correction", "Very gentle and supportive", "Less feedback unless I ask"] },
+            { id: "parent-before", label: "How I prefer support before a match", type: "choice", sensitive: true, options: ["Energizing words", "Calm and relaxed", "Light conversation or humor", "Brief technical cue", "Quiet space"] },
+            { id: "parent-after", label: "How I prefer support after a match", type: "choice", sensitive: true, options: ["Immediate respectful feedback", "Connect first and give feedback later", "Give me space and talk later"] },
+            { id: "parent-change", label: "What I hope may change and why", type: "long", sensitive: true },
+            { id: "parent-plan", label: "What I can do or request if the pattern stays the same", type: "long", sensitive: true },
+            { id: "coach-focus", label: "Coach relationship I am reflecting on", type: "short", sensitive: true },
+            { id: "coach-pressure", label: "Coach pressure I currently perceive", type: "checklist", sensitive: true, options: ["Expectations feel hard to meet", "I feel expected to win or perform well", "I feel expected to be the best at many things", "Their standards feel higher than mine", "I notice anger or disappointment when I am not perfect", "Mistakes seem to affect how they treat me"] },
+            { id: "coach-helps", label: "What my coach does that helps me mentally", type: "long", sensitive: true },
+            { id: "coach-hurts", label: "What unintentionally makes competition harder for me", type: "long", sensitive: true },
+            { id: "coach-critique", label: "How I prefer my coach to correct me", type: "choice", sensitive: true, options: ["Direct and respectful", "Positive framing with clear correction", "Very gentle and supportive", "Ask before giving extra feedback"] },
+            { id: "coach-before", label: "How I prefer coaching before a match", type: "choice", sensitive: true, options: ["Energizing words", "Calm and relaxed", "Light conversation or humor", "One brief technical cue", "Quiet space"] },
+            { id: "coach-after", label: "How I prefer coaching after a match", type: "choice", sensitive: true, options: ["Immediate respectful feedback", "Positive connection first and feedback later", "Space first and feedback later"] },
+            { id: "coach-change", label: "What I hope may change and why", type: "long", sensitive: true },
+            { id: "coach-plan", label: "What I can do or request if the pattern stays the same", type: "long", sensitive: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: "goal-setting",
+      title: "Goal Setting",
+      description: "Connect long-term direction to near-term actions, accountability, and regular reminders.",
+      lessons: [
+        {
+          id: "goal-setting-1",
+          week: 1,
+          title: "Long-Term Goals and Purpose",
+          objective: "Describe meaningful long-term direction in wrestling, school, and life.",
+          fields: [
+            { id: "wrestling-goal", label: "Long-term wrestling goal", type: "long" },
+            { id: "school-goal", label: "Long-term school or career goal", type: "long" },
+            { id: "life-goal", label: "Long-term life goal", type: "long" },
+            { id: "wrestling-purpose", label: "Why wrestling matters to me", type: "long" },
+            { id: "school-purpose", label: "Why learning or career growth matters to me", type: "long" },
+            { id: "life-purpose", label: "Values or purpose I want my life to express", type: "long", sensitive: true, hint: "Spiritual or faith-based language is welcome but never required." },
+            { id: "bucket-family", label: "Family or relationship experiences on my life list", type: "long", sensitive: true },
+            { id: "bucket-travel", label: "Places or adventures on my life list", type: "long" },
+            { id: "bucket-other", label: "Other life experiences I hope to have", type: "long" }
+          ]
+        },
+        {
+          id: "goal-setting-2",
+          week: 2,
+          title: "Six-Month and One-Year Commitments",
+          objective: "Set near-term goals and choose a personal reminder that keeps them visible.",
+          fields: [
+            { id: "six-wrestling", label: "Six-month wrestling goal", type: "long" },
+            { id: "six-school", label: "Six-month school goal", type: "long" },
+            { id: "six-life", label: "Six-month life goal", type: "long" },
+            { id: "year-wrestling", label: "One-year wrestling goal", type: "long" },
+            { id: "year-school", label: "One-year school goal", type: "long" },
+            { id: "year-life", label: "One-year life goal", type: "long" },
+            { id: "commitment", label: "My typed commitment", type: "short" },
+            { id: "date", label: "Commitment date", type: "date" },
+            { id: "reminder", label: "Safe reminder I will keep or place where I will notice it", type: "short" }
+          ]
+        },
+        {
+          id: "goal-setting-3",
+          week: 3,
+          title: "Complete Action Plan",
+          objective: "Translate goals into controllable daily and weekly actions across performance and recovery.",
+          notice: "Training, nutrition, and recovery actions should align with your coach, athletic trainer, clinician, and dietitian guidance.",
+          fields: [
+            { id: "technique", label: "Technique actions", type: "long" },
+            { id: "mindset", label: "Mindset actions", type: "long" },
+            { id: "strength", label: "Strength actions", type: "long" },
+            { id: "tendon-health", label: "Tendon and joint-health actions", type: "long" },
+            { id: "plyometrics", label: "Approved explosive-power actions", type: "long" },
+            { id: "flexibility", label: "Mobility and flexibility actions", type: "long" },
+            { id: "conditioning", label: "Conditioning actions", type: "long" },
+            { id: "nutrition", label: "Nutrition actions", type: "long" },
+            { id: "sleep", label: "Sleep actions", type: "long" },
+            { id: "recovery", label: "Rest and recovery actions", type: "long" }
+          ]
+        },
+        {
+          id: "goal-setting-4",
+          week: 4,
+          title: "Supportive Accountability",
+          objective: "Choose healthy rewards and boundaries that make following the action plan easier.",
+          notice: "Use proportionate, non-shaming consequences. Do not use food, sleep, needed social support, or excessive exercise as a reward or punishment.",
+          fields: [
+            { id: "reward", label: "Healthy reward I may choose after completing my plan", type: "long" },
+            { id: "boundary", label: "Optional leisure I will postpone when my planned work is incomplete", type: "long" },
+            { id: "reset", label: "How I will reset without shame after a missed day", type: "long" }
+          ]
+        },
+        {
+          id: "goal-setting-5",
+          week: 5,
+          title: "Goal Reminders",
+          objective: "Create private or shared reminders that keep the goal connected to daily action.",
+          notice: "Public posting is optional. Protect personal information and follow team, school, and family social-media rules.",
+          fields: [
+            { id: "places", label: "Five places I can safely display or review my goal", type: "long" },
+            { id: "future-image", label: "Sketch description or image plan for myself completing the goal", type: "long" },
+            { id: "share-choice", label: "Do I want to share this goal?", type: "choice", sensitive: true, options: ["Privately with one trusted person", "With my team or support group", "Publicly with appropriate permission", "Not now"] },
+            { id: "share-plan", label: "Where, when, and with whom I may share it", type: "long", sensitive: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: "mental-toughness",
+      title: "Mental Toughness",
+      description: "Practice courage, values-based choices, accountability, and safe responses to fatigue and adversity.",
+      lessons: [
+        {
+          id: "mental-toughness-1",
+          week: 1,
+          title: "30-Day Courage Practice",
+          objective: "Take one safe, voluntary step outside your comfort zone each day.",
+          notice: "Challenges must be age-appropriate, coach-approved when athletic, and free of hazing, punishment, dangerous fatigue, or pressure to disclose private information.",
+          fields: [
+            { id: "days-1-7", label: "Days 1-7 courage actions", type: "long" },
+            { id: "days-8-14", label: "Days 8-14 courage actions", type: "long" },
+            { id: "days-15-21", label: "Days 15-21 courage actions", type: "long" },
+            { id: "days-22-30", label: "Days 22-30 courage actions", type: "long" }
+          ]
+        },
+        {
+          id: "mental-toughness-2",
+          week: 2,
+          title: "Values and Personal Boundaries",
+          objective: "Clarify the values, beliefs, and boundaries that guide decisions on and off the mat.",
+          notice: "Sensitive and optional. Faith, spirituality, relationships, substances, and social life are personal. Choose secular or spiritual reflection, and seek a trusted adult or qualified professional when support is needed.",
+          sensitive: true,
+          fields: [
+            { id: "beliefs", label: "Beliefs, values, or philosophies I want to live by", type: "long", sensitive: true },
+            { id: "reaffirm", label: "Actions that help me reconnect with my values", type: "checklist", sensitive: true, options: ["Prayer or faith practice", "Meditation or quiet reflection", "Values journaling", "Service or helping others", "Conversation with a trusted mentor", "Another personally meaningful practice"] },
+            { id: "parties", label: "My boundary for parties and social events", type: "long", sensitive: true },
+            { id: "alcohol", label: "My boundary for alcohol", type: "long", sensitive: true },
+            { id: "substances", label: "My boundary for tobacco, vaping, and other drugs", type: "long", sensitive: true },
+            { id: "relationships", label: "My boundary for dating and friendships", type: "long", sensitive: true },
+            { id: "late-nights", label: "My boundary for late nights", type: "long", sensitive: true },
+            { id: "barriers", label: "People, places, feelings, or situations that make my boundaries harder", type: "long", sensitive: true },
+            { id: "improvements", label: "Concrete, safe ways I can protect my boundaries", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "mental-toughness-3",
+          week: 3,
+          title: "Accountability Partner and Self-Audit",
+          objective: "Identify improvement areas and choose a trusted person for respectful, consent-based check-ins.",
+          notice: "Sensitive and optional. Do not share sensitive answers unless you choose to. Use a counselor, healthcare professional, safeguarding lead, or trusted adult for addiction, abuse, unsafe relationships, self-harm, or serious mental-health concerns.",
+          sensitive: true,
+          fields: [
+            { id: "buddy", label: "Trusted accountability person", type: "short", sensitive: true },
+            { id: "checkin", label: "Regular check-in time", type: "time", sensitive: true },
+            { id: "sharing", label: "What I consent to share", type: "choice", sensitive: true, options: ["Only goals and next actions", "Selected reflections", "I am not ready to share"] },
+            { id: "sport-audit", label: "Wrestling areas I want to examine", type: "checklist", options: ["Effort and attitude", "Composure and body language", "Enjoyment", "Practice-to-match habits", "Positions needing work", "Coachability", "Nutrition support", "Sleep", "Training consistency", "Mindset routine", "Mobility", "Explosive power", "Taking appropriate chances", "Asking coaches questions", "Other"] },
+            { id: "school-audit", label: "School areas I want to examine", type: "checklist", sensitive: true, options: ["Effort and attitude", "Subjects needing support", "Study quality", "Homework time", "Attendance", "College or career steps", "Class participation", "Asking questions", "Extra help", "Study method", "Note taking", "Teacher communication", "Phone distraction", "Other"] },
+            { id: "life-audit", label: "Life areas I may want to examine", type: "checklist", sensitive: true, options: ["Relationships and support", "Substances or unsafe social pressure", "Screen time", "Values or faith", "How I treat people", "Organization", "Media habits", "Peer group or environments", "Spending", "Procrastination", "Perfectionism", "Complaining or grudges", "Honesty", "Addiction concerns", "Mental-health support", "Other"] },
+            { id: "sport-resolution", label: "Wrestling improvement area and next resolution", type: "long" },
+            { id: "school-resolution", label: "School improvement area and next resolution", type: "long", sensitive: true },
+            { id: "life-resolution", label: "Life improvement area and next resolution", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "mental-toughness-4",
+          week: 4,
+          title: "Safe Fatigue Confidence Plan",
+          objective: "Build confidence in conditioning through approved training and a useful focus cue.",
+          notice: "Do not add unsupervised workouts or train through warning signs. Follow your coach, athletic trainer, physician, recovery plan, and team load limits.",
+          fields: [
+            { id: "approval", label: "Status of this plan", type: "choice", options: ["Not started", "Reviewed with coach", "Reviewed with athletic trainer or clinician when needed"] },
+            { id: "intensity", label: "Approved intensity", type: "short" },
+            { id: "frequency", label: "Approved frequency", type: "short" },
+            { id: "duration", label: "Approved duration", type: "short" },
+            { id: "focal-point", label: "Word, image, or cue I will use when normal fatigue appears", type: "long" }
+          ]
+        },
+        {
+          id: "mental-toughness-5",
+          week: 5,
+          title: "Evidence of Resilience",
+          objective: "Remember past resilience and plan one safe, meaningful challenge.",
+          notice: "Sensitive and optional. Do not revisit trauma without appropriate support. Extreme examples from the original packet, such as day-long workouts or enormous repetition counts, are replaced with supervised, age-appropriate challenges.",
+          sensitive: true,
+          fields: [
+            { id: "hardships", label: "Difficulties I have safely moved through", type: "long", sensitive: true },
+            { id: "lessons", label: "What those experiences show me about my strengths", type: "long", sensitive: true },
+            { id: "challenge", label: "One supervised, time-limited challenge I choose", type: "long" },
+            { id: "support", label: "Who will approve or support the challenge", type: "short" }
+          ]
+        },
+        {
+          id: "mental-toughness-6",
+          week: 6,
+          title: "Past Fatigue Successes",
+          objective: "Recall specific times you kept making sound decisions during normal competitive fatigue.",
+          fields: [
+            { id: "neutral", label: "Neutral-position example and what helped", type: "long" },
+            { id: "top", label: "Top-position example and what helped", type: "long" },
+            { id: "bottom", label: "Bottom-position example and what helped", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "motivation",
+      title: "Motivation",
+      description: "Identify role models, personal drivers, responsibility statements, and useful ways to frame success.",
+      lessons: [
+        {
+          id: "motivation-1",
+          week: 1,
+          title: "Role Models and Reminder Cue",
+          objective: "Choose examples of resilience and create a cue that reconnects you with what you admire.",
+          fields: [
+            { id: "wrestling-models", label: "Wrestling role models and qualities I admire", type: "long" },
+            { id: "school-life-models", label: "School or life role models and qualities I admire", type: "long" },
+            { id: "image-place", label: "Where I may keep an appropriate reminder", type: "short" },
+            { id: "videos", label: "Approved videos or stories I may review", type: "long" },
+            { id: "timing", label: "When I will review them", type: "short" },
+            { id: "anchor", label: "My simple reminder gesture", type: "short" }
+          ]
+        },
+        {
+          id: "motivation-2",
+          week: 2,
+          title: "Excuses to Responsibility",
+          objective: "Notice recurring excuses and rewrite each as a specific responsibility you can act on.",
+          fields: [
+            { id: "wrestling-excuses", label: "Wrestling excuses I notice", type: "long" },
+            { id: "wrestling-responsibility", label: "Wrestling responsibility statements", type: "long" },
+            { id: "school-excuses", label: "School excuses I notice", type: "long" },
+            { id: "school-responsibility", label: "School responsibility statements", type: "long" }
+          ]
+        },
+        {
+          id: "motivation-3",
+          week: 3,
+          title: "Motivation Buttons",
+          objective: "Identify what reliably energizes purposeful action and when to use it.",
+          fields: [
+            { id: "buttons", label: "Songs, people, goals, memories, phrases, or experiences that motivate me", type: "long" },
+            { id: "situations", label: "Situations when I will use a motivation button", type: "long" }
+          ]
+        },
+        {
+          id: "motivation-4",
+          week: 4,
+          title: "Habit Costs and Benefits",
+          objective: "Make the current and future costs and benefits of habits easier to see.",
+          fields: [
+            { id: "old-1", label: "Old habit 1: task, costs, and current payoff", type: "long" },
+            { id: "old-2", label: "Old habit 2: task, costs, and current payoff", type: "long" },
+            { id: "old-3", label: "Old habit 3: task, costs, and current payoff", type: "long" },
+            { id: "old-4", label: "Old habit 4: task, costs, and current payoff", type: "long" },
+            { id: "new-1", label: "Productive habit 1: effort cost and useful benefit", type: "long" },
+            { id: "new-2", label: "Productive habit 2: effort cost and useful benefit", type: "long" },
+            { id: "new-3", label: "Productive habit 3: effort cost and useful benefit", type: "long" },
+            { id: "new-4", label: "Productive habit 4: effort cost and useful benefit", type: "long" }
+          ]
+        },
+        {
+          id: "motivation-5",
+          week: 5,
+          title: "Redefining Success, Failure, and Mistakes",
+          objective: "Define success through values and controllable behavior while treating errors as information.",
+          fields: [
+            { id: "success", label: "My useful definition of success", type: "long" },
+            { id: "failure", label: "My useful definition of failure", type: "long" },
+            { id: "mistakes", label: "How I want to view mistakes, losses, and errors", type: "long" }
+          ]
+        },
+        {
+          id: "motivation-6",
+          week: 6,
+          title: "Self-Sabotage Patterns",
+          objective: "Identify thoughts that pull you away from your goals and write grounded alternatives.",
+          fields: [
+            { id: "patterns", label: "Self-sabotaging thoughts or situations I notice", type: "long" },
+            { id: "responses", label: "More grounded and empowering responses", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "present-moment",
+      title: "Present Moment",
+      description: "Reduce distraction, trust trained skills, simplify decisions, and respond flexibly to thoughts.",
+      lessons: [
+        {
+          id: "present-moment-1",
+          week: 1,
+          title: "Hype and Information Boundaries",
+          objective: "Notice sports-media habits that increase distraction and decide how to handle outside hype.",
+          fields: [
+            { id: "habits", label: "Rankings, records, posts, brackets, forums, or opponent research that distract me", type: "long" },
+            { id: "sources", label: "People or situations that bring hype into my attention", type: "long" },
+            { id: "responses", label: "How I will respond and return to the current job", type: "long" }
+          ]
+        },
+        {
+          id: "present-moment-2",
+          week: 2,
+          title: "Compete From Your Own Values",
+          objective: "Reduce fear of disappointing others and reconnect competition to your own values and love of the sport.",
+          notice: "Sensitive and optional. You do not need to name anyone if doing so feels unsafe or unhelpful.",
+          sensitive: true,
+          fields: [
+            { id: "people", label: "People whose reactions or expectations I worry about", type: "long", sensitive: true },
+            { id: "statement", label: "My statement for competing from my own values", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "present-moment-3",
+          week: 3,
+          title: "Practice Trusting Your Technique",
+          objective: "Plan times to drill familiar technique with feel, flow, and appropriate adjustment.",
+          notice: "Technical correction still matters. Use flow-focused repetitions only for skills your coach says are ready for that kind of practice.",
+          fields: [
+            { id: "practice-plan", label: "When and how I will practice familiar technique with flow", type: "long" },
+            { id: "trust-cue", label: "Physical or visual cue that reminds me to trust and keep moving", type: "short" }
+          ]
+        },
+        {
+          id: "present-moment-4",
+          week: 4,
+          title: "Breathing and a Settling Image",
+          objective: "Use a comfortable breathing practice and a personal image to return attention to the present.",
+          notice: "Breathe naturally and stop if you feel dizzy or uncomfortable. This is a focus skill, not medical treatment.",
+          fields: [
+            { id: "image", label: "Image or place that helps me feel steady", type: "long" },
+            { id: "practice-time", label: "A realistic time to practice calm breathing", type: "time" }
+          ]
+        },
+        {
+          id: "present-moment-5",
+          week: 5,
+          title: "Priorities and Simple Decisions",
+          objective: "Compare current and ideal priorities, then choose questions that simplify difficult decisions.",
+          fields: [
+            { id: "ideal-priorities", label: "My ideal top five priorities in order", type: "long", hint: "Faith or spirituality may be included but is never required." },
+            { id: "current-priorities", label: "My current top five priorities based on how I spend time and attention", type: "long" },
+            { id: "steps", label: "Three steps that move my current priorities toward my ideal", type: "long" },
+            { id: "questions", label: "Questions I will use in complex situations", type: "checklist", options: ["Is this thought useful and grounded?", "Is this focused on what I control?", "Does this choice reflect my priorities?", "Does this move me toward or away from my goal?", "Am I willing and able to change this situation?", "If I cannot change it now, how can I respond well?"] },
+            { id: "custom-question", label: "Another decision question that works for me", type: "long" }
+          ]
+        },
+        {
+          id: "present-moment-6",
+          week: 6,
+          title: "Complaints to Gratitude",
+          objective: "Practice broadening attention by finding useful or appreciated parts of difficult situations.",
+          notice: "Gratitude can be helpful, but it does not replace honest emotion, problem solving, counseling, or treatment for depression or other mental-health concerns.",
+          fields: [
+            { id: "complaint-1", label: "Complaint 1 and three things I can appreciate or use", type: "long" },
+            { id: "complaint-2", label: "Complaint 2 and three things I can appreciate or use", type: "long" },
+            { id: "complaint-3", label: "Complaint 3 and three things I can appreciate or use", type: "long" },
+            { id: "gratitude-list", label: "Other things I appreciate", type: "long" }
+          ]
+        },
+        {
+          id: "present-moment-7",
+          week: 7,
+          title: "Notice and Release Automatic Thoughts",
+          objective: "Notice recurring thoughts, judge whether they are useful, and return gently to a chosen response.",
+          notice: "Persistent or distressing thoughts deserve support from a qualified mental-health professional. This reflection is not a substitute for care.",
+          fields: [
+            { id: "thought-1", label: "Recurring thought 1", type: "long", sensitive: true },
+            { id: "response-1", label: "How I will notice, evaluate, and gently release it", type: "long", sensitive: true },
+            { id: "thought-2", label: "Recurring thought 2", type: "long", sensitive: true },
+            { id: "response-2", label: "How I will notice, evaluate, and gently release it", type: "long", sensitive: true },
+            { id: "thought-3", label: "Recurring thought 3", type: "long", sensitive: true },
+            { id: "response-3", label: "How I will notice, evaluate, and gently release it", type: "long", sensitive: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: "relaxing-under-pressure",
+      title: "Relaxing Under Pressure",
+      description: "Interpret arousal constructively, plan for pressure, and recognize thinking habits that increase stress.",
+      lessons: [
+        {
+          id: "relaxing-under-pressure-1",
+          week: 1,
+          title: "Name Competitive Energy",
+          objective: "Describe physical signs of arousal and choose an interpretation that supports useful action.",
+          notice: "Nervousness is normal. Reframing may help performance, but it is not a requirement to feel positive and does not replace mental-health care.",
+          fields: [
+            { id: "current-label", label: "How I currently interpret pre-match physical sensations", type: "long" },
+            { id: "useful-label", label: "A more useful, believable interpretation", type: "long" }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-2",
+          week: 2,
+          title: "Make Practice and Matches Familiar",
+          objective: "Create safe similarities between live practice and competition preparation.",
+          notice: "Equipment, contact, warm-up intensity, and simulated matches must follow coach direction and safety rules.",
+          fields: [
+            { id: "practice-like-match", label: "Ways coach-approved practice can feel more like competition", type: "long" },
+            { id: "match-like-practice", label: "Ways my competition warm-up can feel familiar from practice", type: "long" }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-3",
+          week: 3,
+          title: "Pressure Factors and Coping Plans",
+          objective: "Identify three pressure sources and write a respectful coping plan for each.",
+          notice: "Sensitive and optional. If pressure includes threats, abuse, harassment, or unsafe conduct, talk with a trusted adult or safeguarding lead.",
+          sensitive: true,
+          fields: [
+            { id: "factor-1", label: "Pressure factor 1", type: "long", sensitive: true },
+            { id: "cope-1", label: "Coping plan 1", type: "long", sensitive: true },
+            { id: "factor-2", label: "Pressure factor 2", type: "long", sensitive: true },
+            { id: "cope-2", label: "Coping plan 2", type: "long", sensitive: true },
+            { id: "factor-3", label: "Pressure factor 3", type: "long", sensitive: true },
+            { id: "cope-3", label: "Coping plan 3", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-4",
+          week: 4,
+          title: "Assumptions and Superstitions",
+          objective: "Challenge performance-limiting assumptions and keep routines flexible enough to remain under your control.",
+          notice: "Do not record or reinforce stereotypes about protected identities. Focus on unsupported performance assumptions such as body type, school, gear, record, or experience.",
+          fields: [
+            { id: "assumptions", label: "Performance assumptions I sometimes make", type: "long", sensitive: true },
+            { id: "counterexamples", label: "Facts or counterexamples that challenge those assumptions", type: "long", sensitive: true },
+            { id: "superstitions", label: "Rituals or conditions that feel compulsory", type: "long" },
+            { id: "flexibility-plan", label: "How I will practice flexibility and keep the routine under my control", type: "long" }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-5",
+          week: 5,
+          title: "Face the Feared Outcome",
+          objective: "Name a feared match outcome and make a grounded plan for handling it.",
+          notice: "Sensitive and optional. Choose an ordinary performance fear, not trauma. Seek qualified support if this reflection becomes overwhelming.",
+          sensitive: true,
+          fields: [
+            { id: "worst-case", label: "The performance outcome I fear most", type: "long", sensitive: true },
+            { id: "response", label: "What I would do, think, and ask for if it happened", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-6",
+          week: 6,
+          title: "Flexible Self-Talk",
+          objective: "Notice rigid or extreme language and experiment with clearer, more workable words.",
+          notice: "These are options, not rules. Use language that is accurate and helpful to you; spiritual wording is optional.",
+          fields: [
+            { id: "patterns", label: "Language patterns I often use", type: "checklist", options: ["Should, have to, must", "Try or trying", "Luck language that overlooks preparation or support", "I already know this", "Worry language", "Always, never, everyone, or no one", "Catastrophic words such as awful or terrible", "Perfection language", "Negative commands", "Why-me questions", "React language", "I do not have time", "Can or could used to avoid commitment", "Problem language"] },
+            { id: "alternatives", label: "More accurate alternatives I want to practice", type: "long", hint: "Examples: choose or want; specific frequency words; inconvenient or challenging; positive action cues; how questions; respond; make time." },
+            { id: "top-three", label: "Three language habits I will review with a trusted coach or mentor", type: "long" }
+          ]
+        },
+        {
+          id: "relaxing-under-pressure-7",
+          week: 7,
+          title: "Thinking Traps",
+          objective: "Recognize common cognitive distortions and choose three patterns to work on.",
+          notice: "This educational checklist is not a diagnosis. A counselor or licensed clinician can help with persistent distress.",
+          fields: [
+            { id: "distortions", label: "Thinking traps I notice", type: "checklist", sensitive: true, options: ["All-or-nothing thinking", "Overgeneralizing", "Mental filtering", "Jumping to conclusions", "Mind reading", "Fortune telling", "Magnifying negatives", "Minimizing positives", "Emotional reasoning", "Labeling myself or others", "Fixed-mindset conclusions"] },
+            { id: "top-three", label: "Three patterns I most want to improve", type: "long", sensitive: true },
+            { id: "reframes", label: "A more balanced response for each selected pattern", type: "long", sensitive: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: "confidence",
+      title: "Confidence",
+      description: "Build confidence from evidence, skill preparation, body language, imagery, and realistic self-talk.",
+      lessons: [
+        {
+          id: "confidence-1",
+          week: 1,
+          title: "Confidence Cue, Successes, and Strengths",
+          objective: "Pair a simple cue with specific evidence of past success and existing strengths.",
+          fields: [
+            { id: "anchor", label: "My confidence cue or gesture", type: "short" },
+            { id: "success-wrestling", label: "Wrestling successes and strong performances", type: "long" },
+            { id: "success-physical", label: "Physical preparation or progress I am proud of", type: "long" },
+            { id: "success-life", label: "School or life successes", type: "long" },
+            { id: "strength-wrestling", label: "Wrestling strengths and reliable moves", type: "long" },
+            { id: "strength-physical", label: "Physical strengths", type: "long" },
+            { id: "strength-life", label: "Personal, school, or life strengths", type: "long" }
+          ]
+        },
+        {
+          id: "confidence-2",
+          week: 2,
+          title: "Comparable Examples and Technique Models",
+          objective: "Use other athletes' experiences and proven technique examples as grounded evidence that growth is possible.",
+          fields: [
+            { id: "similar-people", label: "People with relevant similarities who reached a goal like mine", type: "long" },
+            { id: "technique-models", label: "High-level wrestlers who use techniques similar to mine", type: "long" },
+            { id: "takeaways", label: "What I can realistically learn from these examples", type: "long" }
+          ]
+        },
+        {
+          id: "confidence-3",
+          week: 3,
+          title: "Confident Body Language",
+          objective: "Describe and practice body language that helps you feel ready and engaged.",
+          notice: "Confidence does not require hiding pain, fear, injury, or a need for help.",
+          fields: [
+            { id: "appearance", label: "How I look, move, and communicate when I feel ready", type: "long" },
+            { id: "situations", label: "Situations when confident body language may help", type: "long" },
+            { id: "practice-place", label: "Where I will practice", type: "short" },
+            { id: "practice-time", label: "When I will practice", type: "time" }
+          ]
+        },
+        {
+          id: "confidence-4",
+          week: 4,
+          title: "Daily Confidence Statements",
+          objective: "Write believable, specific statements about preparation, effort, wrestling, and life.",
+          fields: [
+            { id: "statements", label: "My daily confidence statements", type: "long", hint: "Keep them grounded in actions, values, skills, and evidence." },
+            { id: "review-time", label: "When I will review them", type: "time" }
+          ]
+        },
+        {
+          id: "confidence-5",
+          week: 5,
+          title: "Success Imagery and Highlight Review",
+          objective: "Practice vivid, realistic imagery and review video that reinforces effective execution.",
+          notice: "Use a duration that fits your attention and schedule; the original ten-minute target is optional.",
+          fields: [
+            { id: "visualization-place", label: "Time and place for imagery practice", type: "long" },
+            { id: "visualization-focus", label: "Skills, senses, and responses I will imagine", type: "long" },
+            { id: "video", label: "Highlight or strong-performance video I will review", type: "long" }
+          ]
+        },
+        {
+          id: "confidence-6",
+          week: 6,
+          title: "Competence Through Quality Repetitions",
+          objective: "Plan coach-approved quality repetitions for your best neutral, top, and bottom techniques.",
+          notice: "Quality, recovery, and coach guidance matter more than an arbitrary lifetime repetition number. Stop for pain or loss of safe form.",
+          fields: [
+            { id: "neutral", label: "Neutral setup, move, finish, and approved weekly repetitions", type: "long" },
+            { id: "top", label: "Top setup, move, finish, and approved weekly repetitions", type: "long" },
+            { id: "bottom", label: "Bottom setup, move, finish, and approved weekly repetitions", type: "long" }
+          ]
+        },
+        {
+          id: "confidence-7",
+          week: 7,
+          title: "Evidence for Your Goal",
+          objective: "Build a realistic case for pursuing your goal based on preparation, strengths, values, and support.",
+          fields: [
+            { id: "goal", label: "My goal", type: "long" },
+            { id: "evidence", label: "Evidence that I can keep progressing toward it", type: "long" },
+            { id: "statement", label: "My grounded commitment statement", type: "long" }
+          ]
+        },
+        {
+          id: "confidence-8",
+          week: 8,
+          title: "Confidence and Arrogance",
+          objective: "Distinguish self-belief and coachability from comparison, defensiveness, and disrespect.",
+          fields: [
+            { id: "confidence", label: "What confidence looks and sounds like", type: "long" },
+            { id: "arrogance", label: "What arrogance or disrespect looks and sounds like", type: "long" },
+            { id: "balance", label: "How I will combine confidence, humility, and coachability", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "clarity",
+      title: "Clarity",
+      description: "Choose go-to actions and compact cues for neutral, bottom, top, and common match situations.",
+      lessons: [
+        {
+          id: "clarity-1",
+          week: 1,
+          title: "Neutral Clarity",
+          objective: "Choose three reliable takedowns and one compact neutral cue, image, and gesture.",
+          fields: [
+            { id: "takedown-1", label: "Best takedown 1", type: "short" },
+            { id: "takedown-2", label: "Best takedown 2", type: "short" },
+            { id: "takedown-3", label: "Best takedown 3", type: "short" },
+            { id: "cue", label: "Neutral word or short phrase", type: "short" },
+            { id: "image-song", label: "Neutral image or song", type: "short" },
+            { id: "anchor", label: "Neutral reminder gesture", type: "short" }
+          ]
+        },
+        {
+          id: "clarity-2",
+          week: 2,
+          title: "Bottom Clarity",
+          objective: "Choose a first move, two reliable escapes or reversals, and a compact bottom cue.",
+          fields: [
+            { id: "first-move", label: "First move on bottom", type: "short" },
+            { id: "escape-1", label: "Best escape or reversal 1", type: "short" },
+            { id: "escape-2", label: "Best escape or reversal 2", type: "short" },
+            { id: "cue", label: "Bottom word or short phrase", type: "short" },
+            { id: "image-song", label: "Bottom image or song", type: "short" },
+            { id: "anchor", label: "Bottom reminder gesture", type: "short" }
+          ]
+        },
+        {
+          id: "clarity-3",
+          week: 3,
+          title: "Top Clarity",
+          objective: "Choose a first move, three reliable turns, and a compact top cue.",
+          fields: [
+            { id: "first-move", label: "First move on top", type: "short" },
+            { id: "turn-1", label: "Best turn or pinning combination 1", type: "short" },
+            { id: "turn-2", label: "Best turn or pinning combination 2", type: "short" },
+            { id: "turn-3", label: "Best turn or pinning combination 3", type: "short" },
+            { id: "cue", label: "Top word or short phrase", type: "short" },
+            { id: "image-song", label: "Top image or song", type: "short" },
+            { id: "anchor", label: "Top reminder gesture", type: "short" }
+          ]
+        },
+        {
+          id: "clarity-4",
+          week: 4,
+          title: "Go-To Answers for Common Situations",
+          objective: "Choose a safe, legal response and short cue for common positions.",
+          notice: "Review every move with your coach and adapt to rules, position, score, time, and safety.",
+          fields: [
+            { id: "collar-tie", label: "Collar tie: response and cue", type: "short" },
+            { id: "front-headlock-top", label: "Front headlock when I am above: response and cue", type: "short" },
+            { id: "front-headlock-bottom", label: "Front headlock when I am below: response and cue", type: "short" },
+            { id: "mat-return-top", label: "Mat return when I am on top: response and cue", type: "short" },
+            { id: "mat-return-bottom", label: "Mat return when I am on bottom: response and cue", type: "short" },
+            { id: "funk", label: "Funk scramble or leg pass: response and cue", type: "short" },
+            { id: "leg-counter", label: "Leg-ride counter: response and cue", type: "short" },
+            { id: "crab-counter", label: "Crab-ride counter: response and cue", type: "short" },
+            { id: "quad-pod", label: "Opponent quad pods: response and cue", type: "short" },
+            { id: "finish-1", label: "Takedown finish 1 and cue", type: "short" },
+            { id: "finish-2", label: "Takedown finish 2 and cue", type: "short" },
+            { id: "finish-3", label: "Takedown finish 3 and cue", type: "short" }
+          ]
+        },
+        {
+          id: "clarity-5",
+          week: 5,
+          title: "Distraction Interrupt Plans",
+          objective: "Pair common match distractions with a brief interrupt cue and productive next plan.",
+          fields: [
+            { id: "self-doubt", label: "Self-doubt: interrupt cue and next plan", type: "long" },
+            { id: "first-match", label: "First match of the event: cue and plan", type: "long" },
+            { id: "last-match", label: "Last match of the event: cue and plan", type: "long" },
+            { id: "gossip", label: "Overheard gossip or predictions: cue and plan", type: "long" },
+            { id: "team-ahead", label: "Teammates are winning before me: cue and plan", type: "long" },
+            { id: "team-behind", label: "Teammates are losing before me: cue and plan", type: "long" },
+            { id: "upset", label: "A major upset happens before my match: cue and plan", type: "long" },
+            { id: "interview", label: "Interview or media attention: cue and plan", type: "long" },
+            { id: "custom", label: "Another distraction: cue and plan", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "controlled-aggression",
+      title: "Controlled Aggression",
+      description: "Develop decisive, legal, technically sound pressure while preserving safety and sportsmanship.",
+      lessons: [
+        {
+          id: "controlled-aggression-1",
+          week: 1,
+          title: "Competitive Alter Ego",
+          objective: "Create an optional performance character that helps you act decisively without changing your values.",
+          notice: "An alter ego is a focus tool, not permission to demean, threaten, or harm anyone. You remain responsible for legal technique, emotional control, and sportsmanship.",
+          fields: [
+            { id: "name", label: "Performance-character name", type: "short" },
+            { id: "birthday", label: "Date I created this character", type: "date" },
+            { id: "qualities", label: "Calm, courageous, decisive qualities I want to embody", type: "long" },
+            { id: "inner-critic", label: "A lighthearted name for my doubtful inner voice", type: "short", sensitive: true },
+            { id: "critic-response", label: "Respectful words I will use to redirect that voice", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "controlled-aggression-2",
+          week: 2,
+          title: "Flip-the-Switch Routine",
+          objective: "Choose safe physical and sensory cues that signal readiness to compete.",
+          notice: "Color, haircut, and appearance do not guarantee performance. Clothing, markings, sounds, and equipment must follow team, school, event, and safety rules.",
+          fields: [
+            { id: "switch", label: "My safe physical switch or cue", type: "short" },
+            { id: "colors", label: "Optional color or gear cue", type: "short" },
+            { id: "appearance", label: "Optional grooming or appearance routine that feels like me", type: "short" },
+            { id: "sound", label: "Quiet or rules-compliant sound cue", type: "short" },
+            { id: "symbol", label: "Rules-compliant symbol or equipment cue", type: "short" },
+            { id: "other", label: "Other safe additions", type: "long" }
+          ]
+        },
+        {
+          id: "controlled-aggression-3",
+          week: 3,
+          title: "Assertive, Legal Execution",
+          objective: "Practice initiating, continuing to score, and seeking strong competition with control and respect.",
+          notice: "The original harm, domination, and extreme score-chasing language is replaced. Never target injury, humiliate a partner, create unsafe mismatches, or continue beyond coach direction.",
+          fields: [
+            { id: "intent", label: "I am ready to initiate safe, legal offense", type: "choice", options: ["Yes", "Developing", "Not sure yet"] },
+            { id: "partner", label: "Coach-approved partner who will challenge me appropriately", type: "short" },
+            { id: "high-output-plan", label: "Safe practice scenario for continuing purposeful scoring", type: "long" },
+            { id: "tally", label: "Dates and brief notes from completed coach-approved scenarios", type: "long" }
+          ]
+        },
+        {
+          id: "controlled-aggression-4",
+          week: 4,
+          title: "Assertive Role Models",
+          objective: "Study athletes who combine initiative and pressure with technique, control, and respect.",
+          fields: [
+            { id: "models", label: "Assertive wrestler role models", type: "long" },
+            { id: "behaviors", label: "Safe behaviors I can integrate", type: "long", hint: "Examples: purposeful first contact, re-attacks, finishing at the edge, returning promptly to center, and staying composed." },
+            { id: "videos", label: "Approved video I will review each week", type: "long" }
+          ]
+        },
+        {
+          id: "controlled-aggression-5",
+          week: 5,
+          title: "Readiness Buttons",
+          objective: "Collect appropriate media and symbols that help you enter a controlled, assertive mindset.",
+          fields: [
+            { id: "videos", label: "Videos or movies", type: "long" },
+            { id: "songs", label: "Songs", type: "long" },
+            { id: "quotes", label: "Quotes or phrases", type: "long" },
+            { id: "symbols", label: "Animals, heroes, or symbols", type: "long" },
+            { id: "plan", label: "How I will organize and use these cues appropriately", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sleep-recovery",
+      title: "Sleep and Recovery",
+      description: "Build consistent, evidence-informed sleep routines without unsafe weight-control or unsupported remedy claims.",
+      lessons: [
+        {
+          id: "sleep-recovery-1",
+          week: 1,
+          title: "Sleep Environment and Habits",
+          objective: "Select realistic habits that give your body a consistent opportunity to sleep.",
+          notice: "General education only. Student-athletes often need more than eight hours. Discuss persistent sleep trouble, snoring, breathing issues, supplements, herbs, or essential oils with a guardian and qualified clinician.",
+          fields: [
+            { id: "habits", label: "Sleep habits I want to try", type: "checklist", options: ["Allow an age-appropriate sleep window", "Keep bedtime and wake time reasonably consistent", "Make an individualized caffeine plan", "Use a comfortably cool room", "Reduce unwanted light", "Reduce or mask disruptive noise", "Use a short wind-down routine", "Keep the bed mainly for sleep", "Set a practical device cutoff", "Keep the room comfortable and uncluttered", "Use calming audio only if it helps"] },
+            { id: "first-step", label: "The first sleep habit I will test", type: "long" }
+          ]
+        },
+        {
+          id: "sleep-recovery-2",
+          week: 2,
+          title: "Night-Before Competition Plan",
+          objective: "Plan familiar food, drink, and timing choices that support sleep before competition.",
+          notice: "Sensitive and optional. Do not restrict food or fluids or use this worksheet for weight cutting. Follow a qualified sports dietitian, athletic trainer, clinician, and team policy.",
+          sensitive: true,
+          fields: [
+            { id: "current-foods", label: "Foods and drinks I commonly have the night before", type: "long", sensitive: true },
+            { id: "planned-foods", label: "Familiar foods and drinks from my approved nutrition plan", type: "long", sensitive: true },
+            { id: "competition-bedtime", label: "Planned bedtime before early competition", type: "time" },
+            { id: "usual-bedtime", label: "Usual bedtime", type: "time" },
+            { id: "adjust-date", label: "Date I will begin a gradual schedule adjustment if needed", type: "date" }
+          ]
+        },
+        {
+          id: "sleep-recovery-3",
+          week: 3,
+          title: "Pre-Sleep Routine",
+          objective: "Build a repeatable, low-stimulation routine that ends with a settling practice.",
+          notice: "Prayer may be included if personally meaningful, but it is never required.",
+          fields: [
+            { id: "routine", label: "My pre-sleep routine in order", type: "long" },
+            { id: "start-time", label: "Routine start time", type: "time" }
+          ]
+        },
+        {
+          id: "sleep-recovery-4",
+          week: 4,
+          title: "Peaceful Imagery",
+          objective: "Choose a calming image and an optional safe cue that makes the bedroom feel familiar.",
+          fields: [
+            { id: "image", label: "My peaceful image, place, or symbol", type: "long" },
+            { id: "tangible", label: "A safe tangible cue or room feature connected to it", type: "long", hint: "Examples: a photo, comfort object, plant, or gentle audio. Avoid anything that creates a safety hazard." }
+          ]
+        },
+        {
+          id: "sleep-recovery-5",
+          week: 5,
+          title: "Let Go of Forcing Sleep",
+          objective: "Write a statement that allows rest without demanding immediate sleep.",
+          notice: "If sleeplessness is frequent, severe, or affecting health, seek professional guidance rather than trying harder to control it alone.",
+          fields: [
+            { id: "statement", label: "My statement for letting go once I am in bed", type: "long" }
+          ]
+        },
+        {
+          id: "sleep-recovery-6",
+          week: 6,
+          title: "Whole-Person Recovery Habits",
+          objective: "Choose safe mental, emotional, spiritual, and physical recovery habits.",
+          notice: "Unsupported remedy claims from the original packet are omitted. Hydration, supplements, pain care, massage, cold exposure, and nutrition should follow individualized professional guidance.",
+          fields: [
+            { id: "habits", label: "Recovery habits I may incorporate", type: "checklist", options: ["Optional prayer or spiritual practice", "Two minutes of comfortable breathing", "Find three useful or appreciated details after a complaint", "Name five things I appreciate before bed", "Name three ways I improved today", "Follow my individualized hydration plan", "Follow my approved nutrition plan", "Use gentle self-massage only when appropriate", "Choose a comfortable shower or bath", "Dress for the weather", "Ask for support when my mood is low"] },
+            { id: "plan", label: "When and how I will use the selected habits", type: "long" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "injury-recovery",
+      title: "Injury Recovery",
+      description: "Stay connected to progress while following qualified medical guidance and a graded return-to-play plan.",
+      lessons: [
+        {
+          id: "injury-recovery-1",
+          week: 1,
+          title: "Approved Progress While Injured",
+          objective: "Identify safe ways to keep learning and improving without interfering with healing.",
+          notice: "Sensitive and optional. Follow your physician and athletic trainer. Pain, restrictions, and return-to-play limits override every worksheet idea; rest can be the correct action.",
+          sensitive: true,
+          fields: [
+            { id: "technique-video", label: "Technique study or video work I am cleared to do", type: "long", sensitive: true },
+            { id: "mindset", label: "Mindset work I can do", type: "long", sensitive: true },
+            { id: "nutrition", label: "Approved nutrition support", type: "long", sensitive: true },
+            { id: "strength", label: "Strength work for unaffected areas, only if cleared", type: "long", sensitive: true },
+            { id: "footwork", label: "Footwork, stance, or motion work, only if cleared", type: "long", sensitive: true },
+            { id: "flexibility", label: "Mobility or flexibility work, only if prescribed or cleared", type: "long", sensitive: true },
+            { id: "power-conditioning", label: "Explosive-power or conditioning work, only if cleared", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "injury-recovery-2",
+          week: 2,
+          title: "Meaning Without Forced Positivity",
+          objective: "Acknowledge the injury honestly and identify any learning, support, or opportunity that may emerge.",
+          notice: "Sensitive and optional. You do not have to call an injury a blessing or the best thing that happened. Grief, anger, and uncertainty are valid; seek support when needed.",
+          sensitive: true,
+          fields: [
+            { id: "feelings", label: "What this injury experience is honestly like for me", type: "long", sensitive: true },
+            { id: "meaning", label: "A balanced statement about how I want to respond", type: "long", sensitive: true },
+            { id: "possibilities", label: "Up to five ways I might learn, connect, or grow during recovery", type: "long", sensitive: true },
+            { id: "other", label: "Other possibilities or support I may need", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "injury-recovery-3",
+          week: 3,
+          title: "Safe Comeback Examples",
+          objective: "Study athletes who followed rehabilitation and returned with patience and support.",
+          fields: [
+            { id: "athletes", label: "Athletes who returned safely after injury", type: "long", sensitive: true },
+            { id: "process", label: "What their recovery process teaches me", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "injury-recovery-4",
+          week: 4,
+          title: "Responding Safely to Discomfort",
+          objective: "Learn from athletes who communicated symptoms, followed care plans, and made sound return decisions.",
+          notice: "Do not normalize competing through pain. New, worsening, sharp, neurological, or concerning symptoms require stopping and reporting to qualified medical staff.",
+          sensitive: true,
+          fields: [
+            { id: "examples", label: "Examples of athletes who handled recovery responsibly", type: "long", sensitive: true },
+            { id: "lessons", label: "Safe decisions or communication habits I can learn from them", type: "long", sensitive: true }
+          ]
+        },
+        {
+          id: "injury-recovery-5",
+          week: 5,
+          title: "Return-to-Play Confidence",
+          objective: "Confirm medical clearance, graded preparation, personal readiness, and stop criteria before full competition.",
+          notice: "The original packet's death and reinjury-acceptance language is removed. Courage means following medical guidance, reporting symptoms, and stopping when safety requires it.",
+          sensitive: true,
+          fields: [
+            { id: "readiness", label: "Return-to-play steps completed", type: "checklist", sensitive: true, options: ["Physician or qualified clinician clearance", "Athletic-trainer clearance where available", "Prescribed rehabilitation completed consistently", "Graded sport-specific progression completed", "Coach understands current restrictions", "I feel informed and ready to return", "I know my stop-and-report plan"] },
+            { id: "restrictions", label: "Current restrictions or accommodations", type: "long", sensitive: true },
+            { id: "stop-signs", label: "Symptoms or warning signs that mean I stop and report", type: "long", sensitive: true },
+            { id: "statement", label: "My safe return-to-play commitment", type: "long", sensitive: true }
+          ]
+        }
+      ]
+    }
+  ];
+  window.MINDSET_CURRICULUM_UNITS = MINDSET_CURRICULUM_UNITS;
+})();
+
 /* ====== mindset.jsx ====== */
 (() => {
   const { useEffect, useMemo, useRef, useState } = React;
+  const MINDSET_CURRICULUM_UNITS = window.MINDSET_CURRICULUM_UNITS || [];
   const MINDSET_STORAGE_KEY = "wkb_mindset_workbook_v1";
   const MINDSET_RESTORE_RECOVERY_KEY = "wkb_mindset_workbook_before_restore_v1";
   const MINDSET_BACKUP_TYPE = "wkb-mindset-workbook";
@@ -1451,19 +2481,51 @@
   ];
   const POST_MATCH_CHECKLIST = [
     ["warmup", "Warm-up"],
+    ["fullRoutine", "Full pre-match routine"],
     ["firstShot", "First shot"],
     ["forwardPressure", "Forward pressure"],
     ["attackAttempts", "Attack attempts"],
     ["tieControl", "Tie control"],
-    ["firstMove", "Top/bottom first move"],
+    ["topFirstMove", "Top first move"],
+    ["turnAttempts", "Looked to turn or pin"],
     ["matReturns", "Mat returns"],
-    ["movement", "Movement"],
+    ["bottomFirstMove", "Bottom first move"],
+    ["movement", "Constant bottom movement"],
+    ["finishedPeriods", "Finished no period on bottom"],
     ["neverQuit", "Never quit"],
     ["effort", "Effort"],
+    ["edgeEffort", "Wrestled through edges and period endings"],
+    ["hustleCenter", "Hustled back to center"],
     ["composure", "Composure"],
     ["bodyLanguage", "Body language"],
     ["noClockWatching", "No clock watching"]
   ];
+  const LEGACY_POST_MATCH_REQUIRED_KEYS = [
+    "warmup",
+    "firstShot",
+    "forwardPressure",
+    "attackAttempts",
+    "tieControl",
+    "matReturns",
+    "movement",
+    "neverQuit",
+    "effort",
+    "composure",
+    "bodyLanguage",
+    "noClockWatching"
+  ];
+  const POST_MATCH_ADDED_KEYS = ["fullRoutine", "turnAttempts", "finishedPeriods", "edgeEffort", "hustleCenter"];
+  const MINDSET_CURRICULUM_LESSONS = MINDSET_CURRICULUM_UNITS.reduce(
+    (lessons, unit) => lessons.concat(unit.lessons.map((lesson) => ({ ...lesson, unitId: unit.id, unitTitle: unit.title }))),
+    []
+  );
+  const MINDSET_CURRICULUM_LESSON_MAP = MINDSET_CURRICULUM_LESSONS.reduce((result, lesson) => {
+    result[lesson.id] = lesson;
+    return result;
+  }, {});
+  const MINDSET_CURRICULUM_RESPONSE_KEYS = new Set(
+    MINDSET_CURRICULUM_LESSONS.reduce((keys, lesson) => keys.concat((lesson.fields || []).map((field) => lesson.id + "." + field.id)), [])
+  );
   function localDateValue() {
     const now = /* @__PURE__ */ new Date();
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -1509,10 +2571,21 @@
     }, {});
   }
   function makePostChecklist() {
-    return POST_MATCH_CHECKLIST.reduce((checklist, item) => {
-      checklist[item[0]] = false;
-      return checklist;
+    const checklist = POST_MATCH_CHECKLIST.reduce((result, item) => {
+      result[item[0]] = false;
+      return result;
     }, {});
+    checklist.firstMove = false;
+    return checklist;
+  }
+  function copyPostChecklist(checklist) {
+    const result = POST_MATCH_CHECKLIST.reduce((copy, item) => {
+      const legacyFirstMove = item[0] === "topFirstMove" || item[0] === "bottomFirstMove";
+      copy[item[0]] = checklist[item[0]] === true || legacyFirstMove && checklist.firstMove === true;
+      return copy;
+    }, {});
+    result.firstMove = result.topFirstMove || result.bottomFirstMove;
+    return result;
   }
   function makePostMatchDraft() {
     return {
@@ -1547,10 +2620,7 @@
       date: draft.date,
       opponent: draft.opponent,
       result: draft.result,
-      checklist: POST_MATCH_CHECKLIST.reduce((result, item) => {
-        result[item[0]] = draft.checklist[item[0]];
-        return result;
-      }, {}),
+      checklist: copyPostChecklist(draft.checklist),
       reflection: draft.reflection,
       improvements: draft.improvements.slice(0, 3),
       nextAction: draft.nextAction
@@ -1569,7 +2639,8 @@
       preMatchReset: makePreMatchReset(),
       postMatchDraft: makePostMatchDraft(),
       suspendedPostMatchDraft: null,
-      postMatchReviews: []
+      postMatchReviews: [],
+      curriculum: { responses: {} }
     };
   }
   function isRecord(value) {
@@ -1615,10 +2686,21 @@
     if (!["event", "date", "opponent", "result", "reflection", "nextAction"].every((key) => isSafeString(value[key]))) return false;
     if (!Array.isArray(value.improvements) || value.improvements.length !== 3 || !value.improvements.every(isSafeString)) return false;
     if (!isRecord(value.checklist)) return false;
-    return POST_MATCH_CHECKLIST.every((item) => typeof value.checklist[item[0]] === "boolean");
+    if (!LEGACY_POST_MATCH_REQUIRED_KEYS.every((key) => typeof value.checklist[key] === "boolean")) return false;
+    const hasLegacyFirstMove = typeof value.checklist.firstMove === "boolean";
+    const hasSplitFirstMoves = typeof value.checklist.topFirstMove === "boolean" && typeof value.checklist.bottomFirstMove === "boolean";
+    if (!hasLegacyFirstMove && !hasSplitFirstMoves) return false;
+    return POST_MATCH_ADDED_KEYS.every((key) => value.checklist[key] === void 0 || typeof value.checklist[key] === "boolean");
   }
   function validPostEntry(value) {
     return validPostDraft({ ...value, editingId: null }) && isSafeString(value.id) && isSafeString(value.createdAt) && isSafeString(value.updatedAt);
+  }
+  function validCurriculum(value) {
+    if (value === void 0) return true;
+    if (!isRecord(value) || !isRecord(value.responses)) return false;
+    return Object.keys(value.responses).every(
+      (key) => MINDSET_CURRICULUM_RESPONSE_KEYS.has(key) && isSafeString(value.responses[key])
+    );
   }
   function validSuspendedWeeklyDraft(value) {
     return value === void 0 || value === null || validWeeklyDraft(value) && value.editingId === null;
@@ -1652,6 +2734,7 @@
     if (!Array.isArray(value.postMatchReviews) || value.postMatchReviews.length > MINDSET_MAX_HISTORY_ENTRIES || !value.postMatchReviews.every(validPostEntry) || !entriesHaveUniqueIds(value.postMatchReviews)) {
       return "The backup has an invalid post-match history.";
     }
+    if (!validCurriculum(value.curriculum)) return "The backup has an invalid development-program section.";
     return null;
   }
   function normalizeMindsetWorkbook(value) {
@@ -1703,16 +2786,19 @@
         date: entry.date,
         opponent: entry.opponent,
         result: entry.result,
-        checklist: POST_MATCH_CHECKLIST.reduce((result, item) => {
-          result[item[0]] = entry.checklist[item[0]];
-          return result;
-        }, {}),
+        checklist: copyPostChecklist(entry.checklist),
         reflection: entry.reflection,
         improvements: entry.improvements.slice(0, 3),
         nextAction: entry.nextAction,
         createdAt: entry.createdAt,
         updatedAt: entry.updatedAt
-      }))
+      })),
+      curriculum: {
+        responses: Object.keys(value.curriculum && value.curriculum.responses || {}).reduce((result, key) => {
+          if (MINDSET_CURRICULUM_RESPONSE_KEYS.has(key)) result[key] = value.curriculum.responses[key];
+          return result;
+        }, {})
+      }
     };
   }
   function loadMindsetWorkbook() {
@@ -1795,10 +2881,52 @@
     let complete = [draft.event, draft.date, draft.opponent, draft.result, draft.reflection, draft.nextAction].filter(nonEmpty).length;
     complete += draft.improvements.filter(nonEmpty).length;
     complete += POST_MATCH_CHECKLIST.filter((item) => draft.checklist[item[0]]).length;
-    return { complete, total: 22 };
+    return { complete, total: 6 + 3 + POST_MATCH_CHECKLIST.length };
   }
   function hasPostDraftContent(draft) {
     return postDraftCompletion(draft).complete > 0;
+  }
+  function postMatchCurriculumProgress(draft, entries) {
+    return [draft].concat(entries || []).reduce((best, item) => {
+      const progress = postDraftCompletion(item);
+      return progress.complete > best.complete ? progress : best;
+    }, { complete: 0, total: postDraftCompletion(draft).total });
+  }
+  function curriculumResponseKey(lessonId, fieldId) {
+    return lessonId + "." + fieldId;
+  }
+  function curriculumFieldProgress(lesson, curriculum) {
+    const fields = lesson.fields || [];
+    const complete = fields.filter((field) => nonEmpty(curriculum.responses[curriculumResponseKey(lesson.id, field.id)])).length;
+    return { complete, total: fields.length };
+  }
+  function curriculumLessonProgress(lesson, curriculum, linkedProgress) {
+    if (lesson.linkedModule) return linkedProgress[lesson.linkedModule] || { complete: 0, total: 1 };
+    return curriculumFieldProgress(lesson, curriculum);
+  }
+  function curriculumProgramProgress(curriculum, linkedProgress) {
+    return MINDSET_CURRICULUM_LESSONS.reduce((result, lesson) => {
+      const progress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+      result.complete += progress.complete;
+      result.total += progress.total;
+      return result;
+    }, { complete: 0, total: 0 });
+  }
+  function curriculumUnitProgress(unit, curriculum, linkedProgress) {
+    return unit.lessons.reduce((result, lesson) => {
+      const progress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+      result.complete += progress.complete;
+      result.total += progress.total;
+      return result;
+    }, { complete: 0, total: 0 });
+  }
+  function checklistSelections(value) {
+    return nonEmpty(value) ? value.split("\n").filter(Boolean) : [];
+  }
+  function toggleChecklistSelection(value, option) {
+    const selected = checklistSelections(value);
+    const next = selected.indexOf(option) >= 0 ? selected.filter((item) => item !== option) : selected.concat(option);
+    return next.join("\n");
   }
   function TextField({ id, label, value, onChange, placeholder, multiline = false, rows = 3, type = "text", required = false }) {
     const controlProps = {
@@ -1828,8 +2956,8 @@
     const safeValue = Math.min(value, total);
     return /* @__PURE__ */ React.createElement("div", { className: "wb-progress" }, /* @__PURE__ */ React.createElement("div", { className: "wb-progress-copy" }, /* @__PURE__ */ React.createElement("span", null, label), /* @__PURE__ */ React.createElement("span", null, safeValue, " of ", total)), /* @__PURE__ */ React.createElement("progress", { className: "wb-progress-bar", max: total, value: safeValue, "aria-label": label + ": " + safeValue + " of " + total }));
   }
-  function ModuleHeader({ headingId, title, eyebrow, description, onBack }) {
-    return /* @__PURE__ */ React.createElement("header", { className: "wb-module-header" }, /* @__PURE__ */ React.createElement("button", { className: "wb-back-button", type: "button", onClick: onBack }, /* @__PURE__ */ React.createElement(Icon, { name: "back", size: 18, stroke: 2.2 }), "Workbook home"), /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, eyebrow), /* @__PURE__ */ React.createElement("h2", { className: "wb-module-title", id: headingId, tabIndex: "-1" }, title), /* @__PURE__ */ React.createElement("p", { className: "wb-module-description" }, description));
+  function ModuleHeader({ headingId, title, eyebrow, description, onBack, backLabel = "Workbook home" }) {
+    return /* @__PURE__ */ React.createElement("header", { className: "wb-module-header" }, /* @__PURE__ */ React.createElement("button", { className: "wb-back-button", type: "button", onClick: onBack }, /* @__PURE__ */ React.createElement(Icon, { name: "back", size: 18, stroke: 2.2 }), backLabel), /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, eyebrow), /* @__PURE__ */ React.createElement("h2", { className: "wb-module-title", id: headingId, tabIndex: "-1" }, title), /* @__PURE__ */ React.createElement("p", { className: "wb-module-description" }, description));
   }
   function DashboardCard({ module, title, description, summary, progress, progressTotal, buttonLabel, onOpen, history }) {
     return /* @__PURE__ */ React.createElement(
@@ -1840,12 +2968,127 @@
         "data-mindset-module-card": module,
         "data-testid": "mindset-module-card-" + module
       },
-      /* @__PURE__ */ React.createElement("div", { className: "wb-module-card-heading" }, /* @__PURE__ */ React.createElement("span", { className: "wb-module-card-icon", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: module === "baseline" ? "brain" : module === "game-plan" ? "target" : module === "pre-match" ? "flag" : "check", size: 22, stroke: 2 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, title), /* @__PURE__ */ React.createElement("p", null, description))),
+      /* @__PURE__ */ React.createElement("div", { className: "wb-module-card-heading" }, /* @__PURE__ */ React.createElement("span", { className: "wb-module-card-icon", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: module === "baseline" || module === "development" ? "brain" : module === "game-plan" ? "target" : module === "pre-match" ? "flag" : "check", size: 22, stroke: 2 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, title), /* @__PURE__ */ React.createElement("p", null, description))),
       /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress, total: progressTotal, label: "Progress" }),
       /* @__PURE__ */ React.createElement("p", { className: "wb-module-card-summary" }, summary),
       history && /* @__PURE__ */ React.createElement("p", { className: "wb-module-card-history" }, history),
       /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button wb-module-card-action", type: "button", onClick: onOpen }, buttonLabel, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))
     );
+  }
+  function curriculumOptionLabel(option) {
+    return isRecord(option) ? option.label : option;
+  }
+  function curriculumOptionValue(option) {
+    return isRecord(option) ? option.value : option;
+  }
+  function CurriculumField({ lessonId, field, value, onChange }) {
+    const id = "wb-curriculum-" + lessonId + "-" + field.id;
+    const hintId = id + "-hint";
+    const label = /* @__PURE__ */ React.createElement("span", { className: "wb-field-label" }, field.label, /* @__PURE__ */ React.createElement("span", { className: "wb-field-optional" }, field.sensitive ? "Sensitive · Optional" : "Optional"));
+    if (field.type === "choice") {
+      return /* @__PURE__ */ React.createElement("fieldset", { className: "wb-curriculum-choice", "aria-describedby": field.hint ? hintId : void 0 }, /* @__PURE__ */ React.createElement("legend", null, label), field.hint && /* @__PURE__ */ React.createElement("p", { className: "wb-curriculum-field-hint", id: hintId }, field.hint), /* @__PURE__ */ React.createElement("div", { className: "wb-answer-options" }, (field.options || []).map((option) => {
+        const optionValue = curriculumOptionValue(option);
+        return /* @__PURE__ */ React.createElement("label", { className: "wb-answer-option", key: optionValue }, /* @__PURE__ */ React.createElement("input", { type: "radio", name: id, value: optionValue, checked: value === optionValue, onChange: () => onChange(optionValue) }), /* @__PURE__ */ React.createElement("span", null, curriculumOptionLabel(option)));
+      }), nonEmpty(value) && /* @__PURE__ */ React.createElement("button", { className: "wb-link-button", type: "button", onClick: () => onChange("") }, "Clear answer")));
+    }
+    if (field.type === "checklist") {
+      const selected = checklistSelections(value);
+      return /* @__PURE__ */ React.createElement("fieldset", { className: "wb-curriculum-checklist", "aria-describedby": field.hint ? hintId : void 0 }, /* @__PURE__ */ React.createElement("legend", null, label), field.hint && /* @__PURE__ */ React.createElement("p", { className: "wb-curriculum-field-hint", id: hintId }, field.hint), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-check-grid" }, (field.options || []).map((option) => {
+        const optionValue = curriculumOptionValue(option);
+        return /* @__PURE__ */ React.createElement("label", { className: "wb-check-item", key: optionValue }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: selected.indexOf(optionValue) >= 0, onChange: () => onChange(toggleChecklistSelection(value, optionValue)) }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 16, stroke: 2.4 }), curriculumOptionLabel(option)));
+      })));
+    }
+    const inputType = field.type === "date" || field.type === "time" ? field.type : "text";
+    const multiline = field.type !== "short" && field.type !== "date" && field.type !== "time";
+    return /* @__PURE__ */ React.createElement("label", { className: "wb-field wb-curriculum-field", htmlFor: id }, label, field.hint && /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-field-hint", id: hintId }, field.hint), multiline ? /* @__PURE__ */ React.createElement("textarea", { id, className: "wb-field-control", value, onChange: (event) => onChange(event.target.value), placeholder: field.placeholder || "Add your response", rows: field.rows || 4, maxLength: MINDSET_MAX_TEXT_LENGTH, "aria-describedby": field.hint ? hintId : void 0 }) : /* @__PURE__ */ React.createElement("input", { id, className: "wb-field-control", type: inputType, value, onChange: (event) => onChange(event.target.value), placeholder: field.placeholder || "Add your response", maxLength: inputType === "text" ? 180 : void 0, "aria-describedby": field.hint ? hintId : void 0 }));
+  }
+  function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedProgress, selectedLessonId, showLesson, onOpenLesson, onCloseLesson }) {
+    const selectedLesson = showLesson && selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
+    const [openUnitIds, setOpenUnitIds] = useState(() => {
+      const initialLesson = selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
+      return initialLesson ? [initialLesson.unitId] : [];
+    });
+    const selectedIndex = selectedLesson ? MINDSET_CURRICULUM_LESSONS.findIndex((lesson) => lesson.id === selectedLesson.id) : -1;
+    const overallProgress = curriculumProgramProgress(curriculum, linkedProgress);
+    function setUnitOpen(unitId, open) {
+      setOpenUnitIds((current) => open ? current.indexOf(unitId) >= 0 ? current : current.concat(unitId) : current.filter((id) => id !== unitId));
+    }
+    useEffect(() => {
+      if (showLesson || !selectedLessonId) return;
+      const lesson = MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId];
+      if (!lesson) return;
+      setUnitOpen(lesson.unitId, true);
+      window.requestAnimationFrame(() => {
+        const target = document.getElementById("wb-curriculum-open-" + lesson.id);
+        if (!target) return;
+        if (typeof target.scrollIntoView === "function") target.scrollIntoView({ block: "center", behavior: "smooth" });
+        target.focus({ preventScroll: true });
+      });
+    }, [showLesson, selectedLessonId]);
+    function focusAfterNavigation(id) {
+      window.requestAnimationFrame(() => {
+        const target = document.getElementById(id);
+        if (target) target.focus({ preventScroll: true });
+        const content = document.querySelector(".content--workbook");
+        if (content) content.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+    function openLesson(id) {
+      onOpenLesson(id);
+      focusAfterNavigation("wb-curriculum-lesson-title");
+    }
+    function closeLesson() {
+      const unitId = selectedLesson.unitId;
+      setUnitOpen(unitId, true);
+      onCloseLesson();
+    }
+    function setResponse(lessonId, fieldId, response) {
+      const key = curriculumResponseKey(lessonId, fieldId);
+      const responses = { ...curriculum.responses };
+      if (response) responses[key] = response;
+      else delete responses[key];
+      onChange({ responses });
+    }
+    if (selectedLesson) {
+      const progress = curriculumLessonProgress(selectedLesson, curriculum, linkedProgress);
+      const linkedLabels = { "pre-match": "Pre-Match Reset", "post-match": "Post-Match Review", "game-plan": "My Wrestling Game Plan" };
+      return /* @__PURE__ */ React.createElement("section", { className: "wb-module wb-curriculum-lesson", "aria-labelledby": "wb-curriculum-lesson-title", "data-testid": "curriculum-lesson-" + selectedLesson.id }, /* @__PURE__ */ React.createElement(
+        ModuleHeader,
+        {
+          headingId: "wb-curriculum-lesson-title",
+          title: selectedLesson.title,
+          eyebrow: selectedLesson.unitTitle + " · " + (selectedLesson.weekLabel || "Week " + selectedLesson.week),
+          description: selectedLesson.objective,
+          onBack: closeLesson,
+          backLabel: "Development program"
+        }
+      ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: "Worksheet progress" }), (selectedLesson.notice || selectedLesson.sensitive) && /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" + (selectedLesson.sensitive ? " wb-curriculum-notice-sensitive" : "") }, /* @__PURE__ */ React.createElement(Icon, { name: selectedLesson.sensitive ? "brain" : "check", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, selectedLesson.notice || "These sensitive responses are optional.", selectedLesson.sensitive && " Anyone using this same browser profile can view saved responses, so use a personal browser profile on shared devices.")), selectedLesson.linkedModule ? /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-linked-worksheet" }, /* @__PURE__ */ React.createElement("h3", null, "Use the complete core tool"), /* @__PURE__ */ React.createElement("p", null, "This source worksheet is already built as a dedicated phone-first tool, so your plan stays in one place."), /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "button", onClick: () => onOpenLinked(selectedLesson.linkedModule) }, "Open ", linkedLabels[selectedLesson.linkedModule] || "core tool", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))) : /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-curriculum-form", "aria-label": selectedLesson.title + " worksheet fields" }, (selectedLesson.fields || []).map((field) => /* @__PURE__ */ React.createElement(
+        CurriculumField,
+        {
+          key: field.id,
+          lessonId: selectedLesson.id,
+          field,
+          value: curriculum.responses[curriculumResponseKey(selectedLesson.id, field.id)] || "",
+          onChange: (value) => setResponse(selectedLesson.id, field.id, value)
+        }
+      ))), /* @__PURE__ */ React.createElement("nav", { className: "wb-curriculum-pager", "aria-label": "Development worksheet navigation" }, /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", disabled: selectedIndex <= 0, onClick: () => openLesson(MINDSET_CURRICULUM_LESSONS[selectedIndex - 1].id) }, /* @__PURE__ */ React.createElement(Icon, { name: "back", size: 17, stroke: 2.2 }), " Previous"), /* @__PURE__ */ React.createElement("span", null, "Worksheet ", selectedIndex + 1, " of ", MINDSET_CURRICULUM_LESSONS.length), /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", disabled: selectedIndex >= MINDSET_CURRICULUM_LESSONS.length - 1, onClick: () => openLesson(MINDSET_CURRICULUM_LESSONS[selectedIndex + 1].id) }, "Next ", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))));
+    }
+    return /* @__PURE__ */ React.createElement("section", { className: "wb-module wb-curriculum", "aria-labelledby": "wb-curriculum-title" }, /* @__PURE__ */ React.createElement(
+      ModuleHeader,
+      {
+        headingId: "wb-curriculum-title",
+        title: "Complete Development Program",
+        eyebrow: MINDSET_CURRICULUM_LESSONS.length + " guided worksheets · " + MINDSET_CURRICULUM_UNITS.length + " units",
+        description: "Work in order or choose the area that fits today. Every fillable exercise from the source packet is represented here, with safety-sensitive language updated for athletes.",
+        onBack
+      }
+    ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: overallProgress.complete, total: overallProgress.total, label: "Program fields completed" }), /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, "This is an educational reflection tool, not medical or mental-health care. Follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.")), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-units" }, MINDSET_CURRICULUM_UNITS.map((unit) => {
+      const progress = curriculumUnitProgress(unit, curriculum, linkedProgress);
+      return /* @__PURE__ */ React.createElement("details", { className: "wb-curriculum-unit", id: "wb-curriculum-unit-" + unit.id, key: unit.id, open: openUnitIds.indexOf(unit.id) >= 0, onToggle: (event) => setUnitOpen(unit.id, event.currentTarget.open) }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, unit.title), /* @__PURE__ */ React.createElement("small", null, unit.lessons.length, " worksheets · ", unit.description)), /* @__PURE__ */ React.createElement("span", null, progress.complete, " / ", progress.total)), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: unit.title + " progress" }), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-lesson-list" }, unit.lessons.map((lesson) => {
+        const lessonProgress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+        return /* @__PURE__ */ React.createElement("button", { className: "wb-curriculum-lesson-button", id: "wb-curriculum-open-" + lesson.id, type: "button", key: lesson.id, onClick: () => openLesson(lesson.id), "data-testid": "curriculum-open-" + lesson.id }, /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-week" }, lesson.weekLabel || "Week " + lesson.week), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, lesson.title), /* @__PURE__ */ React.createElement("small", null, lesson.objective)), /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-lesson-progress" }, lessonProgress.complete, "/", lessonProgress.total, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 16, stroke: 2.2 })));
+      })));
+    })));
   }
   function BaselineModule({ baseline, onChange, onBack }) {
     const stats = useMemo(() => baselineStats(baseline), [baseline]);
@@ -1903,7 +3146,7 @@
       }));
     })), /* @__PURE__ */ React.createElement("section", { className: "wb-count-table-wrap", "aria-labelledby": "wb-count-table-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-count-table-title" }, "Category response counts"), /* @__PURE__ */ React.createElement("div", { className: "wb-table-scroll", tabIndex: "0" }, /* @__PURE__ */ React.createElement("table", { className: "wb-count-table" }, /* @__PURE__ */ React.createElement("caption", null, "Personal per-category summary; no overall score is calculated."), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Category"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Yes"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Working on it"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Unsure"))), /* @__PURE__ */ React.createElement("tbody", null, stats.map((item) => /* @__PURE__ */ React.createElement("tr", { key: item.id }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, item.label), /* @__PURE__ */ React.createElement("td", null, item.yes), /* @__PURE__ */ React.createElement("td", null, item.working), /* @__PURE__ */ React.createElement("td", null, item.unsure))))))));
   }
-  function GamePlanModule({ gamePlan, onChange, onBack }) {
+  function GamePlanModule({ gamePlan, onChange, onBack, backLabel }) {
     const completion = gamePlanCompletion(gamePlan);
     function setField(key, value) {
       onChange({ ...gamePlan, [key]: value });
@@ -1923,7 +3166,8 @@
         title: "My Wrestling Game Plan",
         eyebrow: "A clear plan for your positions",
         description: "Write the options you have prepared with your coaches. Every free-text field is optional, and you can revise this plan at any time.",
-        onBack
+        onBack,
+        backLabel
       }
     ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: completion.complete, total: completion.total, label: "Game-plan fields completed" }), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-takedowns-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-takedowns-title" }, "Three takedowns"), /* @__PURE__ */ React.createElement("p", null, "For each option, name the shot, the setup that creates it, and the finish you expect to use."), /* @__PURE__ */ React.createElement("div", { className: "wb-takedown-grid" }, gamePlan.takedowns.map((item, index) => /* @__PURE__ */ React.createElement("fieldset", { className: "wb-takedown-card", key: index }, /* @__PURE__ */ React.createElement("legend", null, "Takedown ", index + 1), /* @__PURE__ */ React.createElement(TextField, { id: "wb-td-shot-" + index, label: "Shot", value: item.shot, onChange: (value) => setTakedown(index, "shot", value), placeholder: "My attack" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-td-setup-" + index, label: "Setup", value: item.setup, onChange: (value) => setTakedown(index, "setup", value), placeholder: "How I create the opening" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-td-finish-" + index, label: "Finish", value: item.finish, onChange: (value) => setTakedown(index, "finish", value), placeholder: "My practiced finish" }))))), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-ties-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-ties-title" }, "Ties and counter offense"), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-tie-preference", label: "My best tie", value: gamePlan.tiePreference, onChange: (value) => setField("tiePreference", value), placeholder: "The tie I want" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-tie-creation", label: "How I create and control it", value: gamePlan.tieCreation, onChange: (value) => setField("tieCreation", value), placeholder: "Hand-fighting cues and position", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-tie-answer", label: "My answer to an opponent’s preferred tie", value: gamePlan.tieAnswer, onChange: (value) => setField("tieAnswer", value), placeholder: "Clear, create space, or attack from it", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-counter-offense", label: "Counter offense", value: gamePlan.counterOffense, onChange: (value) => setField("counterOffense", value), placeholder: "My first re-attack or counter option", multiline: true }))), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-mat-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-mat-title" }, "Top and bottom"), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-top-first", label: "Top: first move", value: gamePlan.topFirstMove, onChange: (value) => setField("topFirstMove", value), placeholder: "Breakdown, ride, or turn sequence", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-bottom-first", label: "Bottom: first move", value: gamePlan.bottomFirstMove, onChange: (value) => setField("bottomFirstMove", value), placeholder: "My first movement and follow-up", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-mat-return", label: "Mat return", value: gamePlan.matReturn, onChange: (value) => setField("matReturn", value), placeholder: "My preferred return and control cues", multiline: true }))), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-improvement-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-improvement-title" }, "Three improvement areas"), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, gamePlan.improvementAreas.map((value, index) => /* @__PURE__ */ React.createElement(
       TextField,
@@ -1968,7 +3212,7 @@
       }
     ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: completion.complete, total: completion.total, label: "Current check-in fields completed" }), /* @__PURE__ */ React.createElement("form", { className: "wb-entry-form", onSubmit: submit }, /* @__PURE__ */ React.createElement("header", { className: "wb-entry-form-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, draft.editingId ? "Edit check-in" : "New check-in"), /* @__PURE__ */ React.createElement("p", null, "Ratings and all free-text responses are optional.")), draft.editingId && /* @__PURE__ */ React.createElement("span", { className: "wb-editing-badge" }, "Editing saved entry")), /* @__PURE__ */ React.createElement(TextField, { id: "wb-weekly-date", type: "date", label: "Check-in date", value: draft.date, onChange: (value) => setField("date", value), required: true }), /* @__PURE__ */ React.createElement("div", { className: "wb-rating-grid" }, /* @__PURE__ */ React.createElement(RatingField, { id: "wb-weekly-confidence", label: "Confidence", value: draft.confidence, onChange: (value) => setField("confidence", value) }), /* @__PURE__ */ React.createElement(RatingField, { id: "wb-weekly-energy", label: "Energy", value: draft.energy, onChange: (value) => setField("energy", value) }), /* @__PURE__ */ React.createElement(RatingField, { id: "wb-weekly-focus", label: "Focus", value: draft.focus, onChange: (value) => setField("focus", value) })), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-weekly-win", label: "A win from this week", value: draft.win, onChange: (value) => setField("win", value), placeholder: "Something I want to recognize", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-weekly-challenge", label: "A challenge from this week", value: draft.challenge, onChange: (value) => setField("challenge", value), placeholder: "A situation or position I want to learn from", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-weekly-action", label: "My action for next week", value: draft.weeklyAction, onChange: (value) => setField("weeklyAction", value), placeholder: "One specific, controllable action", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-weekly-why", label: "Why this action matters", value: draft.why, onChange: (value) => setField("why", value), placeholder: "My reason for choosing it", multiline: true })), /* @__PURE__ */ React.createElement("div", { className: "wb-form-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "submit" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 18, stroke: 2.4 }), draft.editingId ? "Update check-in" : "Save check-in"), draft.editingId && /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: onCancelEdit }, "Cancel edit")), /* @__PURE__ */ React.createElement("p", { className: "wb-form-message", role: "status", "aria-live": "polite" }, formMessage)), /* @__PURE__ */ React.createElement("section", { className: "wb-history", "aria-labelledby": "wb-weekly-history-title" }, /* @__PURE__ */ React.createElement("header", { className: "wb-history-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { id: "wb-weekly-history-title" }, "Check-in history"), /* @__PURE__ */ React.createElement("p", null, entries.length, " saved ", entries.length === 1 ? "entry" : "entries"))), !entries.length && /* @__PURE__ */ React.createElement("p", { className: "wb-empty-copy" }, "Your saved weekly check-ins will appear here."), /* @__PURE__ */ React.createElement("div", { className: "wb-history-list" }, entries.map((entry) => /* @__PURE__ */ React.createElement("article", { className: "wb-history-card", key: entry.id }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h4", null, displayDate(entry.date)), /* @__PURE__ */ React.createElement("p", null, "Confidence ", entry.confidence || "—", " · Energy ", entry.energy || "—", " · Focus ", entry.focus || "—"))), /* @__PURE__ */ React.createElement("dl", { className: "wb-history-details" }, nonEmpty(entry.win) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Win"), /* @__PURE__ */ React.createElement("dd", null, entry.win)), nonEmpty(entry.challenge) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Challenge"), /* @__PURE__ */ React.createElement("dd", null, entry.challenge)), nonEmpty(entry.weeklyAction) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Next action"), /* @__PURE__ */ React.createElement("dd", null, entry.weeklyAction)), nonEmpty(entry.why) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Why"), /* @__PURE__ */ React.createElement("dd", null, entry.why))), /* @__PURE__ */ React.createElement("div", { className: "wb-history-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: () => onEdit(entry) }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 17, stroke: 2 }), "Edit"), /* @__PURE__ */ React.createElement("button", { className: "wb-danger-button", type: "button", onClick: () => onDelete(entry.id) }, /* @__PURE__ */ React.createElement(Icon, { name: "trash", size: 17, stroke: 2 }), "Delete")))))));
   }
-  function PreMatchModule({ reset, onChange, onBack }) {
+  function PreMatchModule({ reset, onChange, onBack, backLabel }) {
     const completion = resetCompletion(reset);
     const readout = RESET_FIELDS.filter((field) => nonEmpty(reset[field.key]));
     function setField(key, value) {
@@ -1981,7 +3225,8 @@
         title: "Pre-Match Reset",
         eyebrow: "Build it once, read it quickly",
         description: "Save the exact routine you have prepared so you can scan it before competition. All free-text fields are optional.",
-        onBack
+        onBack,
+        backLabel
       }
     ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: completion.complete, total: completion.total, label: "Reset routine fields completed" }), /* @__PURE__ */ React.createElement("div", { className: "wb-split-layout" }, /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-reset-builder-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-reset-builder-title" }, "Full routine"), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, RESET_FIELDS.map((field) => /* @__PURE__ */ React.createElement(
       TextField,
@@ -2001,7 +3246,7 @@
     const parts = [entry.event, entry.opponent ? "vs. " + entry.opponent : ""].filter(nonEmpty);
     return parts.join(" · ") || "Post-match review";
   }
-  function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete, onCancelEdit, onBack }) {
+  function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete, onCancelEdit, onBack, backLabel }) {
     const [formMessage, setFormMessage] = useState("");
     const completion = postDraftCompletion(draft);
     function setField(key, value) {
@@ -2012,7 +3257,9 @@
       onDraftChange({ ...draft, improvements });
     }
     function toggleChecklist(key) {
-      onDraftChange({ ...draft, checklist: { ...draft.checklist, [key]: !draft.checklist[key] } });
+      const checklist = { ...draft.checklist, [key]: !draft.checklist[key] };
+      if (key === "topFirstMove" || key === "bottomFirstMove") checklist.firstMove = checklist.topFirstMove || checklist.bottomFirstMove;
+      onDraftChange({ ...draft, checklist });
     }
     function submit(event) {
       event.preventDefault();
@@ -2034,7 +3281,8 @@
         title: "Post-Match Review",
         eyebrow: "Repeat after any match",
         description: "Record what happened, recognize useful actions, and choose a specific next step. Metadata and every free-text field are optional.",
-        onBack
+        onBack,
+        backLabel
       }
     ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: completion.complete, total: completion.total, label: "Current review items completed" }), /* @__PURE__ */ React.createElement("form", { className: "wb-entry-form", onSubmit: submit }, /* @__PURE__ */ React.createElement("header", { className: "wb-entry-form-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, draft.editingId ? "Edit review" : "New review"), /* @__PURE__ */ React.createElement("p", null, "Use only the parts that help you reflect.")), draft.editingId && /* @__PURE__ */ React.createElement("span", { className: "wb-editing-badge" }, "Editing saved entry")), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid wb-field-grid-four" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-event", label: "Event", value: draft.event, onChange: (value) => setField("event", value), placeholder: "Meet, dual, or tournament" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-date", type: "date", label: "Date", value: draft.date, onChange: (value) => setField("date", value) }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-opponent", label: "Opponent", value: draft.opponent, onChange: (value) => setField("opponent", value), placeholder: "Name or school" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-result", label: "Result", value: draft.result, onChange: (value) => setField("result", value), placeholder: "Result or match note" })), /* @__PURE__ */ React.createElement("fieldset", { className: "wb-review-checklist" }, /* @__PURE__ */ React.createElement("legend", null, "Match checklist"), /* @__PURE__ */ React.createElement("p", null, "Check the actions you want to recognize from this match."), /* @__PURE__ */ React.createElement("div", { className: "wb-check-grid" }, POST_MATCH_CHECKLIST.map((item) => /* @__PURE__ */ React.createElement("label", { className: "wb-check-item", key: item[0] }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: draft.checklist[item[0]], onChange: () => toggleChecklist(item[0]) }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 16, stroke: 2.5, "aria-hidden": "true" }), item[1]))))), /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-reflection", label: "Reflection", value: draft.reflection, onChange: (value) => setField("reflection", value), placeholder: "What did I notice about my decisions, positions, and response?", multiline: true, rows: 5 }), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-post-improvements-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-post-improvements-title" }, "Three improvements"), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, draft.improvements.map((value, index) => /* @__PURE__ */ React.createElement(TextField, { key: index, id: "wb-post-improvement-" + index, label: "Improvement " + (index + 1), value, onChange: (nextValue) => setImprovement(index, nextValue), placeholder: "A specific position, action, or decision", multiline: true })))), /* @__PURE__ */ React.createElement(TextField, { id: "wb-post-next-action", label: "Next action", value: draft.nextAction, onChange: (value) => setField("nextAction", value), placeholder: "The first specific action I will take in practice", multiline: true }), /* @__PURE__ */ React.createElement("div", { className: "wb-form-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "submit" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 18, stroke: 2.4 }), draft.editingId ? "Update review" : "Save review"), draft.editingId && /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: onCancelEdit }, "Cancel edit")), /* @__PURE__ */ React.createElement("p", { className: "wb-form-message", role: "status", "aria-live": "polite" }, formMessage)), /* @__PURE__ */ React.createElement("section", { className: "wb-history", "aria-labelledby": "wb-post-history-title" }, /* @__PURE__ */ React.createElement("header", { className: "wb-history-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { id: "wb-post-history-title" }, "Post-match history"), /* @__PURE__ */ React.createElement("p", null, entries.length, " saved ", entries.length === 1 ? "review" : "reviews"))), !entries.length && /* @__PURE__ */ React.createElement("p", { className: "wb-empty-copy" }, "Your saved post-match reviews will appear here."), /* @__PURE__ */ React.createElement("div", { className: "wb-history-list" }, entries.map((entry) => {
       const checkedActions = POST_MATCH_CHECKLIST.filter((item) => entry.checklist[item[0]]);
@@ -2055,6 +3303,9 @@
     const [loaded] = useState(loadMindsetWorkbook);
     const [workbook, setWorkbook] = useState(loaded.data);
     const [activeModule, setActiveModule] = useState(null);
+    const [curriculumLessonId, setCurriculumLessonId] = useState(null);
+    const [showCurriculumLesson, setShowCurriculumLesson] = useState(false);
+    const [returnToCurriculumFromLinked, setReturnToCurriculumFromLinked] = useState(false);
     const [saveStatus, setSaveStatus] = useState({
       kind: loaded.error ? "error" : "saved",
       message: loaded.error || "Workbook ready in this browser profile."
@@ -2173,7 +3424,9 @@
     const planCompletion = gamePlanCompletion(workbook.gamePlan);
     const resetProgress = resetCompletion(workbook.preMatchReset);
     const weeklyProgress = weeklyDraftCompletion(workbook.weeklyDraft);
-    const postProgress = postDraftCompletion(workbook.postMatchDraft);
+    const postProgress = postMatchCurriculumProgress(workbook.postMatchDraft, workbook.postMatchReviews);
+    const linkedCurriculumProgress = { "game-plan": planCompletion, "pre-match": resetProgress, "post-match": postProgress };
+    const developmentProgress = curriculumProgramProgress(workbook.curriculum, linkedCurriculumProgress);
     function updateWorkbook(value) {
       dirtyRef.current = true;
       setWorkbook(value);
@@ -2198,11 +3451,24 @@
       });
     }
     function openModule(module) {
+      setReturnToCurriculumFromLinked(false);
       setActiveModule(module);
-      const headingIds = { baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
+      const headingIds = { development: showCurriculumLesson && curriculumLessonId ? "wb-curriculum-lesson-title" : "wb-curriculum-title", baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
       scrollWorkbookToTop(headingIds[module]);
     }
+    function openCurriculumLinkedModule(module) {
+      setReturnToCurriculumFromLinked(true);
+      setActiveModule(module);
+      const headingIds = { "game-plan": "wb-game-plan-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
+      scrollWorkbookToTop(headingIds[module]);
+    }
+    function returnToCurriculumLesson() {
+      setReturnToCurriculumFromLinked(false);
+      setActiveModule("development");
+      scrollWorkbookToTop("wb-curriculum-lesson-title");
+    }
     function closeModule() {
+      setReturnToCurriculumFromLinked(false);
       setActiveModule(null);
       scrollWorkbookToTop("wb-dashboard-title");
     }
@@ -2383,6 +3649,9 @@
         dirtyRef.current = false;
         setWorkbook(normalized);
         setActiveModule(null);
+        setCurriculumLessonId(null);
+        setShowCurriculumLesson(false);
+        setReturnToCurriculumFromLinked(false);
         setCanUndoRestore(!!previousRaw);
         setSaveStatus({ kind: "saved", message: "Restored backup saved in this browser profile." });
         setNotice("Backup restored and saved. Your previous stored copy is available through Undo last restore.");
@@ -2432,6 +3701,9 @@
       skipNextSaveRef.current = true;
       setWorkbook(makeEmptyMindsetWorkbook());
       setActiveModule(null);
+      setCurriculumLessonId(null);
+      setShowCurriculumLesson(false);
+      setReturnToCurriculumFromLinked(false);
       setCanUndoRestore(false);
       setSaveStatus({ kind: "saved", message: "Workbook cleared from this browser profile." });
       setNotice("All workbook responses and history were cleared from this browser profile.");
@@ -2441,12 +3713,31 @@
     const firstTakedown = workbook.gamePlan.takedowns.find((item) => nonEmpty(item.shot));
     const resetReadoutCount = resetProgress.complete;
     let activeContent = null;
+    const linkedModuleBack = returnToCurriculumFromLinked ? returnToCurriculumLesson : closeModule;
+    const linkedModuleBackLabel = returnToCurriculumFromLinked ? "Development worksheet" : void 0;
+    if (activeModule === "development") activeContent = /* @__PURE__ */ React.createElement(
+      CurriculumProgram,
+      {
+        curriculum: workbook.curriculum,
+        onChange: (value) => setSection("curriculum", value),
+        onBack: closeModule,
+        onOpenLinked: openCurriculumLinkedModule,
+        linkedProgress: linkedCurriculumProgress,
+        selectedLessonId: curriculumLessonId,
+        showLesson: showCurriculumLesson,
+        onOpenLesson: (id) => {
+          setCurriculumLessonId(id);
+          setShowCurriculumLesson(true);
+        },
+        onCloseLesson: () => setShowCurriculumLesson(false)
+      }
+    );
     if (activeModule === "baseline") activeContent = /* @__PURE__ */ React.createElement(BaselineModule, { baseline: workbook.baseline, onChange: (value) => setSection("baseline", value), onBack: closeModule });
-    if (activeModule === "game-plan") activeContent = /* @__PURE__ */ React.createElement(GamePlanModule, { gamePlan: workbook.gamePlan, onChange: (value) => setSection("gamePlan", value), onBack: closeModule });
+    if (activeModule === "game-plan") activeContent = /* @__PURE__ */ React.createElement(GamePlanModule, { gamePlan: workbook.gamePlan, onChange: (value) => setSection("gamePlan", value), onBack: linkedModuleBack, backLabel: linkedModuleBackLabel });
     if (activeModule === "weekly") activeContent = /* @__PURE__ */ React.createElement(WeeklyModule, { draft: workbook.weeklyDraft, entries: workbook.weeklyCheckIns, onDraftChange: (value) => setSection("weeklyDraft", value), onSave: saveWeeklyCheckIn, onEdit: editWeeklyCheckIn, onDelete: deleteWeeklyCheckIn, onCancelEdit: cancelWeeklyEdit, onBack: closeModule });
-    if (activeModule === "pre-match") activeContent = /* @__PURE__ */ React.createElement(PreMatchModule, { reset: workbook.preMatchReset, onChange: (value) => setSection("preMatchReset", value), onBack: closeModule });
-    if (activeModule === "post-match") activeContent = /* @__PURE__ */ React.createElement(PostMatchModule, { draft: workbook.postMatchDraft, entries: workbook.postMatchReviews, onDraftChange: (value) => setSection("postMatchDraft", value), onSave: savePostMatchReview, onEdit: editPostMatchReview, onDelete: deletePostMatchReview, onCancelEdit: cancelPostMatchEdit, onBack: closeModule });
-    return /* @__PURE__ */ React.createElement("div", { className: "wb-workbook" }, /* @__PURE__ */ React.createElement("header", { className: "wb-workbook-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Device-local athlete workspace"), /* @__PURE__ */ React.createElement("h1", null, "Mindset Workbook"), /* @__PURE__ */ React.createElement("p", null, "Build a game plan, reflect on your week and matches, and keep a routine you can revisit.")), /* @__PURE__ */ React.createElement("div", { className: "wb-save-status wb-save-status-" + saveStatus.kind, role: "status", "aria-live": "polite", "aria-atomic": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: saveStatus.kind === "error" ? "close" : "check", size: 17, stroke: 2.3 }), /* @__PURE__ */ React.createElement("span", null, saveStatus.message))), /* @__PURE__ */ React.createElement(
+    if (activeModule === "pre-match") activeContent = /* @__PURE__ */ React.createElement(PreMatchModule, { reset: workbook.preMatchReset, onChange: (value) => setSection("preMatchReset", value), onBack: linkedModuleBack, backLabel: linkedModuleBackLabel });
+    if (activeModule === "post-match") activeContent = /* @__PURE__ */ React.createElement(PostMatchModule, { draft: workbook.postMatchDraft, entries: workbook.postMatchReviews, onDraftChange: (value) => setSection("postMatchDraft", value), onSave: savePostMatchReview, onEdit: editPostMatchReview, onDelete: deletePostMatchReview, onCancelEdit: cancelPostMatchEdit, onBack: linkedModuleBack, backLabel: linkedModuleBackLabel });
+    return /* @__PURE__ */ React.createElement("div", { className: "wb-workbook" }, /* @__PURE__ */ React.createElement("header", { className: "wb-workbook-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Device-local athlete workspace"), /* @__PURE__ */ React.createElement("h1", null, "Mindset Workbook"), /* @__PURE__ */ React.createElement("p", null, "Use the complete worksheet program, quick match tools, and saved plans in one phone-first workspace.")), /* @__PURE__ */ React.createElement("div", { className: "wb-save-status wb-save-status-" + saveStatus.kind, role: "status", "aria-live": "polite", "aria-atomic": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: saveStatus.kind === "error" ? "close" : "check", size: 17, stroke: 2.3 }), /* @__PURE__ */ React.createElement("span", null, saveStatus.message))), /* @__PURE__ */ React.createElement(
       "div",
       {
         className: "wb-workbook-main",
@@ -2455,6 +3746,18 @@
         "data-testid": "mindset-active-module-" + (activeModule || "dashboard")
       },
       activeContent || /* @__PURE__ */ React.createElement("section", { className: "wb-dashboard", "aria-labelledby": "wb-dashboard-title" }, /* @__PURE__ */ React.createElement("header", { className: "wb-dashboard-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Your local workbook"), /* @__PURE__ */ React.createElement("h2", { id: "wb-dashboard-title", tabIndex: "-1" }, "Choose a module")), /* @__PURE__ */ React.createElement("p", null, "Responses are not published, but anyone using this same browser profile can view them.")), /* @__PURE__ */ React.createElement("div", { className: "wb-module-grid" }, /* @__PURE__ */ React.createElement(
+        DashboardCard,
+        {
+          module: "development",
+          title: "Complete Development Program",
+          description: MINDSET_CURRICULUM_LESSONS.length + " guided worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units.",
+          summary: "Self-knowledge, goals, toughness, motivation, present moment, pressure, confidence, clarity, controlled aggression, sleep, and injury recovery.",
+          progress: developmentProgress.complete,
+          progressTotal: developmentProgress.total,
+          buttonLabel: developmentProgress.complete ? "Resume program" : "Explore full program",
+          onOpen: () => openModule("development")
+        }
+      ), /* @__PURE__ */ React.createElement(
         DashboardCard,
         {
           module: "baseline",
@@ -3119,7 +4422,7 @@
       },
       /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 18, stroke: 2.4 }),
       /* @__PURE__ */ React.createElement("span", null, "Add Entry")
-    )), /* @__PURE__ */ React.createElement("div", { className: "content" + (view === "workbook" ? " content--workbook" : "") }, view === "workbook" ? /* @__PURE__ */ React.createElement(MindsetWorkbook, null) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "phead" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "phead__title" }, viewTitle), /* @__PURE__ */ React.createElement("p", { className: "phead__sub" }, viewSub)), /* @__PURE__ */ React.createElement("div", { className: "phead__count" }, results.length, " ", results.length === 1 ? "entry" : "entries")), view === "all" && !query.trim() && /* @__PURE__ */ React.createElement("section", { className: "wb-launch", "aria-labelledby": "wb-launch-title" }, /* @__PURE__ */ React.createElement("div", { className: "wb-launch__mark" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 27, stroke: 1.9 })), /* @__PURE__ */ React.createElement("div", { className: "wb-launch__copy" }, /* @__PURE__ */ React.createElement("span", { className: "wb-eyebrow" }, "Personal mindset practice"), /* @__PURE__ */ React.createElement("h2", { id: "wb-launch-title" }, "Turn the worksheets into your plan"), /* @__PURE__ */ React.createElement("p", null, "Five short, phone-first tools with automatic saving, match reviews, and a backup you control.")), /* @__PURE__ */ React.createElement("button", { className: "wb-primary wb-launch__button", onClick: () => go("workbook") }, "Open Mindset Workbook ", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))), view !== "saved" && view !== "progress" && /* @__PURE__ */ React.createElement("div", { className: "chips" }, /* @__PURE__ */ React.createElement("button", { className: "chip" + (view === "all" ? " chip--on" : ""), onClick: () => go("all") }, "All"), cats.map((c) => /* @__PURE__ */ React.createElement(
+    )), /* @__PURE__ */ React.createElement("div", { className: "content" + (view === "workbook" ? " content--workbook" : "") }, view === "workbook" ? /* @__PURE__ */ React.createElement(MindsetWorkbook, null) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "phead" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "phead__title" }, viewTitle), /* @__PURE__ */ React.createElement("p", { className: "phead__sub" }, viewSub)), /* @__PURE__ */ React.createElement("div", { className: "phead__count" }, results.length, " ", results.length === 1 ? "entry" : "entries")), view === "all" && !query.trim() && /* @__PURE__ */ React.createElement("section", { className: "wb-launch", "aria-labelledby": "wb-launch-title" }, /* @__PURE__ */ React.createElement("div", { className: "wb-launch__mark" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 27, stroke: 1.9 })), /* @__PURE__ */ React.createElement("div", { className: "wb-launch__copy" }, /* @__PURE__ */ React.createElement("span", { className: "wb-eyebrow" }, "Personal mindset practice"), /* @__PURE__ */ React.createElement("h2", { id: "wb-launch-title" }, "Turn the worksheets into your plan"), /* @__PURE__ */ React.createElement("p", null, "The complete worksheet program plus phone-first match tools, automatic saving, reviews, and a backup you control.")), /* @__PURE__ */ React.createElement("button", { className: "wb-primary wb-launch__button", onClick: () => go("workbook") }, "Open Mindset Workbook ", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))), view !== "saved" && view !== "progress" && /* @__PURE__ */ React.createElement("div", { className: "chips" }, /* @__PURE__ */ React.createElement("button", { className: "chip" + (view === "all" ? " chip--on" : ""), onClick: () => go("all") }, "All"), cats.map((c) => /* @__PURE__ */ React.createElement(
       "button",
       {
         key: c.id,

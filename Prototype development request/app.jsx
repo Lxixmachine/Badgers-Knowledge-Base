@@ -632,7 +632,7 @@ function App() {
               <div className="wb-launch__copy">
                 <span className="wb-eyebrow">Personal mindset practice</span>
                 <h2 id="wb-launch-title">Turn the worksheets into your plan</h2>
-                <p>Five short, phone-first tools with automatic saving, match reviews, and a backup you control.</p>
+                <p>The complete worksheet program plus phone-first match tools, automatic saving, reviews, and a backup you control.</p>
               </div>
               <button className="wb-primary wb-launch__button" onClick={() => go("workbook")}>
                 Open Mindset Workbook <Icon name="chevron" size={17} stroke={2.2} />

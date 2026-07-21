@@ -22,6 +22,26 @@ async function testStaticArtifacts() {
   assert.match(bundle, /wkb_mindset_workbook_v1/);
   assert.match(html, /\.wb-workbook\{/);
   assert.match(html, /@media\(max-width:720px\)/);
+  const styleDom = new JSDOM(html);
+  const findStyleRule = (selector) => {
+    let match = null;
+    const visit = (rules) => {
+      for (const rule of rules) {
+        if (rule.selectorText === selector) match = rule;
+        if (rule.cssRules) visit(rule.cssRules);
+      }
+    };
+    for (const sheet of styleDom.window.document.styleSheets) visit(sheet.cssRules);
+    return match;
+  };
+  const questionRule = findStyleRule(".wb-baseline-question");
+  const answerRowRule = findStyleRule(".wb-baseline-question>legend+.wb-answer-options");
+  const curriculumSummaryFocusRule = findStyleRule(".wb-curriculum-unit>summary:focus-visible");
+  assert.equal(questionRule?.style.getPropertyValue("min-width"), "0");
+  assert.equal(answerRowRule?.style.getPropertyValue("clear"), "left");
+  assert.equal(answerRowRule?.style.getPropertyValue("width"), "100%");
+  assert.match(curriculumSummaryFocusRule?.style.getPropertyValue("outline") || "", /3px solid/);
+  assert.equal(curriculumSummaryFocusRule?.style.getPropertyValue("outline-offset"), "-4px");
   assert.equal(duplicate, html);
   assert.equal(distHtml, html);
   assert.equal(distBundle, bundle);
@@ -96,17 +116,21 @@ async function testAccessibilityStructure() {
   assert.match(app, /<button className="scrim"[^>]*aria-label="Close menu"/);
   assert.doesNotMatch(mindset, />Private note</);
   assert.match(mindset, />Personal note/);
+  assert.doesNotMatch(mindset, /Private · Optional/);
+  assert.match(mindset, /Sensitive · Optional/);
+  assert.match(mindset, /aria-describedby=\{field\.hint \? hintId : undefined\}/);
   assert.match(mindset, /<fieldset className="wb-rating" aria-describedby=\{id \+ "-help"\}>/);
 }
 
 async function loadMindsetCore() {
-  const source = await read("mindset.jsx");
+  const [curriculumSource, source] = await Promise.all([read("mindset-curriculum.jsx"), read("mindset.jsx")]);
   const instrumented = source + `\nObject.assign(window.__mindsetTest, {
     makeEmptyMindsetWorkbook, validateMindsetWorkbook, normalizeMindsetWorkbook,
     baselineStats, gamePlanCompletion, weeklyDraftCompletion, postDraftCompletion,
-    makeWeeklyDraft, makePostMatchDraft, MINDSET_MAX_HISTORY_ENTRIES, MINDSET_MAX_TEXT_LENGTH
+    makeWeeklyDraft, makePostMatchDraft, postMatchCurriculumProgress, curriculumProgramProgress,
+    MINDSET_CURRICULUM_LESSONS, MINDSET_CURRICULUM_RESPONSE_KEYS,
+    MINDSET_MAX_HISTORY_ENTRIES, MINDSET_MAX_TEXT_LENGTH
   });`;
-  const compiled = await transform(instrumented, { loader: "jsx", format: "iife", target: "es2018" });
   const context = {
     window: { __mindsetTest: {}, localStorage: { getItem: () => null, setItem() {}, removeItem() {} } },
     document: {},
@@ -121,6 +145,9 @@ async function loadMindsetCore() {
     Set,
     crypto: { randomUUID: () => "00000000-0000-4000-8000-000000000000" },
   };
+  const curriculumCompiled = await transform(curriculumSource, { loader: "jsx", format: "iife", target: "es2018" });
+  vm.runInNewContext(curriculumCompiled.code, context, { filename: "mindset-curriculum.test.js" });
+  const compiled = await transform(instrumented, { loader: "jsx", format: "iife", target: "es2018" });
   vm.runInNewContext(compiled.code, context, { filename: "mindset.test.js" });
   return context.window.__mindsetTest;
 }
@@ -129,14 +156,17 @@ async function testWorkbookValidation() {
   const core = await loadMindsetCore();
   const empty = core.makeEmptyMindsetWorkbook();
   assert.equal(core.validateMindsetWorkbook(empty), null);
+  assert.equal(empty.postMatchDraft.checklist.firstMove, false);
 
   const legacyBackup = structuredClone(empty);
   delete legacyBackup.suspendedWeeklyDraft;
   delete legacyBackup.suspendedPostMatchDraft;
+  delete legacyBackup.curriculum;
   assert.equal(core.validateMindsetWorkbook(legacyBackup), null);
   const normalizedLegacyBackup = core.normalizeMindsetWorkbook(legacyBackup);
   assert.equal(normalizedLegacyBackup.suspendedWeeklyDraft, null);
   assert.equal(normalizedLegacyBackup.suspendedPostMatchDraft, null);
+  assert.equal(Object.keys(normalizedLegacyBackup.curriculum.responses).length, 0);
 
   const backupWithSuspendedDrafts = structuredClone(empty);
   backupWithSuspendedDrafts.suspendedWeeklyDraft = {
@@ -158,6 +188,33 @@ async function testWorkbookValidation() {
   assert.equal("hidden" in normalizedSuspendedDrafts.suspendedWeeklyDraft, false);
   assert.equal("hidden" in normalizedSuspendedDrafts.suspendedPostMatchDraft, false);
 
+  const legacyPostBackup = structuredClone(empty);
+  const legacyPostChecklist = { ...legacyPostBackup.postMatchDraft.checklist, firstMove: true };
+  for (const key of ["topFirstMove", "bottomFirstMove", "fullRoutine", "turnAttempts", "finishedPeriods", "edgeEffort", "hustleCenter"]) delete legacyPostChecklist[key];
+  legacyPostBackup.postMatchDraft.checklist = legacyPostChecklist;
+  legacyPostBackup.postMatchReviews = [{
+    ...legacyPostBackup.postMatchDraft,
+    editingId: undefined,
+    id: "legacy-post",
+    createdAt: "2026-07-20T00:00:00.000Z",
+    updatedAt: "2026-07-20T00:00:00.000Z",
+  }];
+  delete legacyPostBackup.postMatchReviews[0].editingId;
+  assert.equal(core.validateMindsetWorkbook(legacyPostBackup), null);
+  const normalizedLegacyPost = core.normalizeMindsetWorkbook(legacyPostBackup);
+  assert.equal(normalizedLegacyPost.postMatchDraft.checklist.topFirstMove, true);
+  assert.equal(normalizedLegacyPost.postMatchDraft.checklist.bottomFirstMove, true);
+  assert.equal(normalizedLegacyPost.postMatchReviews[0].checklist.topFirstMove, true);
+  assert.equal(normalizedLegacyPost.postMatchReviews[0].checklist.bottomFirstMove, true);
+  assert.equal(normalizedLegacyPost.postMatchReviews[0].checklist.firstMove, true);
+
+  const savedReviewProgress = core.postMatchCurriculumProgress(core.makePostMatchDraft(), [{
+    ...core.makePostMatchDraft(),
+    event: "Saved dual",
+    reflection: "Completed review",
+  }]);
+  assert.equal(savedReviewProgress.complete, 2);
+
   const invalidSuspendedDraft = structuredClone(backupWithSuspendedDrafts);
   invalidSuspendedDraft.suspendedWeeklyDraft.editingId = "history-entry";
   assert.match(core.validateMindsetWorkbook(invalidSuspendedDraft), /invalid suspended weekly check-in draft/i);
@@ -178,6 +235,16 @@ async function testWorkbookValidation() {
   const tooLong = structuredClone(empty);
   tooLong.gamePlan.tiePreference = "x".repeat(core.MINDSET_MAX_TEXT_LENGTH + 1);
   assert.match(core.validateMindsetWorkbook(tooLong), /invalid game-plan section/i);
+
+  assert.equal(core.MINDSET_CURRICULUM_LESSONS.length, 70);
+  assert.ok(core.MINDSET_CURRICULUM_RESPONSE_KEYS.size > 100);
+  const curriculumKey = [...core.MINDSET_CURRICULUM_RESPONSE_KEYS][0];
+  const curriculumBackup = structuredClone(empty);
+  curriculumBackup.curriculum.responses[curriculumKey] = "Saved development response";
+  assert.equal(core.validateMindsetWorkbook(curriculumBackup), null);
+  const unknownCurriculumField = structuredClone(empty);
+  unknownCurriculumField.curriculum.responses["unknown.lesson"] = "must be rejected";
+  assert.match(core.validateMindsetWorkbook(unknownCurriculumField), /invalid development-program section/i);
 
   const hiddenData = structuredClone(empty);
   hiddenData.weeklyDraft.hidden = "must not survive";
@@ -404,11 +471,38 @@ async function testRenderedWorkbook() {
     trace("verified mobile drawer focus");
 
     await click(window, act, window.document.querySelector('[data-testid="mindset-workbook-nav"]'));
-    assert.equal(window.document.querySelectorAll("[data-mindset-module-card]").length, 5);
+    assert.equal(window.document.querySelectorAll("[data-mindset-module-card]").length, 6);
     assert.match(window.document.querySelector(".wb-dashboard-header").textContent, /same browser profile can view them/i);
     trace("opened workbook dashboard");
 
+    await click(window, act, window.document.querySelector('[data-testid="mindset-module-card-development"] .wb-primary-button'));
+    assert.equal(window.document.querySelectorAll(".wb-curriculum-unit").length, 11);
+    assert.equal(window.document.querySelectorAll(".wb-curriculum-lesson-button").length, 70);
+    await click(window, act, window.document.querySelector(".wb-curriculum-lesson-button"));
+    const firstCurriculumControl = window.document.querySelector(".wb-curriculum-form textarea.wb-field-control");
+    assert.ok(firstCurriculumControl, "The first development worksheet should contain a response control");
+    await change(window, act, firstCurriculumControl, "My complete-program response");
+    await click(window, act, window.document.querySelector(".wb-back-button"));
+    const returnedCurriculumUnit = window.document.getElementById("wb-curriculum-unit-self-knowledge");
+    const returnedLessonButton = window.document.getElementById("wb-curriculum-open-self-knowledge-1");
+    assert.equal(returnedCurriculumUnit.open, true);
+    await act(async () => { await delay(50); });
+    assert.ok(window.document.activeElement === returnedLessonButton, "Returning from a worksheet should restore its unit and focus its row");
+    await click(window, act, window.document.querySelector('[data-testid="curriculum-open-self-knowledge-4"]'));
+    await click(window, act, window.document.querySelector(".wb-linked-worksheet .wb-primary-button"));
+    assert.ok(window.document.getElementById("wb-pre-match-title"));
+    assert.match(window.document.querySelector(".wb-back-button").textContent, /Development worksheet/);
+    await click(window, act, window.document.querySelector(".wb-back-button"));
+    assert.ok(window.document.querySelector('[data-testid="curriculum-lesson-self-knowledge-4"]'), "Linked tools should return to their source worksheet");
+    await click(window, act, window.document.querySelector(".wb-back-button"));
+    await click(window, act, window.document.querySelector(".wb-back-button"));
+    assert.ok(window.document.querySelector('[data-testid="mindset-module-card-baseline"]'));
+    trace("verified comprehensive development program");
+
     await click(window, act, window.document.querySelector('[data-testid="mindset-module-card-baseline"] .wb-primary-button'));
+    const baselineQuestions = [...window.document.querySelectorAll(".wb-baseline-question")];
+    assert.ok(baselineQuestions.length > 0);
+    baselineQuestions.forEach((question) => assert.equal(question.querySelectorAll(".wb-answer-option").length, 3));
     await click(window, act, window.document.querySelector('.wb-baseline-question input[value="working"]'));
     await change(window, act, window.document.querySelector(".wb-question-note textarea"), "Reset after the next whistle");
     await click(window, act, window.document.querySelector(".wb-back-button"));
@@ -416,6 +510,7 @@ async function testRenderedWorkbook() {
     const storedAfterFastExit = JSON.parse(window.localStorage.getItem("wkb_mindset_workbook_v1"));
     assert.equal(Object.values(storedAfterFastExit.baseline.answers)[0], "working");
     assert.equal(Object.values(storedAfterFastExit.baseline.notes)[0], "Reset after the next whistle");
+    assert.ok(Object.values(storedAfterFastExit.curriculum.responses).includes("My complete-program response"));
     trace("saved baseline fast-exit state");
 
     await click(window, act, window.document.querySelector('[data-testid="mindset-workbook-nav"]'));

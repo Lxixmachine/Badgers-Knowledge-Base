@@ -7,6 +7,7 @@ const sources = [
   "film.jsx",
   "components.jsx",
   "docs.jsx",
+  "mindset-curriculum.jsx",
   "mindset.jsx",
   "app.jsx",
 ];
