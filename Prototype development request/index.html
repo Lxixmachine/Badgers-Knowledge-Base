@@ -443,6 +443,7 @@ input,select,textarea{font-family:inherit}
 .wb-dashboard-header>p{max-width:420px;color:var(--tx3);font-size:13px;text-align:right}
 .wb-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .wb-module-card{display:flex;flex-direction:column;gap:16px;min-width:0;padding:21px;border:1px solid var(--line);border-radius:16px;background:var(--surf);box-shadow:var(--card-rest-shadow);transition:border-color .15s,transform .15s,box-shadow .15s}
+.wb-module-card[data-module-card="development"]{grid-column:1/-1;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf) 72%)}
 .wb-module-card:hover{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));transform:translateY(-2px);box-shadow:var(--shadow)}
 .wb-module-card-heading{display:flex;align-items:flex-start;gap:13px}
 .wb-module-card-icon{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:11px;background:color-mix(in srgb,var(--accent) 12%,var(--surf2));color:var(--accent-tx)}
@@ -504,6 +505,40 @@ textarea.wb-field-control{min-height:82px}
 .wb-editing-badge{flex-shrink:0;padding:5px 9px;border:1px solid color-mix(in srgb,var(--accent) 36%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--accent) 9%,transparent);color:var(--accent-tx);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.055em}
 .wb-form-actions,.wb-history-actions,.wb-data-tool-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
 .wb-form-message,.wb-data-notice{min-height:20px;color:var(--tx2);font-size:12.5px}
+.wb-curriculum-notice{display:flex;align-items:flex-start;gap:11px;padding:16px 17px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:13px;background:color-mix(in srgb,var(--accent) 7%,var(--surf));color:var(--tx2);font-size:12.5px;line-height:1.55}
+.wb-curriculum-notice svg{flex-shrink:0;margin-top:1px;color:var(--accent-tx)}
+.wb-curriculum-notice-sensitive{border-color:color-mix(in srgb,var(--danger-tx) 34%,var(--line));background:color-mix(in srgb,var(--danger-tx) 7%,var(--surf))}
+.wb-curriculum-units{display:flex;flex-direction:column;gap:12px}
+.wb-curriculum-unit{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--surf)}
+.wb-curriculum-unit>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;cursor:pointer;list-style:none;transition:background .14s}
+.wb-curriculum-unit>summary:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 72%,#fff);outline-offset:-4px}
+.wb-curriculum-unit>summary::-webkit-details-marker{display:none}
+.wb-curriculum-unit>summary:hover{background:var(--surf2)}
+.wb-curriculum-unit>summary>span:first-child{display:flex;min-width:0;flex-direction:column;gap:3px}
+.wb-curriculum-unit>summary strong{font-family:"Oswald",sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.02em}
+.wb-curriculum-unit>summary small{color:var(--tx3);font-size:12px;line-height:1.4}
+.wb-curriculum-unit>summary>span:last-child{flex-shrink:0;padding:5px 8px;border-radius:999px;background:var(--surf2);color:var(--tx3);font-size:11px;font-weight:800}
+.wb-curriculum-unit[open]>summary{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--accent) 5%,var(--surf))}
+.wb-curriculum-unit>.wb-progress{padding:16px 18px 4px}
+.wb-curriculum-lesson-list{display:flex;flex-direction:column;padding:12px}
+.wb-curriculum-lesson-button{width:100%;display:grid;grid-template-columns:82px minmax(0,1fr) auto;align-items:center;gap:13px;padding:13px 10px;border-radius:10px;text-align:left;transition:background .14s,color .14s}
+.wb-curriculum-lesson-button:hover{background:var(--surf2)}
+.wb-curriculum-week{align-self:start;padding:4px 7px;border-radius:7px;background:color-mix(in srgb,var(--accent) 10%,var(--surf2));color:var(--accent-tx);font-size:10.5px;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:.045em}
+.wb-curriculum-lesson-button>span:nth-child(2){display:flex;min-width:0;flex-direction:column;gap:3px}
+.wb-curriculum-lesson-button strong{color:var(--tx);font-size:13.5px}
+.wb-curriculum-lesson-button small{display:-webkit-box;overflow:hidden;color:var(--tx3);font-size:11.5px;line-height:1.4;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.wb-curriculum-lesson-progress{display:flex;align-items:center;gap:6px;color:var(--tx3);font-size:11px;font-weight:800}
+.wb-curriculum-form{display:flex;flex-direction:column;gap:0;padding-top:4px;padding-bottom:4px}
+.wb-curriculum-field,.wb-curriculum-choice,.wb-curriculum-checklist{width:100%;min-width:0;padding:18px 2px;border:0;border-bottom:1px solid var(--line)}
+.wb-curriculum-field:last-child,.wb-curriculum-choice:last-child,.wb-curriculum-checklist:last-child{border-bottom:0}
+.wb-curriculum-choice>legend,.wb-curriculum-checklist>legend{width:100%}
+.wb-curriculum-field-hint{display:block;color:var(--tx3);font-size:11.5px;font-weight:400;line-height:1.45}
+.wb-curriculum-check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+.wb-linked-worksheet{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.wb-linked-worksheet>p{margin-top:-7px}
+.wb-curriculum-pager{display:grid;grid-template-columns:auto minmax(120px,1fr) auto;align-items:center;gap:12px}
+.wb-curriculum-pager>span{color:var(--tx3);font-size:11.5px;font-weight:700;text-align:center}
+.wb-curriculum-pager button:disabled{opacity:.4;cursor:not-allowed}
 .wb-baseline>.wb-progress{padding:0 2px}
 .wb-priorities{padding:20px 21px;border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-radius:15px;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf))}
 .wb-priorities h3{font-family:"Oswald",sans-serif;font-size:19px;text-transform:uppercase}
@@ -520,8 +555,9 @@ textarea.wb-field-control{min-height:82px}
 .wb-baseline-group-header span{color:var(--tx3);font-size:11.5px;font-weight:700}
 .wb-category-counts{display:flex;flex-wrap:wrap;gap:7px;padding:0 19px 16px;color:var(--tx3);font-size:11px}
 .wb-category-counts span{padding:4px 7px;border-radius:999px;background:var(--surf2)}
-.wb-baseline-question{padding:17px 19px;border:0;border-top:1px solid var(--line)}
+.wb-baseline-question{width:100%;min-width:0;padding:17px 19px;border:0;border-top:1px solid var(--line)}
 .wb-baseline-question>legend{float:left;width:100%;margin-bottom:2px;color:var(--tx);font-size:13.5px;font-weight:650;line-height:1.45}
+.wb-baseline-question>legend+.wb-answer-options{clear:left;width:100%;min-width:0}
 .wb-baseline-question>legend span{color:var(--accent-tx)}
 .wb-baseline-question::after{content:"";display:block;clear:both}
 .wb-question-note{display:flex;flex-direction:column;gap:6px;margin-top:12px;color:var(--tx2);font-size:12px;font-weight:700}
@@ -601,6 +637,7 @@ textarea.wb-field-control{min-height:82px}
   .wb-form-section,.wb-entry-form,.wb-history,.wb-count-table-wrap{padding:17px}
   .wb-priority-list{grid-template-columns:1fr}
   .wb-takedown-grid,.wb-check-grid{grid-template-columns:1fr}
+  .wb-curriculum-check-grid{grid-template-columns:1fr}
   .wb-takedown-card:last-child{grid-column:auto}
   .wb-quick-readout{position:static}
   .wb-workbook-footer{gap:12px}
@@ -615,6 +652,11 @@ textarea.wb-field-control{min-height:82px}
   .wb-answer-option{flex:1;min-width:calc(50% - 4px)}
   .wb-answer-option span{width:100%;padding:0 8px}
   .wb-form-actions>button,.wb-history-actions>button,.wb-data-tool-actions>button{width:100%;flex:1 1 100%}
+  .wb-curriculum-unit>summary{align-items:flex-start;padding:16px}
+  .wb-curriculum-lesson-button{grid-template-columns:72px minmax(0,1fr);align-items:start}
+  .wb-curriculum-lesson-progress{grid-column:2;justify-self:start}
+  .wb-curriculum-pager{grid-template-columns:1fr 1fr}
+  .wb-curriculum-pager>span{grid-column:1/-1;grid-row:1}
   .wb-privacy-notice{padding:17px}
 }
 @media(prefers-reduced-motion:reduce){

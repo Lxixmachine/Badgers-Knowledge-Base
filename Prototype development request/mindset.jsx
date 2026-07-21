@@ -1,6 +1,7 @@
 // mindset.jsx — private, device-local athlete reflection workbook.
 // This component intentionally never reads from or writes to window.WKB.
 const { useEffect, useMemo, useRef, useState } = React;
+const MINDSET_CURRICULUM_UNITS = window.MINDSET_CURRICULUM_UNITS || [];
 
 const MINDSET_STORAGE_KEY = "wkb_mindset_workbook_v1";
 const MINDSET_RESTORE_RECOVERY_KEY = "wkb_mindset_workbook_before_restore_v1";
@@ -117,19 +118,42 @@ const RESET_FIELDS = [
 
 const POST_MATCH_CHECKLIST = [
   ["warmup", "Warm-up"],
+  ["fullRoutine", "Full pre-match routine"],
   ["firstShot", "First shot"],
   ["forwardPressure", "Forward pressure"],
   ["attackAttempts", "Attack attempts"],
   ["tieControl", "Tie control"],
-  ["firstMove", "Top/bottom first move"],
+  ["topFirstMove", "Top first move"],
+  ["turnAttempts", "Looked to turn or pin"],
   ["matReturns", "Mat returns"],
-  ["movement", "Movement"],
+  ["bottomFirstMove", "Bottom first move"],
+  ["movement", "Constant bottom movement"],
+  ["finishedPeriods", "Finished no period on bottom"],
   ["neverQuit", "Never quit"],
   ["effort", "Effort"],
+  ["edgeEffort", "Wrestled through edges and period endings"],
+  ["hustleCenter", "Hustled back to center"],
   ["composure", "Composure"],
   ["bodyLanguage", "Body language"],
   ["noClockWatching", "No clock watching"],
 ];
+const LEGACY_POST_MATCH_REQUIRED_KEYS = [
+  "warmup", "firstShot", "forwardPressure", "attackAttempts", "tieControl", "matReturns", "movement",
+  "neverQuit", "effort", "composure", "bodyLanguage", "noClockWatching",
+];
+const POST_MATCH_ADDED_KEYS = ["fullRoutine", "turnAttempts", "finishedPeriods", "edgeEffort", "hustleCenter"];
+
+const MINDSET_CURRICULUM_LESSONS = MINDSET_CURRICULUM_UNITS.reduce(
+  (lessons, unit) => lessons.concat(unit.lessons.map((lesson) => ({ ...lesson, unitId: unit.id, unitTitle: unit.title }))),
+  []
+);
+const MINDSET_CURRICULUM_LESSON_MAP = MINDSET_CURRICULUM_LESSONS.reduce((result, lesson) => {
+  result[lesson.id] = lesson;
+  return result;
+}, {});
+const MINDSET_CURRICULUM_RESPONSE_KEYS = new Set(
+  MINDSET_CURRICULUM_LESSONS.reduce((keys, lesson) => keys.concat((lesson.fields || []).map((field) => lesson.id + "." + field.id)), [])
+);
 
 function localDateValue() {
   const now = new Date();
@@ -182,10 +206,22 @@ function makePreMatchReset() {
 }
 
 function makePostChecklist() {
-  return POST_MATCH_CHECKLIST.reduce((checklist, item) => {
-    checklist[item[0]] = false;
-    return checklist;
+  const checklist = POST_MATCH_CHECKLIST.reduce((result, item) => {
+    result[item[0]] = false;
+    return result;
   }, {});
+  checklist.firstMove = false;
+  return checklist;
+}
+
+function copyPostChecklist(checklist) {
+  const result = POST_MATCH_CHECKLIST.reduce((copy, item) => {
+    const legacyFirstMove = item[0] === "topFirstMove" || item[0] === "bottomFirstMove";
+    copy[item[0]] = checklist[item[0]] === true || (legacyFirstMove && checklist.firstMove === true);
+    return copy;
+  }, {});
+  result.firstMove = result.topFirstMove || result.bottomFirstMove;
+  return result;
 }
 
 function makePostMatchDraft() {
@@ -223,10 +259,7 @@ function copyPostMatchDraft(draft) {
     date: draft.date,
     opponent: draft.opponent,
     result: draft.result,
-    checklist: POST_MATCH_CHECKLIST.reduce((result, item) => {
-      result[item[0]] = draft.checklist[item[0]];
-      return result;
-    }, {}),
+    checklist: copyPostChecklist(draft.checklist),
     reflection: draft.reflection,
     improvements: draft.improvements.slice(0, 3),
     nextAction: draft.nextAction,
@@ -247,6 +280,7 @@ function makeEmptyMindsetWorkbook() {
     postMatchDraft: makePostMatchDraft(),
     suspendedPostMatchDraft: null,
     postMatchReviews: [],
+    curriculum: { responses: {} },
   };
 }
 
@@ -310,12 +344,24 @@ function validPostDraft(value) {
   if (!["event", "date", "opponent", "result", "reflection", "nextAction"].every((key) => isSafeString(value[key]))) return false;
   if (!Array.isArray(value.improvements) || value.improvements.length !== 3 || !value.improvements.every(isSafeString)) return false;
   if (!isRecord(value.checklist)) return false;
-  return POST_MATCH_CHECKLIST.every((item) => typeof value.checklist[item[0]] === "boolean");
+  if (!LEGACY_POST_MATCH_REQUIRED_KEYS.every((key) => typeof value.checklist[key] === "boolean")) return false;
+  const hasLegacyFirstMove = typeof value.checklist.firstMove === "boolean";
+  const hasSplitFirstMoves = typeof value.checklist.topFirstMove === "boolean" && typeof value.checklist.bottomFirstMove === "boolean";
+  if (!hasLegacyFirstMove && !hasSplitFirstMoves) return false;
+  return POST_MATCH_ADDED_KEYS.every((key) => value.checklist[key] === undefined || typeof value.checklist[key] === "boolean");
 }
 
 function validPostEntry(value) {
   return validPostDraft({ ...value, editingId: null }) && isSafeString(value.id) &&
     isSafeString(value.createdAt) && isSafeString(value.updatedAt);
+}
+
+function validCurriculum(value) {
+  if (value === undefined) return true;
+  if (!isRecord(value) || !isRecord(value.responses)) return false;
+  return Object.keys(value.responses).every((key) =>
+    MINDSET_CURRICULUM_RESPONSE_KEYS.has(key) && isSafeString(value.responses[key])
+  );
 }
 
 function validSuspendedWeeklyDraft(value) {
@@ -353,6 +399,7 @@ function validateMindsetWorkbook(value) {
   if (!Array.isArray(value.postMatchReviews) || value.postMatchReviews.length > MINDSET_MAX_HISTORY_ENTRIES || !value.postMatchReviews.every(validPostEntry) || !entriesHaveUniqueIds(value.postMatchReviews)) {
     return "The backup has an invalid post-match history.";
   }
+  if (!validCurriculum(value.curriculum)) return "The backup has an invalid development-program section.";
   return null;
 }
 
@@ -398,16 +445,19 @@ function normalizeMindsetWorkbook(value) {
       date: entry.date,
       opponent: entry.opponent,
       result: entry.result,
-      checklist: POST_MATCH_CHECKLIST.reduce((result, item) => {
-        result[item[0]] = entry.checklist[item[0]];
-        return result;
-      }, {}),
+      checklist: copyPostChecklist(entry.checklist),
       reflection: entry.reflection,
       improvements: entry.improvements.slice(0, 3),
       nextAction: entry.nextAction,
       createdAt: entry.createdAt,
       updatedAt: entry.updatedAt,
     })),
+    curriculum: {
+      responses: Object.keys(value.curriculum && value.curriculum.responses || {}).reduce((result, key) => {
+        if (MINDSET_CURRICULUM_RESPONSE_KEYS.has(key)) result[key] = value.curriculum.responses[key];
+        return result;
+      }, {}),
+    },
   };
 }
 
@@ -499,11 +549,61 @@ function postDraftCompletion(draft) {
     .filter(nonEmpty).length;
   complete += draft.improvements.filter(nonEmpty).length;
   complete += POST_MATCH_CHECKLIST.filter((item) => draft.checklist[item[0]]).length;
-  return { complete, total: 22 };
+  return { complete, total: 6 + 3 + POST_MATCH_CHECKLIST.length };
 }
 
 function hasPostDraftContent(draft) {
   return postDraftCompletion(draft).complete > 0;
+}
+
+function postMatchCurriculumProgress(draft, entries) {
+  return [draft].concat(entries || []).reduce((best, item) => {
+    const progress = postDraftCompletion(item);
+    return progress.complete > best.complete ? progress : best;
+  }, { complete: 0, total: postDraftCompletion(draft).total });
+}
+
+function curriculumResponseKey(lessonId, fieldId) {
+  return lessonId + "." + fieldId;
+}
+
+function curriculumFieldProgress(lesson, curriculum) {
+  const fields = lesson.fields || [];
+  const complete = fields.filter((field) => nonEmpty(curriculum.responses[curriculumResponseKey(lesson.id, field.id)])).length;
+  return { complete, total: fields.length };
+}
+
+function curriculumLessonProgress(lesson, curriculum, linkedProgress) {
+  if (lesson.linkedModule) return linkedProgress[lesson.linkedModule] || { complete: 0, total: 1 };
+  return curriculumFieldProgress(lesson, curriculum);
+}
+
+function curriculumProgramProgress(curriculum, linkedProgress) {
+  return MINDSET_CURRICULUM_LESSONS.reduce((result, lesson) => {
+    const progress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+    result.complete += progress.complete;
+    result.total += progress.total;
+    return result;
+  }, { complete: 0, total: 0 });
+}
+
+function curriculumUnitProgress(unit, curriculum, linkedProgress) {
+  return unit.lessons.reduce((result, lesson) => {
+    const progress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+    result.complete += progress.complete;
+    result.total += progress.total;
+    return result;
+  }, { complete: 0, total: 0 });
+}
+
+function checklistSelections(value) {
+  return nonEmpty(value) ? value.split("\n").filter(Boolean) : [];
+}
+
+function toggleChecklistSelection(value, option) {
+  const selected = checklistSelections(value);
+  const next = selected.indexOf(option) >= 0 ? selected.filter((item) => item !== option) : selected.concat(option);
+  return next.join("\n");
 }
 
 function TextField({ id, label, value, onChange, placeholder, multiline = false, rows = 3, type = "text", required = false }) {
@@ -566,12 +666,12 @@ function ProgressMeter({ value, total, label }) {
   );
 }
 
-function ModuleHeader({ headingId, title, eyebrow, description, onBack }) {
+function ModuleHeader({ headingId, title, eyebrow, description, onBack, backLabel = "Workbook home" }) {
   return (
     <header className="wb-module-header">
       <button className="wb-back-button" type="button" onClick={onBack}>
         <Icon name="back" size={18} stroke={2.2} />
-        Workbook home
+        {backLabel}
       </button>
       <p className="wb-eyebrow">{eyebrow}</p>
       <h2 className="wb-module-title" id={headingId} tabIndex="-1">{title}</h2>
@@ -589,7 +689,7 @@ function DashboardCard({ module, title, description, summary, progress, progress
       data-testid={"mindset-module-card-" + module}
     >
       <div className="wb-module-card-heading">
-        <span className="wb-module-card-icon" aria-hidden="true"><Icon name={module === "baseline" ? "brain" : module === "game-plan" ? "target" : module === "pre-match" ? "flag" : "check"} size={22} stroke={2} /></span>
+        <span className="wb-module-card-icon" aria-hidden="true"><Icon name={module === "baseline" || module === "development" ? "brain" : module === "game-plan" ? "target" : module === "pre-match" ? "flag" : "check"} size={22} stroke={2} /></span>
         <div>
           <h3>{title}</h3>
           <p>{description}</p>
@@ -603,6 +703,239 @@ function DashboardCard({ module, title, description, summary, progress, progress
         <Icon name="chevron" size={17} stroke={2.2} />
       </button>
     </article>
+  );
+}
+
+function curriculumOptionLabel(option) {
+  return isRecord(option) ? option.label : option;
+}
+
+function curriculumOptionValue(option) {
+  return isRecord(option) ? option.value : option;
+}
+
+function CurriculumField({ lessonId, field, value, onChange }) {
+  const id = "wb-curriculum-" + lessonId + "-" + field.id;
+  const hintId = id + "-hint";
+  const label = (
+    <span className="wb-field-label">
+      {field.label}
+      <span className="wb-field-optional">{field.sensitive ? "Sensitive · Optional" : "Optional"}</span>
+    </span>
+  );
+
+  if (field.type === "choice") {
+    return (
+      <fieldset className="wb-curriculum-choice" aria-describedby={field.hint ? hintId : undefined}>
+        <legend>{label}</legend>
+        {field.hint && <p className="wb-curriculum-field-hint" id={hintId}>{field.hint}</p>}
+        <div className="wb-answer-options">
+          {(field.options || []).map((option) => {
+            const optionValue = curriculumOptionValue(option);
+            return (
+              <label className="wb-answer-option" key={optionValue}>
+                <input type="radio" name={id} value={optionValue} checked={value === optionValue} onChange={() => onChange(optionValue)} />
+                <span>{curriculumOptionLabel(option)}</span>
+              </label>
+            );
+          })}
+          {nonEmpty(value) && <button className="wb-link-button" type="button" onClick={() => onChange("")}>Clear answer</button>}
+        </div>
+      </fieldset>
+    );
+  }
+
+  if (field.type === "checklist") {
+    const selected = checklistSelections(value);
+    return (
+      <fieldset className="wb-curriculum-checklist" aria-describedby={field.hint ? hintId : undefined}>
+        <legend>{label}</legend>
+        {field.hint && <p className="wb-curriculum-field-hint" id={hintId}>{field.hint}</p>}
+        <div className="wb-curriculum-check-grid">
+          {(field.options || []).map((option) => {
+            const optionValue = curriculumOptionValue(option);
+            return (
+              <label className="wb-check-item" key={optionValue}>
+                <input type="checkbox" checked={selected.indexOf(optionValue) >= 0} onChange={() => onChange(toggleChecklistSelection(value, optionValue))} />
+                <span><Icon name="check" size={16} stroke={2.4} />{curriculumOptionLabel(option)}</span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+    );
+  }
+
+  const inputType = field.type === "date" || field.type === "time" ? field.type : "text";
+  const multiline = field.type !== "short" && field.type !== "date" && field.type !== "time";
+  return (
+    <label className="wb-field wb-curriculum-field" htmlFor={id}>
+      {label}
+      {field.hint && <span className="wb-curriculum-field-hint" id={hintId}>{field.hint}</span>}
+      {multiline ? (
+        <textarea id={id} className="wb-field-control" value={value} onChange={(event) => onChange(event.target.value)} placeholder={field.placeholder || "Add your response"} rows={field.rows || 4} maxLength={MINDSET_MAX_TEXT_LENGTH} aria-describedby={field.hint ? hintId : undefined} />
+      ) : (
+        <input id={id} className="wb-field-control" type={inputType} value={value} onChange={(event) => onChange(event.target.value)} placeholder={field.placeholder || "Add your response"} maxLength={inputType === "text" ? 180 : undefined} aria-describedby={field.hint ? hintId : undefined} />
+      )}
+    </label>
+  );
+}
+
+function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedProgress, selectedLessonId, showLesson, onOpenLesson, onCloseLesson }) {
+  const selectedLesson = showLesson && selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
+  const [openUnitIds, setOpenUnitIds] = useState(() => {
+    const initialLesson = selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
+    return initialLesson ? [initialLesson.unitId] : [];
+  });
+  const selectedIndex = selectedLesson ? MINDSET_CURRICULUM_LESSONS.findIndex((lesson) => lesson.id === selectedLesson.id) : -1;
+  const overallProgress = curriculumProgramProgress(curriculum, linkedProgress);
+
+  function setUnitOpen(unitId, open) {
+    setOpenUnitIds((current) => open
+      ? (current.indexOf(unitId) >= 0 ? current : current.concat(unitId))
+      : current.filter((id) => id !== unitId));
+  }
+
+  useEffect(() => {
+    if (showLesson || !selectedLessonId) return;
+    const lesson = MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId];
+    if (!lesson) return;
+    setUnitOpen(lesson.unitId, true);
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById("wb-curriculum-open-" + lesson.id);
+      if (!target) return;
+      if (typeof target.scrollIntoView === "function") target.scrollIntoView({ block: "center", behavior: "smooth" });
+      target.focus({ preventScroll: true });
+    });
+  }, [showLesson, selectedLessonId]);
+
+  function focusAfterNavigation(id) {
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (target) target.focus({ preventScroll: true });
+      const content = document.querySelector(".content--workbook");
+      if (content) content.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  function openLesson(id) {
+    onOpenLesson(id);
+    focusAfterNavigation("wb-curriculum-lesson-title");
+  }
+
+  function closeLesson() {
+    const unitId = selectedLesson.unitId;
+    setUnitOpen(unitId, true);
+    onCloseLesson();
+  }
+
+  function setResponse(lessonId, fieldId, response) {
+    const key = curriculumResponseKey(lessonId, fieldId);
+    const responses = { ...curriculum.responses };
+    if (response) responses[key] = response;
+    else delete responses[key];
+    onChange({ responses });
+  }
+
+  if (selectedLesson) {
+    const progress = curriculumLessonProgress(selectedLesson, curriculum, linkedProgress);
+    const linkedLabels = { "pre-match": "Pre-Match Reset", "post-match": "Post-Match Review", "game-plan": "My Wrestling Game Plan" };
+    return (
+      <section className="wb-module wb-curriculum-lesson" aria-labelledby="wb-curriculum-lesson-title" data-testid={"curriculum-lesson-" + selectedLesson.id}>
+        <ModuleHeader
+          headingId="wb-curriculum-lesson-title"
+          title={selectedLesson.title}
+          eyebrow={selectedLesson.unitTitle + " · " + (selectedLesson.weekLabel || "Week " + selectedLesson.week)}
+          description={selectedLesson.objective}
+          onBack={closeLesson}
+          backLabel="Development program"
+        />
+        <ProgressMeter value={progress.complete} total={progress.total} label="Worksheet progress" />
+        {(selectedLesson.notice || selectedLesson.sensitive) && (
+          <aside className={"wb-curriculum-notice" + (selectedLesson.sensitive ? " wb-curriculum-notice-sensitive" : "")}>
+            <Icon name={selectedLesson.sensitive ? "brain" : "check"} size={20} stroke={2} />
+            <p>
+              {selectedLesson.notice || "These sensitive responses are optional."}
+              {selectedLesson.sensitive && " Anyone using this same browser profile can view saved responses, so use a personal browser profile on shared devices."}
+            </p>
+          </aside>
+        )}
+        {selectedLesson.linkedModule ? (
+          <section className="wb-form-section wb-linked-worksheet">
+            <h3>Use the complete core tool</h3>
+            <p>This source worksheet is already built as a dedicated phone-first tool, so your plan stays in one place.</p>
+            <button className="wb-primary-button" type="button" onClick={() => onOpenLinked(selectedLesson.linkedModule)}>
+              Open {linkedLabels[selectedLesson.linkedModule] || "core tool"}
+              <Icon name="chevron" size={17} stroke={2.2} />
+            </button>
+          </section>
+        ) : (
+          <section className="wb-form-section wb-curriculum-form" aria-label={selectedLesson.title + " worksheet fields"}>
+            {(selectedLesson.fields || []).map((field) => (
+              <CurriculumField
+                key={field.id}
+                lessonId={selectedLesson.id}
+                field={field}
+                value={curriculum.responses[curriculumResponseKey(selectedLesson.id, field.id)] || ""}
+                onChange={(value) => setResponse(selectedLesson.id, field.id, value)}
+              />
+            ))}
+          </section>
+        )}
+        <nav className="wb-curriculum-pager" aria-label="Development worksheet navigation">
+          <button className="wb-secondary-button" type="button" disabled={selectedIndex <= 0} onClick={() => openLesson(MINDSET_CURRICULUM_LESSONS[selectedIndex - 1].id)}>
+            <Icon name="back" size={17} stroke={2.2} /> Previous
+          </button>
+          <span>Worksheet {selectedIndex + 1} of {MINDSET_CURRICULUM_LESSONS.length}</span>
+          <button className="wb-secondary-button" type="button" disabled={selectedIndex >= MINDSET_CURRICULUM_LESSONS.length - 1} onClick={() => openLesson(MINDSET_CURRICULUM_LESSONS[selectedIndex + 1].id)}>
+            Next <Icon name="chevron" size={17} stroke={2.2} />
+          </button>
+        </nav>
+      </section>
+    );
+  }
+
+  return (
+    <section className="wb-module wb-curriculum" aria-labelledby="wb-curriculum-title">
+      <ModuleHeader
+        headingId="wb-curriculum-title"
+        title="Complete Development Program"
+        eyebrow={MINDSET_CURRICULUM_LESSONS.length + " guided worksheets · " + MINDSET_CURRICULUM_UNITS.length + " units"}
+        description="Work in order or choose the area that fits today. Every fillable exercise from the source packet is represented here, with safety-sensitive language updated for athletes."
+        onBack={onBack}
+      />
+      <ProgressMeter value={overallProgress.complete} total={overallProgress.total} label="Program fields completed" />
+      <aside className="wb-curriculum-notice">
+        <Icon name="brain" size={20} stroke={2} />
+        <p>This is an educational reflection tool, not medical or mental-health care. Follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.</p>
+      </aside>
+      <div className="wb-curriculum-units">
+        {MINDSET_CURRICULUM_UNITS.map((unit) => {
+          const progress = curriculumUnitProgress(unit, curriculum, linkedProgress);
+          return (
+            <details className="wb-curriculum-unit" id={"wb-curriculum-unit-" + unit.id} key={unit.id} open={openUnitIds.indexOf(unit.id) >= 0} onToggle={(event) => setUnitOpen(unit.id, event.currentTarget.open)}>
+              <summary>
+                <span><strong>{unit.title}</strong><small>{unit.lessons.length} worksheets · {unit.description}</small></span>
+                <span>{progress.complete} / {progress.total}</span>
+              </summary>
+              <ProgressMeter value={progress.complete} total={progress.total} label={unit.title + " progress"} />
+              <div className="wb-curriculum-lesson-list">
+                {unit.lessons.map((lesson) => {
+                  const lessonProgress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
+                  return (
+                    <button className="wb-curriculum-lesson-button" id={"wb-curriculum-open-" + lesson.id} type="button" key={lesson.id} onClick={() => openLesson(lesson.id)} data-testid={"curriculum-open-" + lesson.id}>
+                      <span className="wb-curriculum-week">{lesson.weekLabel || "Week " + lesson.week}</span>
+                      <span><strong>{lesson.title}</strong><small>{lesson.objective}</small></span>
+                      <span className="wb-curriculum-lesson-progress">{lessonProgress.complete}/{lessonProgress.total}<Icon name="chevron" size={16} stroke={2.2} /></span>
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -733,7 +1066,7 @@ function BaselineModule({ baseline, onChange, onBack }) {
   );
 }
 
-function GamePlanModule({ gamePlan, onChange, onBack }) {
+function GamePlanModule({ gamePlan, onChange, onBack, backLabel }) {
   const completion = gamePlanCompletion(gamePlan);
 
   function setField(key, value) {
@@ -758,6 +1091,7 @@ function GamePlanModule({ gamePlan, onChange, onBack }) {
         eyebrow="A clear plan for your positions"
         description="Write the options you have prepared with your coaches. Every free-text field is optional, and you can revise this plan at any time."
         onBack={onBack}
+        backLabel={backLabel}
       />
       <ProgressMeter value={completion.complete} total={completion.total} label="Game-plan fields completed" />
 
@@ -897,7 +1231,7 @@ function WeeklyModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete,
   );
 }
 
-function PreMatchModule({ reset, onChange, onBack }) {
+function PreMatchModule({ reset, onChange, onBack, backLabel }) {
   const completion = resetCompletion(reset);
   const readout = RESET_FIELDS.filter((field) => nonEmpty(reset[field.key]));
 
@@ -913,6 +1247,7 @@ function PreMatchModule({ reset, onChange, onBack }) {
         eyebrow="Build it once, read it quickly"
         description="Save the exact routine you have prepared so you can scan it before competition. All free-text fields are optional."
         onBack={onBack}
+        backLabel={backLabel}
       />
       <ProgressMeter value={completion.complete} total={completion.total} label="Reset routine fields completed" />
       <div className="wb-split-layout">
@@ -954,7 +1289,7 @@ function postHistoryTitle(entry) {
   return parts.join(" · ") || "Post-match review";
 }
 
-function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete, onCancelEdit, onBack }) {
+function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete, onCancelEdit, onBack, backLabel }) {
   const [formMessage, setFormMessage] = useState("");
   const completion = postDraftCompletion(draft);
 
@@ -968,7 +1303,9 @@ function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDele
   }
 
   function toggleChecklist(key) {
-    onDraftChange({ ...draft, checklist: { ...draft.checklist, [key]: !draft.checklist[key] } });
+    const checklist = { ...draft.checklist, [key]: !draft.checklist[key] };
+    if (key === "topFirstMove" || key === "bottomFirstMove") checklist.firstMove = checklist.topFirstMove || checklist.bottomFirstMove;
+    onDraftChange({ ...draft, checklist });
   }
 
   function submit(event) {
@@ -993,6 +1330,7 @@ function PostMatchModule({ draft, entries, onDraftChange, onSave, onEdit, onDele
         eyebrow="Repeat after any match"
         description="Record what happened, recognize useful actions, and choose a specific next step. Metadata and every free-text field are optional."
         onBack={onBack}
+        backLabel={backLabel}
       />
       <ProgressMeter value={completion.complete} total={completion.total} label="Current review items completed" />
 
@@ -1081,6 +1419,9 @@ function MindsetWorkbook() {
   const [loaded] = useState(loadMindsetWorkbook);
   const [workbook, setWorkbook] = useState(loaded.data);
   const [activeModule, setActiveModule] = useState(null);
+  const [curriculumLessonId, setCurriculumLessonId] = useState(null);
+  const [showCurriculumLesson, setShowCurriculumLesson] = useState(false);
+  const [returnToCurriculumFromLinked, setReturnToCurriculumFromLinked] = useState(false);
   const [saveStatus, setSaveStatus] = useState({
     kind: loaded.error ? "error" : "saved",
     message: loaded.error || "Workbook ready in this browser profile.",
@@ -1204,7 +1545,9 @@ function MindsetWorkbook() {
   const planCompletion = gamePlanCompletion(workbook.gamePlan);
   const resetProgress = resetCompletion(workbook.preMatchReset);
   const weeklyProgress = weeklyDraftCompletion(workbook.weeklyDraft);
-  const postProgress = postDraftCompletion(workbook.postMatchDraft);
+  const postProgress = postMatchCurriculumProgress(workbook.postMatchDraft, workbook.postMatchReviews);
+  const linkedCurriculumProgress = { "game-plan": planCompletion, "pre-match": resetProgress, "post-match": postProgress };
+  const developmentProgress = curriculumProgramProgress(workbook.curriculum, linkedCurriculumProgress);
 
   function updateWorkbook(value) {
     dirtyRef.current = true;
@@ -1234,12 +1577,27 @@ function MindsetWorkbook() {
   }
 
   function openModule(module) {
+    setReturnToCurriculumFromLinked(false);
     setActiveModule(module);
-    const headingIds = { baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
+    const headingIds = { development: showCurriculumLesson && curriculumLessonId ? "wb-curriculum-lesson-title" : "wb-curriculum-title", baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
     scrollWorkbookToTop(headingIds[module]);
   }
 
+  function openCurriculumLinkedModule(module) {
+    setReturnToCurriculumFromLinked(true);
+    setActiveModule(module);
+    const headingIds = { "game-plan": "wb-game-plan-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
+    scrollWorkbookToTop(headingIds[module]);
+  }
+
+  function returnToCurriculumLesson() {
+    setReturnToCurriculumFromLinked(false);
+    setActiveModule("development");
+    scrollWorkbookToTop("wb-curriculum-lesson-title");
+  }
+
   function closeModule() {
+    setReturnToCurriculumFromLinked(false);
     setActiveModule(null);
     scrollWorkbookToTop("wb-dashboard-title");
   }
@@ -1452,6 +1810,9 @@ function MindsetWorkbook() {
       dirtyRef.current = false;
       setWorkbook(normalized);
       setActiveModule(null);
+      setCurriculumLessonId(null);
+      setShowCurriculumLesson(false);
+      setReturnToCurriculumFromLinked(false);
       setCanUndoRestore(!!previousRaw);
       setSaveStatus({ kind: "saved", message: "Restored backup saved in this browser profile." });
       setNotice("Backup restored and saved. Your previous stored copy is available through Undo last restore.");
@@ -1502,6 +1863,9 @@ function MindsetWorkbook() {
     skipNextSaveRef.current = true;
     setWorkbook(makeEmptyMindsetWorkbook());
     setActiveModule(null);
+    setCurriculumLessonId(null);
+    setShowCurriculumLesson(false);
+    setReturnToCurriculumFromLinked(false);
     setCanUndoRestore(false);
     setSaveStatus({ kind: "saved", message: "Workbook cleared from this browser profile." });
     setNotice("All workbook responses and history were cleared from this browser profile.");
@@ -1513,11 +1877,26 @@ function MindsetWorkbook() {
   const resetReadoutCount = resetProgress.complete;
 
   let activeContent = null;
+  const linkedModuleBack = returnToCurriculumFromLinked ? returnToCurriculumLesson : closeModule;
+  const linkedModuleBackLabel = returnToCurriculumFromLinked ? "Development worksheet" : undefined;
+  if (activeModule === "development") activeContent = (
+    <CurriculumProgram
+      curriculum={workbook.curriculum}
+      onChange={(value) => setSection("curriculum", value)}
+      onBack={closeModule}
+      onOpenLinked={openCurriculumLinkedModule}
+      linkedProgress={linkedCurriculumProgress}
+      selectedLessonId={curriculumLessonId}
+      showLesson={showCurriculumLesson}
+      onOpenLesson={(id) => { setCurriculumLessonId(id); setShowCurriculumLesson(true); }}
+      onCloseLesson={() => setShowCurriculumLesson(false)}
+    />
+  );
   if (activeModule === "baseline") activeContent = <BaselineModule baseline={workbook.baseline} onChange={(value) => setSection("baseline", value)} onBack={closeModule} />;
-  if (activeModule === "game-plan") activeContent = <GamePlanModule gamePlan={workbook.gamePlan} onChange={(value) => setSection("gamePlan", value)} onBack={closeModule} />;
+  if (activeModule === "game-plan") activeContent = <GamePlanModule gamePlan={workbook.gamePlan} onChange={(value) => setSection("gamePlan", value)} onBack={linkedModuleBack} backLabel={linkedModuleBackLabel} />;
   if (activeModule === "weekly") activeContent = <WeeklyModule draft={workbook.weeklyDraft} entries={workbook.weeklyCheckIns} onDraftChange={(value) => setSection("weeklyDraft", value)} onSave={saveWeeklyCheckIn} onEdit={editWeeklyCheckIn} onDelete={deleteWeeklyCheckIn} onCancelEdit={cancelWeeklyEdit} onBack={closeModule} />;
-  if (activeModule === "pre-match") activeContent = <PreMatchModule reset={workbook.preMatchReset} onChange={(value) => setSection("preMatchReset", value)} onBack={closeModule} />;
-  if (activeModule === "post-match") activeContent = <PostMatchModule draft={workbook.postMatchDraft} entries={workbook.postMatchReviews} onDraftChange={(value) => setSection("postMatchDraft", value)} onSave={savePostMatchReview} onEdit={editPostMatchReview} onDelete={deletePostMatchReview} onCancelEdit={cancelPostMatchEdit} onBack={closeModule} />;
+  if (activeModule === "pre-match") activeContent = <PreMatchModule reset={workbook.preMatchReset} onChange={(value) => setSection("preMatchReset", value)} onBack={linkedModuleBack} backLabel={linkedModuleBackLabel} />;
+  if (activeModule === "post-match") activeContent = <PostMatchModule draft={workbook.postMatchDraft} entries={workbook.postMatchReviews} onDraftChange={(value) => setSection("postMatchDraft", value)} onSave={savePostMatchReview} onEdit={editPostMatchReview} onDelete={deletePostMatchReview} onCancelEdit={cancelPostMatchEdit} onBack={linkedModuleBack} backLabel={linkedModuleBackLabel} />;
 
   return (
     <div className="wb-workbook">
@@ -1525,7 +1904,7 @@ function MindsetWorkbook() {
         <div>
           <p className="wb-eyebrow">Device-local athlete workspace</p>
           <h1>Mindset Workbook</h1>
-          <p>Build a game plan, reflect on your week and matches, and keep a routine you can revisit.</p>
+          <p>Use the complete worksheet program, quick match tools, and saved plans in one phone-first workspace.</p>
         </div>
         <div className={"wb-save-status wb-save-status-" + saveStatus.kind} role="status" aria-live="polite" aria-atomic="true">
           <Icon name={saveStatus.kind === "error" ? "close" : "check"} size={17} stroke={2.3} />
@@ -1546,6 +1925,16 @@ function MindsetWorkbook() {
               <p>Responses are not published, but anyone using this same browser profile can view them.</p>
             </header>
             <div className="wb-module-grid">
+              <DashboardCard
+                module="development"
+                title="Complete Development Program"
+                description={MINDSET_CURRICULUM_LESSONS.length + " guided worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units."}
+                summary="Self-knowledge, goals, toughness, motivation, present moment, pressure, confidence, clarity, controlled aggression, sleep, and injury recovery."
+                progress={developmentProgress.complete}
+                progressTotal={developmentProgress.total}
+                buttonLabel={developmentProgress.complete ? "Resume program" : "Explore full program"}
+                onOpen={() => openModule("development")}
+              />
               <DashboardCard
                 module="baseline"
                 title="Mindset Baseline"
