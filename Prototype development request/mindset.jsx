@@ -2,6 +2,8 @@
 // This component intentionally never reads from or writes to window.WKB.
 const { useEffect, useMemo, useRef, useState } = React;
 const MINDSET_CURRICULUM_UNITS = window.MINDSET_CURRICULUM_UNITS || [];
+const MINDSET_CURRICULUM_CONTEXT = window.MINDSET_CURRICULUM_CONTEXT || {};
+const MINDSET_CURRICULUM_UNIT_CONTEXT = window.MINDSET_CURRICULUM_UNIT_CONTEXT || {};
 
 const MINDSET_STORAGE_KEY = "wkb_mindset_workbook_v1";
 const MINDSET_RESTORE_RECOVERY_KEY = "wkb_mindset_workbook_before_restore_v1";
@@ -714,6 +716,38 @@ function curriculumOptionValue(option) {
   return isRecord(option) ? option.value : option;
 }
 
+function CurriculumLessonGuide({ lesson }) {
+  const guide = MINDSET_CURRICULUM_CONTEXT[lesson.id];
+  if (!guide) return null;
+  const headingId = "wb-curriculum-guide-" + lesson.id;
+  return (
+    <section className="wb-lesson-guide" aria-labelledby={headingId}>
+      <header className="wb-lesson-guide-header">
+        <span className="wb-lesson-guide-icon" aria-hidden="true"><Icon name="brain" size={21} stroke={2} /></span>
+        <div>
+          <span className="wb-guide-eyebrow">Worksheet guide</span>
+          <h3 id={headingId}>Understand the work before you answer</h3>
+        </div>
+      </header>
+      <div className="wb-lesson-guide-grid">
+        <article className="wb-guide-why">
+          <h4>Why this matters</h4>
+          <p>{guide.why}</p>
+        </article>
+        <article className="wb-guide-steps">
+          <h4>How to use this worksheet</h4>
+          <ol>{guide.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+        </article>
+        <article className="wb-guide-example">
+          <h4>Wrestling example</h4>
+          <p>{guide.example}</p>
+          <small>Use the example as a model for specificity, not as a required answer.</small>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function CurriculumField({ lessonId, field, value, onChange }) {
   const id = "wb-curriculum-" + lessonId + "-" + field.id;
   const hintId = id + "-hint";
@@ -851,6 +885,7 @@ function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedP
           backLabel="Development program"
         />
         <ProgressMeter value={progress.complete} total={progress.total} label="Worksheet progress" />
+        <CurriculumLessonGuide lesson={selectedLesson} />
         {(selectedLesson.notice || selectedLesson.sensitive) && (
           <aside className={"wb-curriculum-notice" + (selectedLesson.sensitive ? " wb-curriculum-notice-sensitive" : "")}>
             <Icon name={selectedLesson.sensitive ? "brain" : "check"} size={20} stroke={2} />
@@ -901,17 +936,18 @@ function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedP
         headingId="wb-curriculum-title"
         title="Complete Development Program"
         eyebrow={MINDSET_CURRICULUM_LESSONS.length + " guided worksheets · " + MINDSET_CURRICULUM_UNITS.length + " units"}
-        description="Work in order or choose the area that fits today. Every fillable exercise from the source packet is represented here, with safety-sensitive language updated for athletes."
+        description="Work in order or choose the area that fits today. Each worksheet includes the performance concept, completion steps, and a wrestling example before the response fields."
         onBack={onBack}
       />
       <ProgressMeter value={overallProgress.complete} total={overallProgress.total} label="Program fields completed" />
       <aside className="wb-curriculum-notice">
         <Icon name="brain" size={20} stroke={2} />
-        <p>This is an educational reflection tool, not medical or mental-health care. Follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.</p>
+        <p>The guide sections paraphrase the teaching context from the worksheet packet. This is an educational reflection tool, not medical or mental-health care; follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.</p>
       </aside>
       <div className="wb-curriculum-units">
         {MINDSET_CURRICULUM_UNITS.map((unit) => {
           const progress = curriculumUnitProgress(unit, curriculum, linkedProgress);
+          const unitGuide = MINDSET_CURRICULUM_UNIT_CONTEXT[unit.id];
           return (
             <details className="wb-curriculum-unit" id={"wb-curriculum-unit-" + unit.id} key={unit.id} open={openUnitIds.indexOf(unit.id) >= 0} onToggle={(event) => setUnitOpen(unit.id, event.currentTarget.open)}>
               <summary>
@@ -919,6 +955,13 @@ function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedP
                 <span>{progress.complete} / {progress.total}</span>
               </summary>
               <ProgressMeter value={progress.complete} total={progress.total} label={unit.title + " progress"} />
+              {unitGuide && (
+                <section className="wb-unit-guide" aria-label={unit.title + " unit roadmap"}>
+                  <span>Unit roadmap</span>
+                  <p>{unitGuide.overview}</p>
+                  <small>{unitGuide.approach}</small>
+                </section>
+              )}
               <div className="wb-curriculum-lesson-list">
                 {unit.lessons.map((lesson) => {
                   const lessonProgress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
@@ -1928,8 +1971,8 @@ function MindsetWorkbook() {
               <DashboardCard
                 module="development"
                 title="Complete Development Program"
-                description={MINDSET_CURRICULUM_LESSONS.length + " guided worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units."}
-                summary="Self-knowledge, goals, toughness, motivation, present moment, pressure, confidence, clarity, controlled aggression, sleep, and injury recovery."
+                description={MINDSET_CURRICULUM_LESSONS.length + " context-rich worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units."}
+                summary="Every worksheet explains why the topic matters, how to complete it, and what a specific wrestling application can look like."
                 progress={developmentProgress.complete}
                 progressTotal={developmentProgress.total}
                 buttonLabel={developmentProgress.complete ? "Resume program" : "Explore full program"}

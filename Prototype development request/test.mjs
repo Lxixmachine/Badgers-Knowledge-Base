@@ -20,6 +20,8 @@ async function testStaticArtifacts() {
   assert.match(html, /<script src="content\.js"><\/script>\s*<script src="app\.compiled\.js"><\/script>/);
   assert.match(bundle, /MindsetWorkbook/);
   assert.match(bundle, /wkb_mindset_workbook_v1/);
+  assert.match(bundle, /Understand the work before you answer/);
+  assert.match(bundle, /MINDSET_CURRICULUM_CONTEXT/);
   assert.match(html, /\.wb-workbook\{/);
   assert.match(html, /@media\(max-width:720px\)/);
   const styleDom = new JSDOM(html);
@@ -37,11 +39,13 @@ async function testStaticArtifacts() {
   const questionRule = findStyleRule(".wb-baseline-question");
   const answerRowRule = findStyleRule(".wb-baseline-question>legend+.wb-answer-options");
   const curriculumSummaryFocusRule = findStyleRule(".wb-curriculum-unit>summary:focus-visible");
+  const lessonGuideRule = findStyleRule(".wb-lesson-guide");
   assert.equal(questionRule?.style.getPropertyValue("min-width"), "0");
   assert.equal(answerRowRule?.style.getPropertyValue("clear"), "left");
   assert.equal(answerRowRule?.style.getPropertyValue("width"), "100%");
   assert.match(curriculumSummaryFocusRule?.style.getPropertyValue("outline") || "", /3px solid/);
   assert.equal(curriculumSummaryFocusRule?.style.getPropertyValue("outline-offset"), "-4px");
+  assert.match(lessonGuideRule?.style.getPropertyValue("border") || "", /1px solid/);
   assert.equal(duplicate, html);
   assert.equal(distHtml, html);
   assert.equal(distBundle, bundle);
@@ -120,15 +124,24 @@ async function testAccessibilityStructure() {
   assert.match(mindset, /Sensitive · Optional/);
   assert.match(mindset, /aria-describedby=\{field\.hint \? hintId : undefined\}/);
   assert.match(mindset, /<fieldset className="wb-rating" aria-describedby=\{id \+ "-help"\}>/);
+  assert.match(mindset, /<section className="wb-lesson-guide" aria-labelledby=\{headingId\}>/);
+  assert.match(mindset, /<section className="wb-unit-guide" aria-label=\{unit\.title \+ " unit roadmap"\}>/);
 }
 
 async function loadMindsetCore() {
-  const [curriculumSource, source] = await Promise.all([read("mindset-curriculum.jsx"), read("mindset.jsx")]);
+  const [curriculumSource, foundationsContext, performanceContext, competitionContext, source] = await Promise.all([
+    read("mindset-curriculum.jsx"),
+    read("mindset-context-foundations.jsx"),
+    read("mindset-context-performance.jsx"),
+    read("mindset-context-competition.jsx"),
+    read("mindset.jsx"),
+  ]);
   const instrumented = source + `\nObject.assign(window.__mindsetTest, {
     makeEmptyMindsetWorkbook, validateMindsetWorkbook, normalizeMindsetWorkbook,
     baselineStats, gamePlanCompletion, weeklyDraftCompletion, postDraftCompletion,
     makeWeeklyDraft, makePostMatchDraft, postMatchCurriculumProgress, curriculumProgramProgress,
     MINDSET_CURRICULUM_LESSONS, MINDSET_CURRICULUM_RESPONSE_KEYS,
+    MINDSET_CURRICULUM_CONTEXT, MINDSET_CURRICULUM_UNIT_CONTEXT,
     MINDSET_MAX_HISTORY_ENTRIES, MINDSET_MAX_TEXT_LENGTH
   });`;
   const context = {
@@ -147,6 +160,14 @@ async function loadMindsetCore() {
   };
   const curriculumCompiled = await transform(curriculumSource, { loader: "jsx", format: "iife", target: "es2018" });
   vm.runInNewContext(curriculumCompiled.code, context, { filename: "mindset-curriculum.test.js" });
+  for (const [filename, contextSource] of [
+    ["mindset-context-foundations.test.js", foundationsContext],
+    ["mindset-context-performance.test.js", performanceContext],
+    ["mindset-context-competition.test.js", competitionContext],
+  ]) {
+    const contextCompiled = await transform(contextSource, { loader: "jsx", format: "iife", target: "es2018" });
+    vm.runInNewContext(contextCompiled.code, context, { filename });
+  }
   const compiled = await transform(instrumented, { loader: "jsx", format: "iife", target: "es2018" });
   vm.runInNewContext(compiled.code, context, { filename: "mindset.test.js" });
   return context.window.__mindsetTest;
@@ -237,6 +258,34 @@ async function testWorkbookValidation() {
   assert.match(core.validateMindsetWorkbook(tooLong), /invalid game-plan section/i);
 
   assert.equal(core.MINDSET_CURRICULUM_LESSONS.length, 70);
+  const curriculumLessonIds = core.MINDSET_CURRICULUM_LESSONS.map((lesson) => lesson.id);
+  const curriculumContextIds = Object.keys(core.MINDSET_CURRICULUM_CONTEXT);
+  const wordCount = (value) => value.trim().split(/\s+/).length;
+  assert.equal(curriculumContextIds.length, 70);
+  assert.equal(new Set(curriculumContextIds).size, 70);
+  assert.equal(curriculumContextIds.slice().sort().join("|"), curriculumLessonIds.slice().sort().join("|"));
+  for (const lesson of core.MINDSET_CURRICULUM_LESSONS) {
+    const guide = core.MINDSET_CURRICULUM_CONTEXT[lesson.id];
+    assert.ok(guide.why.trim().length >= 80, `${lesson.id} needs useful why context`);
+    assert.ok(wordCount(guide.why) <= 55, `${lesson.id} why context must stay phone-friendly`);
+    assert.equal(Array.isArray(guide.steps), true, `${lesson.id} steps must be an array`);
+    assert.equal(guide.steps.length, 3, `${lesson.id} needs exactly three instructions`);
+    assert.equal(guide.steps.every((step) => typeof step === "string" && step.trim().length >= 20), true, `${lesson.id} instructions need substance`);
+    assert.equal(guide.steps.every((step) => wordCount(step) <= 35), true, `${lesson.id} instructions must stay phone-friendly`);
+    assert.ok(guide.example.trim().length >= 45, `${lesson.id} needs a concrete example`);
+    assert.ok(wordCount(guide.example) <= 40, `${lesson.id} example must stay phone-friendly`);
+  }
+  const curriculumUnitIds = [...new Set(core.MINDSET_CURRICULUM_LESSONS.map((lesson) => lesson.unitId))];
+  assert.equal(Object.keys(core.MINDSET_CURRICULUM_UNIT_CONTEXT).length, 11);
+  for (const unitId of curriculumUnitIds) {
+    const guide = core.MINDSET_CURRICULUM_UNIT_CONTEXT[unitId];
+    assert.ok(guide.overview.trim().length >= 100, `${unitId} needs a useful unit overview`);
+    assert.ok(guide.approach.trim().length >= 35, `${unitId} needs unit instructions`);
+  }
+  const curriculumGuidanceText = JSON.stringify({ lessons: core.MINDSET_CURRICULUM_CONTEXT, units: core.MINDSET_CURRICULUM_UNIT_CONTEXT });
+  assert.doesNotMatch(curriculumGuidanceText, /compete through pain|push through pain|no mercy|score 50 points|castor oil|success hotline|text mindset|inner wimp|shut up/i);
+  assert.match(core.MINDSET_CURRICULUM_CONTEXT["relaxing-under-pressure-1"].why, /mild pre-match sensations/i);
+  assert.match(core.MINDSET_CURRICULUM_CONTEXT["injury-recovery-1"].steps.join(" "), /restrictions[\s\S]*stop and report/i);
   assert.ok(core.MINDSET_CURRICULUM_RESPONSE_KEYS.size > 100);
   const curriculumKey = [...core.MINDSET_CURRICULUM_RESPONSE_KEYS][0];
   const curriculumBackup = structuredClone(empty);
@@ -478,7 +527,11 @@ async function testRenderedWorkbook() {
     await click(window, act, window.document.querySelector('[data-testid="mindset-module-card-development"] .wb-primary-button'));
     assert.equal(window.document.querySelectorAll(".wb-curriculum-unit").length, 11);
     assert.equal(window.document.querySelectorAll(".wb-curriculum-lesson-button").length, 70);
+    assert.equal(window.document.querySelectorAll(".wb-unit-guide").length, 11);
     await click(window, act, window.document.querySelector(".wb-curriculum-lesson-button"));
+    assert.match(window.document.querySelector(".wb-lesson-guide").textContent, /Why this matters/i);
+    assert.match(window.document.querySelector(".wb-lesson-guide").textContent, /Wrestling example/i);
+    assert.equal(window.document.querySelectorAll(".wb-guide-steps li").length, 3);
     const firstCurriculumControl = window.document.querySelector(".wb-curriculum-form textarea.wb-field-control");
     assert.ok(firstCurriculumControl, "The first development worksheet should contain a response control");
     await change(window, act, firstCurriculumControl, "My complete-program response");
