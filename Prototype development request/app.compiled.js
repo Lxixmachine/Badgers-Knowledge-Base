@@ -2368,10 +2368,716 @@
   window.MINDSET_CURRICULUM_UNITS = MINDSET_CURRICULUM_UNITS;
 })();
 
+/* ====== mindset-context-foundations.jsx ====== */
+(() => {
+  window.MINDSET_CURRICULUM_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_CONTEXT || {},
+    "self-knowledge-1": {
+      why: "Mindset skills become dependable when they are practiced in small, repeatable doses instead of saved for competition day. A simple daily and weekly plan turns reflection into habits you can actually use under pressure.",
+      steps: [
+        "Choose a short set of principles and daily actions that fit your schedule, team plan, and current health needs.",
+        "Complete the dated reflection by naming specific improvement, gratitude, and one next action rather than judging the whole day.",
+        "At the end of the week, review your notes with a trusted support person if desired and adjust the plan to keep it realistic."
+      ],
+      example: "After Tuesday practice, an athlete notes a cleaner stand-up, appreciates a partner's effort, and plans to ask the coach about hand position tomorrow."
+    },
+    "self-knowledge-2": {
+      why: "Consistent performances often grow from consistent patterns in attention, emotion, and energy before and during a match. Comparing strong and difficult matches helps you recognize which patterns support clear wrestling and which ones pull you away from it.",
+      steps: [
+        "Select three strong matches and three difficult matches that you remember clearly enough to describe without focusing only on the final score.",
+        "For each match, record what you were thinking and feeling before and during it, plus an honest energy rating from 1 to 10.",
+        "Compare the two groups for repeated themes, then describe the energy range and observable signs that usually help you perform well."
+      ],
+      example: "A wrestler notices that strong matches began around a 7 in energy with attention on first contact, while difficult matches began near a 10 with attention on the opponent's ranking."
+    },
+    "self-knowledge-3": {
+      why: "Clear first choices reduce hesitation and let you apply pressure with purpose in every position. Naming reliable setups, finishes, counters, and backups also gives you and your coach a concrete map to improve.",
+      steps: [
+        "Write your best neutral, top, and bottom sequences in enough detail to show the setup, main action, and finish.",
+        "Add a safe, legal answer for each common tie, attack, ride, escape, scramble, and mat-return situation listed.",
+        "Circle three gaps or uncertain answers and review them with your coach before treating them as part of your match plan."
+      ],
+      example: "For a collar tie, an athlete writes: clear the wrist, regain inside position, use a level-change fake, then attack a high crotch with the practiced finish."
+    },
+    "self-knowledge-4": {
+      why: "A practiced pre-match routine directs attention toward familiar actions instead of the bracket, crowd, or imagined outcomes. A short backup version keeps you composed when mat timing changes and the full routine is not possible.",
+      steps: [
+        "Build the full routine in time order, including arrival, fueling from your approved plan, gear, movement, warm-up, breathing, drilling, and one useful cue.",
+        "Create an under-two-minute version containing only the safest essential actions you can complete when called unexpectedly.",
+        "Rehearse both versions during appropriate practices and revise the timing with your coach based on what leaves you ready, warm, and clear."
+      ],
+      example: "A full routine ends with dynamic movement, two familiar finishes with a partner, one settling breath, and the cue 'first contact'; the short version uses the last three elements."
+    },
+    "self-knowledge-5": {
+      why: "A win can hide poor choices, and a loss can include excellent wrestling, so the result alone is weak feedback. Reviewing controllable actions shows what to repeat and gives the next practice a useful target.",
+      steps: [
+        "Complete the evaluation soon after the match, once you are calm enough to describe what happened accurately.",
+        "Rate the listed preparation, position, effort, composure, and follow-through behaviors using observable actions rather than assumptions about intent.",
+        "Choose no more than three priorities, note one thing to keep, and bring the technical questions to your coach."
+      ],
+      example: "After a close loss, a wrestler records strong bottom movement and composure, then selects delayed first contact and one missed mat return as practice priorities."
+    },
+    "self-knowledge-6": {
+      why: "Disruptions cost less attention when you have already decided how to respond to them. Pairing one brief physical reset with a specific next action helps you return to wrestling without denying what happened.",
+      steps: [
+        "Choose one rules-compliant reset gesture that is quick enough to use after a whistle, score, mistake, or distraction.",
+        "For each scenario, write a short response that acknowledges the situation and directs you toward the next controllable action.",
+        "Select three likely scenarios and rehearse the cue-and-response sequence with your coach during normal practice situations."
+      ],
+      example: "After giving up a takedown, an athlete exhales, relaxes both hands, says 'next position,' and begins the planned first move from bottom."
+    },
+    "self-knowledge-7": {
+      why: "Attention is limited, so monitoring other people's reactions leaves less capacity for the task in front of you. Focused thinking brings attention back to your choices, technique, and next useful response while preserving respect for everyone involved.",
+      steps: [
+        "List recurring reactive thoughts in wrestling, school, and life that center on judgment, comparison, blame, or events outside your control.",
+        "Rewrite each one as a narrow, accurate statement about an action, question, or value you can choose now.",
+        "Practice one rewritten response during the week and note whether it helped you re-engage with the task."
+      ],
+      example: "Instead of 'Everyone saw that mistake,' a wrestler writes, 'Clear the tie, regain stance, and attack the next opening.'"
+    },
+    "self-knowledge-8": {
+      why: "Competition energy naturally rises and falls across a long day, and staying highly activated between every round can drain attention and physical readiness. Planned recovery periods help you save intensity for a complete warm-up and full match effort.",
+      steps: [
+        "Identify low-demand times before and between rounds when you can step away from hype, loosen tension, eat or drink from your approved plan, and rest.",
+        "Write separate energy-management choices for tournaments, dual meets, the competition day, and brief pauses during a match.",
+        "Review the plan with your coach so recovery choices do not replace required check-ins, warm-up, fueling, or team responsibilities."
+      ],
+      example: "Between rounds, an athlete leaves the loud mat area with permission, has the planned snack and fluids, talks lightly with teammates, then begins the scheduled warm-up on time."
+    },
+    "self-knowledge-9": {
+      why: "Enjoyment tied to the sport itself can support effort when medals, rankings, and results feel distant. Naming specific parts of wrestling you value also reminds you that one result does not define the entire experience.",
+      steps: [
+        "Think back to what first drew you to wrestling and identify details that are unique to practicing, competing, and being at events.",
+        "List what you enjoy in each worksheet category without using winning, awards, or approval as the only reason.",
+        "Choose one item to revisit during a demanding week and decide how you can engage with it intentionally."
+      ],
+      example: "An athlete lists solving hand-fighting problems at practice, the quiet before the whistle in duals, and supporting teammates between tournament rounds."
+    },
+    "self-knowledge-10": {
+      why: "Unclear expectations and mismatched feedback styles can add pressure even when parents, caregivers, and coaches intend to help. Describing your experience and support preferences can create a more workable conversation and a clearer competitive mind.",
+      steps: [
+        "Privately complete only the parent, caregiver, or coach prompts that feel safe and useful, focusing on your perception rather than assigning motives.",
+        "Identify specific behaviors that help, behaviors that make competing harder, and the timing and style of feedback you prefer.",
+        "If you choose to share, plan a calm conversation with a trusted adult present when helpful; use a counselor or safeguarding contact if direct discussion feels unsafe."
+      ],
+      example: "A wrestler writes, 'After a match, please ask if I want feedback now or later; I usually learn better after I have had ten minutes to settle.'"
+    },
+    "goal-setting-1": {
+      why: "Long-term goals provide direction, while purpose explains why the work matters when progress is slow. Considering school and life alongside wrestling keeps the sport connected to a larger, personally meaningful future.",
+      steps: [
+        "Write a specific long-term direction for wrestling, school or career, and life without worrying about whether another person would choose the same goals.",
+        "For each area, explain the values, experiences, or contribution that make the direction meaningful to you.",
+        "Add optional life-list experiences that broaden your perspective beyond performance, keeping sensitive details private if you prefer."
+      ],
+      example: "A wrestler lists competing in college, completing an engineering degree, and mentoring younger athletes, then explains that growth and service connect all three goals."
+    },
+    "goal-setting-2": {
+      why: "Six-month and one-year commitments turn a distant direction into milestones close enough to guide today's choices. A simple reminder can interrupt autopilot and reconnect a decision to what you chose to pursue.",
+      steps: [
+        "Set one realistic six-month milestone and one one-year milestone in wrestling, school, and life that fit your current stage.",
+        "Type a commitment in your own words, date it, and check that each milestone describes a meaningful result rather than a vague wish.",
+        "Choose a safe, private reminder you will notice regularly and decide what question it should prompt before an important choice."
+      ],
+      example: "An athlete keeps a small card in the wrestling notebook that asks, 'Does this next choice support my semester training and grade goals?'"
+    },
+    "goal-setting-3": {
+      why: "Outcomes are influenced by opponents and circumstances, but preparation behaviors are much more controllable. A complete action plan directs daily attention toward the technical, mental, physical, and recovery work that makes progress more likely.",
+      steps: [
+        "For every category, write a concrete action with a frequency or situation instead of a broad instruction such as 'work harder.'",
+        "Confirm physical training, nutrition, sleep, and recovery actions with the appropriate coach, athletic trainer, clinician, or dietitian.",
+        "Review the plan whenever the season, school schedule, health status, or team workload changes and revise what no longer fits."
+      ],
+      example: "For technique, a wrestler writes, 'After Tuesday drilling, ask my coach for five minutes of feedback on the finish to my best single,' rather than 'improve shots.'"
+    },
+    "goal-setting-4": {
+      why: "A planned accountability structure makes priorities easier to follow when optional distractions compete with the work. Healthy rewards, reasonable leisure boundaries, and a shame-free reset support consistency without turning a missed day into punishment.",
+      steps: [
+        "Choose a modest reward connected to completing the planned work, not to winning or making weight.",
+        "Name one optional leisure activity you may delay when an agreed task is unfinished, while protecting sleep, food, recovery, relationships, and needed support.",
+        "Write the exact reset you will use after a miss: identify the barrier, choose the next feasible action, and adjust the plan if it was unrealistic."
+      ],
+      example: "If homework and the planned film review are complete, an athlete watches a show; after a missed review, the athlete reschedules ten minutes tomorrow and changes the reminder."
+    },
+    "goal-setting-5": {
+      why: "Goals guide behavior more reliably when meaningful words and images bring them back into attention. Choosing where and with whom to share a goal can add support, but privacy and personal readiness matter more than public declaration.",
+      steps: [
+        "Select five safe places or moments where you can review the goal without exposing personal information or breaking team, school, or family rules.",
+        "Describe or sketch a realistic future scene that includes the actions and qualities you want to demonstrate, not only a podium result.",
+        "Decide whether to keep the goal private or share it with a trusted person or group, then write a specific plan only if sharing feels useful."
+      ],
+      example: "A wrestler pictures finishing a difficult third-period sequence with good position and places a written cue inside the practice notebook rather than posting it publicly."
+    },
+    "mental-toughness-1": {
+      why: "Courage grows when you repeatedly choose manageable actions despite normal nervousness. Safe, voluntary practice makes competition, leadership, and honest communication feel more familiar without using danger or humiliation as proof of toughness.",
+      steps: [
+        "Create a list of age-appropriate courage actions that stretch your comfort zone and require coach approval whenever they involve wrestling or training.",
+        "Choose one manageable action each day, with permission to scale it down, substitute a non-athletic action, or stop if safety or wellbeing changes.",
+        "Record what you did and what you learned across all 30 days, focusing on willingness and follow-through rather than intensity."
+      ],
+      example: "One day's action is volunteering to demonstrate a familiar setup at practice after checking with the coach; another is asking a teacher a question after class."
+    },
+    "mental-toughness-2": {
+      why: "Values and boundaries provide a decision guide before pressure, fatigue, or a social situation makes the choice harder. The guide can be spiritual, secular, or both, and it works best when it reflects your own beliefs rather than someone else's demands.",
+      steps: [
+        "Write only the beliefs, values, or philosophies you freely choose to explore, and skip private topics that do not feel useful here.",
+        "Select regular actions that reconnect you with those values, such as reflection, service, a faith practice, or a trusted conversation.",
+        "Define practical boundaries and identify likely barriers, then name a safe exit, support person, or prepared response for difficult situations."
+      ],
+      example: "An athlete values reliability, sets a boundary to leave social events by an agreed time before competition, and plans to text a trusted ride if the situation changes."
+    },
+    "mental-toughness-3": {
+      why: "Self-audits reveal specific gaps that broad labels such as 'not tough enough' cannot solve. A trusted accountability person can support follow-through when the athlete controls what is shared and the check-in stays respectful.",
+      steps: [
+        "Choose a trustworthy person, agree on a regular check-in, and state clearly which goals or reflections you consent to discuss.",
+        "Scan the wrestling, school, and life areas, selecting only the items that are relevant and safe for you to examine.",
+        "Turn one selected area from each useful category into a small resolution with a next action, and seek qualified help for concerns beyond peer support."
+      ],
+      example: "A wrestler shares only the goal of improving sleep consistency and asks a teammate to check each Sunday whether the planned device cutoff was attempted."
+    },
+    "mental-toughness-4": {
+      why: "Normal match fatigue can trigger doubt, but confidence is stronger when it rests on approved preparation rather than extra punishment. A practiced cue helps you keep making sound technical decisions while still respecting warning signs and workload limits.",
+      steps: [
+        "Ask your coach to define the approved intensity, frequency, and duration, involving an athletic trainer or clinician whenever your health status requires it.",
+        "Choose a brief word or image that directs attention to posture, breathing, position, or the next technical action during normal fatigue.",
+        "Practice the cue only within the approved plan, and stop and report pain, illness, dizziness, unusual symptoms, or any instructed warning sign."
+      ],
+      example: "During a coach-planned live go, an athlete uses the cue 'hips and hands' to maintain position late in the period, then follows the scheduled recovery rather than adding sprints."
+    },
+    "mental-toughness-5": {
+      why: "Remembering times you adapted to difficulty provides personal evidence that you can take the next step again. Resilience can be strengthened through a supervised, bounded challenge without reliving trauma or using extreme workouts.",
+      steps: [
+        "List only difficulties you feel safe recalling, then identify the decisions, supports, or personal strengths that helped you move through them.",
+        "Choose one age-appropriate challenge with a clear purpose, time limit, and stop point instead of selecting it for shock value.",
+        "Name the coach, trusted adult, or qualified professional who will approve or support the challenge before you begin."
+      ],
+      example: "An athlete remembers returning to practice after an academic setback and chooses to lead one coach-approved warm-up this week with a captain present."
+    },
+    "mental-toughness-6": {
+      why: "Specific memories of making good decisions while normally tired can counter the vague prediction that fatigue will take over. Separating neutral, top, and bottom examples helps you recover the cues and actions that worked in each position.",
+      steps: [
+        "Recall one match or approved practice example in each position where normal fatigue was present and you still acted effectively.",
+        "Describe the exact situation, technical decision, self-talk, breathing, or support that helped rather than writing only that you pushed through.",
+        "Select one useful cue from the three examples to rehearse within current coaching and health guidance."
+      ],
+      example: "From bottom late in a match, a wrestler remembers relaxing the grip, rebuilding the base, and using the cue 'one clean step' before the escape."
+    },
+    "motivation-1": {
+      why: "Role models can make qualities such as patience, preparation, resilience, and composure easier to picture in action. Pairing those qualities with a simple reminder cue helps you retrieve the lesson when effort or confidence dips.",
+      steps: [
+        "Choose wrestling, school, or life role models for specific behaviors you genuinely respect rather than reputation alone.",
+        "Select appropriate images, stories, or videos and decide where and when you will review them without turning comparison into self-criticism.",
+        "Choose a small, rules-compliant gesture and practice pairing it with one quality and one next action."
+      ],
+      example: "An athlete admires a veteran teammate's calm between rounds, reviews one saved clip before practice, then uses a head nod as a reminder to slow the breath and listen."
+    },
+    "motivation-2": {
+      why: "Excuses often mix real constraints with choices you still control, which can make the next action hard to see. Rewriting the controllable part as a specific responsibility restores agency without blaming yourself for circumstances outside your control.",
+      steps: [
+        "List repeated explanations you use in wrestling and school, then separate the genuine barrier from the part you can influence.",
+        "Rewrite each controllable part as an accurate first-person responsibility followed by one observable action.",
+        "Review the statements during a relevant planning moment and revise any wording that is shaming, absolute, or unrealistic."
+      ],
+      example: "Instead of 'I never get enough drill time,' a wrestler writes, 'I am responsible for asking my coach where five focused finish repetitions fit this week.'"
+    },
+    "motivation-3": {
+      why: "Motivation rises for different reasons at different times, so relying on one feeling leaves action to chance. Identifying personal cues and matching them to specific situations creates a repeatable way to begin purposeful work.",
+      steps: [
+        "Recall moments when you moved from stuck to engaged and list the songs, people, goals, memories, phrases, or experiences that helped.",
+        "For each useful cue, name the situation where it fits and the safe action it should start.",
+        "Test one cue this week, then keep it, revise it, or replace it based on whether it supported the intended action."
+      ],
+      example: "When film review feels easy to postpone, an athlete plays one chosen song, opens the saved match, and studies the first two neutral exchanges."
+    },
+    "motivation-4": {
+      why: "Unproductive habits often persist because they offer an immediate payoff even when their later cost is larger. Making both the effort cost and the useful benefit visible helps you choose productive habits with realistic expectations.",
+      steps: [
+        "For each old habit, name the immediate benefit that keeps it going as honestly as you name its current and future costs.",
+        "For each replacement habit, name the real effort or inconvenience alongside the short- and long-term benefits you value.",
+        "Choose one replacement and reduce the starting step until it is specific, safe, and feasible in your actual week."
+      ],
+      example: "An athlete notes that skipping film creates free time now but repeats positioning errors, while a ten-minute review costs some leisure and produces one clear practice question."
+    },
+    "motivation-5": {
+      why: "When success means only winning, fear of mistakes can make a wrestler cautious and less willing to use trained skills. Definitions built around values, decisions, and learning allow ambition and honest evaluation to exist together.",
+      steps: [
+        "Define success with controllable behaviors you would respect even in a difficult result, such as committed attacks, composure, or following the game plan.",
+        "Define failure in terms of abandoning chosen values or avoiding useful action, not as a label for yourself or every loss.",
+        "Write a view of mistakes that names how you will notice, learn, reset, and seek technical feedback."
+      ],
+      example: "A wrestler defines success as initiating the planned offense and resetting after scores, then treats a missed finish as information to review with the coach."
+    },
+    "motivation-6": {
+      why: "Progress can create new pressure, visibility, and expectations, which sometimes trigger hesitation or avoidance near an important goal. Naming these patterns early makes it easier to choose a grounded response and ask for support before they steer behavior.",
+      steps: [
+        "List situations where you delay, withdraw, overthink, or change helpful routines as competition or expectations increase.",
+        "Write a balanced response for each pattern that acknowledges the concern and directs you to one controllable next action.",
+        "Choose one pattern to monitor with a trusted coach, adult, counselor, or support person while keeping disclosure at a level you choose."
+      ],
+      example: "When attention after a strong tournament makes an athlete avoid attacking, the response becomes, 'Attention feels uncomfortable, and my job is still first contact and the next position.'"
+    }
+  };
+  window.MINDSET_CURRICULUM_UNIT_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_UNIT_CONTEXT || {},
+    "self-knowledge": {
+      overview: "Self-knowledge turns past experience into a usable performance map. The worksheets connect routines, match patterns, technical choices, adversity responses, energy management, enjoyment, and communication so you can prepare and adjust with greater consistency.",
+      approach: "Work in order when possible, use concrete match examples, and review technical or communication plans with the appropriate trusted person."
+    },
+    "goal-setting": {
+      overview: "Goal setting connects a meaningful long-term direction to choices you can make this week. The worksheets move from purpose and milestones into a complete action plan, supportive accountability, and reminders that keep the plan visible.",
+      approach: "Write goals in your own language, then spend most review time on safe, specific actions within your control."
+    },
+    "mental-toughness": {
+      overview: "Mental toughness here means choosing useful action through discomfort while staying aligned with safety, values, and sound judgment. The worksheets build courage gradually, clarify boundaries, add consent-based accountability, and develop confidence for normal fatigue and adversity.",
+      approach: "Choose manageable challenges, involve coaches or qualified professionals where needed, and measure toughness by wise follow-through rather than extremity."
+    },
+    "motivation": {
+      overview: "Motivation becomes more reliable when you understand what activates it and what quietly blocks it. These worksheets connect role models, personal cues, responsibility, habit tradeoffs, useful definitions of success, and responses to self-sabotage.",
+      approach: "Use specific situations from your own week, test one strategy at a time, and keep only the cues that lead to purposeful action."
+    }
+  };
+})();
+
+/* ====== mindset-context-performance.jsx ====== */
+(() => {
+  window.MINDSET_CURRICULUM_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_CONTEXT || {},
+    "present-moment-1": {
+      why: "Rankings, brackets, posts, and opponent stories can pull an athlete into predicting the match instead of preparing to wrestle it. Clear information boundaries protect attention for controllable jobs such as stance, first contact, and the next scoring action.",
+      steps: [
+        "List the media, research, and conversation habits that most often leave you distracted or comparing yourself.",
+        "Name the people, places, and moments when outside hype is most likely to reach you.",
+        "Write a brief response for each trigger that ends the conversation or screen time and redirects you to a current task."
+      ],
+      example: "After seeing a bracket prediction, I close the app and review my first-contact cue: forehead position, inside control, and feet moving."
+    },
+    "present-moment-2": {
+      why: "Worrying about someone else's reaction can make normal match risks feel like threats to a relationship or reputation. Competing from your own values gives you a steadier reason to attack, learn, and enjoy wrestling even when others have expectations.",
+      steps: [
+        "Privately identify any expectations or reactions that make you hesitant; you may describe the situation without naming a person.",
+        "Write the values that make wrestling worth doing for you, separate from praise, approval, or results.",
+        "Turn those values into one believable statement you can use before stepping on the mat."
+      ],
+      example: "I compete because I value courage and growth, so my job is to wrestle forward and learn from whatever happens."
+    },
+    "present-moment-3": {
+      why: "New technique needs deliberate correction, but familiar technique also needs repetitions where the wrestler feels position and adjusts without stopping after every imperfection. Practicing that switch with coach-approved skills makes it easier to keep moving when a match becomes messy.",
+      steps: [
+        "Choose one familiar technique your coach agrees is ready for flow-focused drilling rather than constant technical correction.",
+        "Plan a specific practice period where you will finish the sequence, adjust to your partner, and reset only when safety or coaching requires it.",
+        "Select a simple visual or physical cue that reminds you to trust the trained sequence and keep wrestling."
+      ],
+      example: "During Tuesday single-leg finishes, a small mark on my wrist reminds me to feel the opponent's balance and continue through the finish."
+    },
+    "present-moment-4": {
+      why: "A comfortable breathing rhythm and a familiar image give attention somewhere simple to return when the mind starts chasing noise. The goal is not to force a feeling, but to practice settling enough to notice the next useful action.",
+      steps: [
+        "Choose a place, scene, or image that you personally associate with steadiness rather than excitement or pressure.",
+        "Schedule a short practice time when you can sit or lie comfortably and breathe naturally without rushing.",
+        "Let thoughts pass, return attention to the breath and image, and stop if you become dizzy or uncomfortable."
+      ],
+      example: "At 9:15 p.m., I picture an empty practice room while taking six easy breaths and returning to the image whenever my mind wanders."
+    },
+    "present-moment-5": {
+      why: "Decisions get harder when daily time and attention do not match the priorities an athlete says matter most. A written priority order and a few repeatable questions can turn overthinking into a smaller, controllable choice.",
+      steps: [
+        "Rank your ideal five priorities, then separately rank what your recent schedule and attention show you are prioritizing now.",
+        "Choose three small changes that would move the current list closer to the ideal list this week.",
+        "Select the decision questions that feel useful and add one of your own for moments when you feel stuck."
+      ],
+      example: "Because recovery ranks above late-night entertainment, I ask whether one more video moves me toward tomorrow's practice goal."
+    },
+    "present-moment-6": {
+      why: "A complaint can narrow attention to what is wrong and hide resources, choices, or worthwhile parts of the same situation. Gratitude broadens the picture without requiring you to deny frustration or ignore a problem that needs action.",
+      steps: [
+        "Write three recurring complaints in specific, neutral language without judging yourself for having them.",
+        "For each complaint, identify three things you appreciate, can learn, or can still use in that situation.",
+        "Add other genuine sources of gratitude and note one practical action for any problem that still needs to be addressed."
+      ],
+      example: "I dislike an early lift, but I value the teammate beside me, the planned coaching, and having the chance to build a better routine."
+    },
+    "present-moment-7": {
+      why: "Automatic thoughts are mental events, not instructions or reliable predictions, and fighting them can keep attention stuck on them. Naming a recurring pattern, checking its usefulness, and returning gently to a chosen cue creates room for the next wrestling action.",
+      steps: [
+        "Record up to three thoughts that repeatedly show up before or during competition, using your own words.",
+        "For each one, ask whether it is supported by facts, useful right now, and connected to something you control.",
+        "Write a calm release phrase and a specific attention cue that brings you back to the position or task in front of you."
+      ],
+      example: "When 'I always fade late' appears, I answer, 'That is a prediction,' then return to stance, breathing, and the next hand fight."
+    },
+    "relaxing-under-pressure-1": {
+      why: "Familiar, mild pre-match sensations such as a faster heartbeat or restlessness can be interpreted as competitive energy instead of automatic danger. New, severe, or concerning symptoms are not a mindset exercise and should be stopped and reported.",
+      steps: [
+        "Describe only the familiar, mild physical sensations you commonly notice before a match.",
+        "Write the label you normally give those sensations and how that label affects your behavior.",
+        "Choose an honest, useful label and a next action; stop and report anything unusual, severe, or concerning."
+      ],
+      example: "My quick heartbeat means competition energy is here; I can still exhale, move my feet, and start my warm-up sequence."
+    },
+    "relaxing-under-pressure-2": {
+      why: "Competition can feel less unfamiliar when safe elements of practice and match preparation overlap. Planned familiarity frees attention from novelty, while coach direction keeps simulations, contact, and warm-ups appropriate.",
+      steps: [
+        "Compare a normal live-practice period with match day and list the differences that most affect your readiness.",
+        "Choose coach-approved ways to bring match structure into practice and familiar practice cues into the competition warm-up.",
+        "Confirm the plan with a coach, including equipment, partner, contact level, timing, and available space."
+      ],
+      example: "Once a week, my coach times a live period with scoring, and before matches I use the same short stance-and-motion sequence from practice."
+    },
+    "relaxing-under-pressure-3": {
+      why: "Pressure often grows when a vague concern about people, stakes, or mistakes is left unnamed and unplanned. Separating each pressure source from a respectful response gives the athlete options before attention becomes overloaded.",
+      steps: [
+        "Identify three specific situations, expectations, or interactions that add pressure; omit names or details you do not want to record.",
+        "For each factor, write a coping plan with a thought cue, an action, and a person you can contact if support is needed.",
+        "Check that each plan respects safety and team expectations, and bring threats, harassment, or unsafe conduct to a trusted adult or safeguarding lead."
+      ],
+      example: "When lineup talk starts, I step away, tell myself 'selection is not today's drill,' and ask my coach for one practice priority."
+    },
+    "relaxing-under-pressure-4": {
+      why: "An opponent's record, build, school, gear, or experience can become a mental shortcut that exaggerates advantage before wrestling begins. Evidence-based counterexamples and flexible routines keep confidence tied to preparation instead of conditions that may change.",
+      steps: [
+        "List performance assumptions you make about opponents or circumstances, avoiding stereotypes about protected identities.",
+        "Challenge each assumption with facts, exceptions, or examples that show the outcome is not predetermined.",
+        "Identify rituals that feel compulsory and design a safe variation that proves your preparation can remain useful when one detail changes."
+      ],
+      example: "Instead of treating a national ranking as proof I cannot score, I note wrestlers who created attacks on ranked opponents and practice warming up with a different song."
+    },
+    "relaxing-under-pressure-5": {
+      why: "An ordinary performance fear can become larger when the mind repeats the outcome but never considers what would happen afterward. A grounded response plan restores choices and support, even if nervousness does not disappear.",
+      steps: [
+        "Choose one common wrestling outcome you fear, such as losing, making an early mistake, or falling short of a placement goal.",
+        "Describe the feared outcome realistically, separating likely consequences from imagined judgments or permanent conclusions.",
+        "Write what you would do, tell yourself, and ask others for during the first hour and the next practice after it happened."
+      ],
+      example: "If I lose in overtime, I will cool down, speak with my coach when ready, record one lesson, and return to the week's training plan."
+    },
+    "relaxing-under-pressure-6": {
+      why: "Words do not control outcomes, but rigid or extreme wording can make a difficult moment sound permanent, universal, or impossible. More precise language helps identify the actual problem and the next action without demanding forced positivity.",
+      steps: [
+        "Mark the language patterns you use often, especially absolutes, catastrophic labels, negative commands, and vague avoidance words.",
+        "Rewrite several real phrases with accurate frequency words, positive action cues, or questions about what you can do next.",
+        "Choose three language habits to practice and review your alternatives with a trusted coach or mentor."
+      ],
+      example: "I replace 'I always get ridden out' with 'I stayed down twice today; next rep I will clear my hands and build my base.'"
+    },
+    "relaxing-under-pressure-7": {
+      why: "Under stress, athletes commonly filter evidence, predict outcomes, read other people's minds, or turn one mistake into a fixed label. Recognizing the pattern creates a pause in which a more balanced interpretation and useful action can be chosen.",
+      steps: [
+        "Review the thinking-trap list and mark patterns you recognize without treating the checklist as a diagnosis.",
+        "Select three patterns and write one recent wrestling example of each as specifically as possible.",
+        "For every example, write a balanced response using available evidence and finish with one controllable next action."
+      ],
+      example: "'Coach corrected me, so he has lost confidence in me' is mind reading; the known fact is that he gave me a detail I can drill today."
+    },
+    "confidence-1": {
+      why: "Confidence is easier to access when it is connected to specific evidence rather than a demand to feel certain. A simple cue can remind you to review past execution, physical preparation, and strengths, but it does not have to create a particular feeling.",
+      steps: [
+        "Choose a brief, safe cue or gesture that you can use without disrupting practice, competition, or a teammate.",
+        "List concrete successes from wrestling, physical preparation, and school or life, including small examples of effective effort.",
+        "List strengths in those same areas and practice the cue while calmly reviewing one item from each list."
+      ],
+      example: "I press my thumb to my wrist and remember finishing a hard third period, completing summer lifts, and asking for help in chemistry."
+    },
+    "confidence-2": {
+      why: "Comparable athletes can provide evidence that a pathway is possible, while high-level technique models show how familiar positions work against strong opposition. The useful comparison is about strategies and development, not a promise that two athletes will achieve the same result.",
+      steps: [
+        "Identify people whose background, challenge, or development path is relevant to your goal and state the specific similarity.",
+        "Choose skilled wrestlers who use setups, attacks, rides, or escapes related to your own game.",
+        "Write one realistic lesson from each example that you can test in training with your coach."
+      ],
+      example: "A lighter upperclassman who earned the lineup spot shows me the value of consistent strength work, while a college wrestler's underhook entry gives me one detail to study."
+    },
+    "confidence-3": {
+      why: "Posture, pace, eye line, and clear communication can support readiness and help an athlete stay engaged when confidence feels uneven. Practicing composed body language is a performance routine, not a requirement to hide pain, fear, injury, or a need for help.",
+      steps: [
+        "Describe what your head position, shoulders, walking pace, stance, and voice look like when you are ready to engage.",
+        "Name the situations where those behaviors would help, such as entering the room, warming up, returning to center, or receiving instruction.",
+        "Schedule a place and time to rehearse the behaviors, then ask a coach or teammate for observable feedback."
+      ],
+      example: "Before live goes, I stand tall, walk directly to the circle, make eye contact with my partner, and state the starting position clearly."
+    },
+    "confidence-4": {
+      why: "Short, believable statements can direct attention toward preparation, values, skills, and effort before old doubts take over. Statements grounded in evidence are usually more usable than absolute claims that the athlete does not believe.",
+      steps: [
+        "Draft several first-person statements covering preparation, effort, a reliable wrestling skill, and a strength outside the sport.",
+        "Revise each statement until it is specific, within your control, and believable on both good and difficult days.",
+        "Choose a consistent review time and read the statements as cues for action rather than predictions of a result."
+      ],
+      example: "I have prepared my finishes, I can stay active after a mistake, and I will keep looking for the next score."
+    },
+    "confidence-5": {
+      why: "Realistic imagery lets an athlete mentally rehearse positions, sensory cues, decisions, and recovery from ordinary mistakes before competition. Reviewing effective video adds visible evidence of execution, but neither practice replaces physical training or coaching.",
+      steps: [
+        "Choose a quiet time, place, and manageable duration for imagery that fits your attention and schedule.",
+        "Imagine a first-person sequence with mat feel, sounds, movement, a familiar technique, and a composed response to one challenge.",
+        "Select a short clip of effective execution and record the exact behavior you want to carry into the next practice."
+      ],
+      example: "I picture clearing a collar tie, hearing the whistle, finishing my single at the edge, then calmly rebuilding stance after a restart."
+    },
+    "confidence-6": {
+      why: "Reliable confidence grows when an athlete can point to repeated, technically sound execution in the positions that matter most. Feedback, recovery, and quality of movement provide better evidence than chasing an arbitrary repetition total.",
+      steps: [
+        "Write your best coach-approved neutral, top, and bottom sequences, including the setup, main action, and finish for each.",
+        "Agree with your coach on a realistic weekly amount of quality practice for each sequence.",
+        "Track execution and feedback; stop and report pain, and adjust repetitions only for form, recovery, or coaching direction."
+      ],
+      example: "For bottom, I will complete three sets of five clean stand-up sequences twice this week, stopping if form breaks and checking the hand-clear detail with my coach."
+    },
+    "confidence-7": {
+      why: "A goal feels more credible when it is supported by evidence from preparation, strengths, progress, values, and available support. Building that case is not proof that an outcome is owed; it clarifies why continued pursuit and the next step are reasonable.",
+      steps: [
+        "State one meaningful goal with a timeframe or competition context that makes it clear enough to evaluate.",
+        "Organize supporting evidence from your training, past progress, personal strengths, and people or resources that can help.",
+        "Write a grounded commitment statement that emphasizes controllable work while allowing the final result to remain uncertain."
+      ],
+      example: "My goal is to earn a postseason starting spot; improved finishes, consistent attendance, and weekly coach feedback support my commitment to keep competing for it."
+    },
+    "confidence-8": {
+      why: "Confidence is belief in your own preparation and capacity, while arrogance depends on comparison, disrespect, or refusing useful correction. Knowing the difference lets a wrestler compete assertively while remaining humble, coachable, and respectful.",
+      steps: [
+        "Define confidence and arrogance through behaviors you could actually observe in practice, competition, and conversation.",
+        "Describe how each response would look after success, after a teammate succeeds, and after receiving correction.",
+        "Write a personal plan for showing strong self-belief together with respect, curiosity, and accountability."
+      ],
+      example: "I can say I trust my single leg, celebrate a teammate's win, and still ask my coach which finish detail needs work."
+    }
+  };
+  window.MINDSET_CURRICULUM_UNIT_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_UNIT_CONTEXT || {},
+    "present-moment": {
+      overview: "This unit develops the ability to keep attention on the position, decision, or action available now. Its worksheets move from reducing outside noise to clarifying values and priorities, trusting trained skills, using settling cues, broadening perspective, and responding flexibly to recurring thoughts.",
+      approach: "Work through one lesson at a time, test its cue or boundary in practice, and revise the answer based on what actually helps you re-engage."
+    },
+    "relaxing-under-pressure": {
+      overview: "This unit helps athletes understand competitive energy and reduce avoidable pressure created by novelty, assumptions, rigid routines, feared outcomes, and extreme thinking. The worksheets build a practical response plan rather than requiring an athlete to eliminate nerves or manufacture calm.",
+      approach: "Use specific match situations, choose believable responses, and review any practice simulation or safety-sensitive plan with a coach."
+    },
+    "confidence": {
+      overview: "This unit builds confidence from evidence: past execution, existing strengths, useful models, practiced behavior, realistic self-talk, imagery, and quality repetitions. The final lessons connect that evidence to a meaningful goal and distinguish strong self-belief from comparison or disrespect.",
+      approach: "Favor concrete examples over hype, then turn each worksheet into one action you can practice or review with your coach."
+    }
+  };
+})();
+
+/* ====== mindset-context-competition.jsx ====== */
+(() => {
+  window.MINDSET_CURRICULUM_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_CONTEXT || {},
+    "clarity-1": {
+      why: "A small, coach-approved neutral offense helps you recognize scoring opportunities without sorting through every move you know. Pairing that plan with a brief cue, image, and gesture makes your intended response easier to recall under match pressure.",
+      steps: [
+        "Review recent practice and match evidence with your coach, then rank the three takedowns you can set up and finish most reliably.",
+        "Enter those takedowns in order and make sure each name is specific enough that you both mean the same variation.",
+        "Choose one short neutral cue, one personally useful image or song, and one subtle rules-compliant gesture, then rehearse the set during drilling."
+      ],
+      example: "A wrestler lists an outside single, high crotch, and snap-down, then pairs them with the cue ‘hands first’ and a quick exhale."
+    },
+    "clarity-2": {
+      why: "A rehearsed first action on bottom reduces the pause that lets the top wrestler settle into control. Two dependable follow-up options keep the plan simple while still allowing you to adjust to the opponent and your coach’s direction.",
+      steps: [
+        "Ask your coach which legal first movement best fits your starting position, strengths, and current ruleset.",
+        "List two escapes or reversals you execute reliably, including the option you will use when the first action is blocked.",
+        "Create a short cue, image or song, and subtle anchor that emphasize immediate controlled movement, then test them in live starts."
+      ],
+      example: "A wrestler writes ‘hand control, then stand-up or sit-out’ and uses ‘move now’ with a quiet finger tap as the reminder."
+    },
+    "clarity-3": {
+      why: "Knowing your first safe action on top helps you apply pressure before the bottom wrestler establishes an escape. A short list of proven turns keeps attention on creating controlled scoring opportunities instead of merely holding position.",
+      steps: [
+        "Confirm a legal, technically sound first move with your coach for the whistle and for common referee-position variations.",
+        "Rank three turns or pinning combinations you can perform with control, and use precise names your coach recognizes.",
+        "Add one compact top cue, one useful image or song, and one unobtrusive gesture, then practice recalling them before situational goes."
+      ],
+      example: "A wrestler chooses a tight-waist chop first, lists a half nelson and two coach-approved turns, and uses the cue ‘break down, build.’"
+    },
+    "clarity-4": {
+      why: "Common positions become slower when you have to invent an answer in the middle of the exchange. Preselecting one legal response and one attention cue for each situation speeds recognition while leaving room for score, time, and opponent adjustments.",
+      steps: [
+        "Walk through every listed situation with your coach and name the safe response that best fits your current skill level.",
+        "Write a brief cue beside each response that directs attention to its first controllable detail, such as head position or hand control.",
+        "Rehearse the answers in short situational rounds, then revise any response that is unreliable, unsafe, or mismatched to the rules."
+      ],
+      example: "For an opponent’s collar tie, an athlete records a coach-taught clear-and-attack sequence with the cue ‘post, angle.’"
+    },
+    "clarity-5": {
+      why: "Rankings, crowd noise, team momentum, and self-doubt can pull attention away from the position in front of you. An interrupt cue followed by a specific next action creates a practiced route back to useful wrestling.",
+      steps: [
+        "For each prompt, describe the exact thought, sound, or event that usually captures your attention.",
+        "Choose a brief respectful interrupt, such as an exhale, head nod, or two-word cue, that you can use without delaying action.",
+        "Write the immediate productive plan that follows the interrupt and rehearse the pair during practice or visualization."
+      ],
+      example: "After hearing predictions about an opponent, a wrestler plans one exhale, the cue ‘my position,’ and a return to stance and hand fighting."
+    },
+    "controlled-aggression-1": {
+      why: "A competitive character can give a reserved athlete permission to act decisively while keeping the same values off the mat. The tool works only when its qualities remain legal, controlled, coachable, and respectful of opponents.",
+      steps: [
+        "Choose a performance-character name and creation date that feel motivating without insulting or threatening anyone.",
+        "List observable qualities you want to display, such as initiating contact, staying composed, and finishing legal technique.",
+        "Optionally name your doubtful inner voice, then write a firm but respectful response that redirects you to the next action."
+      ],
+      example: "An athlete names the character ‘Steady Pressure,’ lists decisive re-attacks and calm body language, and answers doubt with ‘noted—back to stance.’"
+    },
+    "controlled-aggression-2": {
+      why: "A repeatable sensory or physical cue can mark the transition from waiting to purposeful competition. Its value comes from repeated association with readiness, not from a color, hairstyle, sound, or symbol having special power.",
+      steps: [
+        "Select one safe physical switch you can perform consistently, such as fastening headgear and taking a controlled breath.",
+        "Add only optional clothing, grooming, sound, or symbol cues that fit school, team, event, equipment, and safety rules.",
+        "Practice the same short sequence before drilling and matches, then keep only the elements that help you feel composed and ready."
+      ],
+      example: "A wrestler tightens approved headgear, exhales once, and silently says ‘first contact’ before stepping toward the center."
+    },
+    "controlled-aggression-3": {
+      why: "Assertiveness in wrestling means initiating legal offense, responding quickly, and continuing to pursue points with sound technique. It does not mean hurting, humiliating, punishing, or overwhelming a partner beyond the practice plan.",
+      steps: [
+        "Use the readiness choice to rate how prepared you feel to initiate safe, legal offense today.",
+        "With your coach, choose an appropriately matched partner and define a bounded scoring scenario with clear intensity and stop rules.",
+        "Record each completed scenario by date and note whether you initiated, stayed technical, respected stoppages, and returned to useful pressure."
+      ],
+      example: "A coach pairs two similar athletes for four 30-second neutral starts, asking each to create the first legal attack and reset at the whistle."
+    },
+    "controlled-aggression-4": {
+      why: "Role models make assertive wrestling concrete by showing what initiative and composure look like in real exchanges. Studying observable, legal behaviors is more useful than copying a personality, celebration, or intimidating image.",
+      steps: [
+        "Choose wrestlers whose matches show technical pressure, emotional control, sportsmanship, and responsiveness to coaches and officials.",
+        "List two or three observable behaviors you can safely practice, describing actions rather than personality labels.",
+        "Select an approved match clip each week and track where the athlete creates contact, re-attacks, finishes, resets, and stays composed."
+      ],
+      example: "An athlete studies a wrestler who hand-fights into angles, finishes at the edge, returns promptly to center, and shakes hands respectfully."
+    },
+    "controlled-aggression-5": {
+      why: "Music, images, phrases, and short videos can help recall the level of energy and intent you want to bring to competition. Organizing them in advance prevents last-minute searching and helps you avoid cues that make you reckless or over-aroused.",
+      steps: [
+        "Collect a small set of age-appropriate media, phrases, and symbols that represent controlled initiative rather than violence or disrespect.",
+        "Sort the cues by effect—calming, focusing, or energizing—and remove anything that pushes you above your useful intensity.",
+        "Write when, where, and how long you will use the collection while following venue, headphone, device, and team rules."
+      ],
+      example: "A wrestler makes a five-minute playlist for the bus, saves one technical highlight for warm-up, and finishes with the phrase ‘calm pressure.’"
+    },
+    "sleep-recovery-1": {
+      why: "Sleep is easier to support when your schedule and room repeatedly offer a quiet, comfortable opportunity to rest. No single habit guarantees sleep, so the goal is to test realistic changes and notice what helps your own pattern.",
+      steps: [
+        "Review the checklist with a guardian when appropriate and select habits that fit your age, household, school schedule, and training demands.",
+        "Choose one first change you can repeat for a week, stating exactly when or how you will do it.",
+        "Track whether the habit was practical and how rested you felt, and discuss persistent trouble, breathing concerns, or any remedy with a qualified clinician."
+      ],
+      example: "A student-athlete sets a consistent 10:00 p.m. wind-down, charges the phone outside the bed area, and records morning energy for seven days."
+    },
+    "sleep-recovery-2": {
+      why: "The night before competition is more predictable when food, fluids, and sleep timing remain familiar instead of becoming a new experiment. This plan supports rest and fueling; it must never become a tool for dehydration, restriction, or rapid weight control.",
+      steps: [
+        "Privately record what you usually eat and drink, then compare it with guidance from your guardian and qualified sports-health team.",
+        "Write a familiar approved meal and hydration plan, avoiding new supplements, stimulants, or last-minute weight-cutting tactics.",
+        "Compare your usual bedtime with the competition plan and, if needed, schedule a gradual adjustment rather than forcing an unusually early night."
+      ],
+      example: "With a sports dietitian’s plan, an athlete keeps the usual dinner and fluids, then moves bedtime 15 minutes earlier across several nights."
+    },
+    "sleep-recovery-3": {
+      why: "A familiar low-stimulation sequence gives your mind fewer decisions to make as bedtime approaches. Repeating it on ordinary nights makes it more useful before competition than trying a complicated routine for the first time.",
+      steps: [
+        "List a short sequence of ordinary activities such as hygiene, preparing tomorrow’s items, quiet reading, or optional personal reflection.",
+        "Choose a realistic start time and end with a comfortable settling practice such as slow breathing, without straining or forcing relaxation.",
+        "Test the sequence on regular training nights, then shorten or reorder any step that wakes you up or is difficult to sustain."
+      ],
+      example: "A wrestler packs the gear bag, showers, reads for ten minutes, takes four easy breaths, and turns out the light at the usual time."
+    },
+    "sleep-recovery-4": {
+      why: "A peaceful image can shift attention away from match rehearsal and toward a neutral, settling scene. A safe object or room feature may strengthen familiarity, but it is optional and does not guarantee sleep.",
+      steps: [
+        "Choose a place, image, or symbol that feels calm and has no competitive demand attached to it.",
+        "Describe a few sensory details you can gently notice while resting, without trying to force the image or a particular result.",
+        "Optionally select one safe bedroom cue connected to the image, checking that it creates no fire, trip, sound, or equipment hazard."
+      ],
+      example: "An athlete pictures a quiet lakeshore, notices the imagined water and breeze, and keeps a small landscape photo on the nightstand."
+    },
+    "sleep-recovery-5": {
+      why: "Trying to command yourself to sleep can add frustration when your mind is active before competition. A permission-based statement shifts the immediate goal from perfect sleep to allowing rest without another performance test.",
+      steps: [
+        "Notice the demand or prediction that appears when sleep is slow, such as believing tomorrow is ruined.",
+        "Write a believable statement that accepts wakefulness and nervous thoughts while giving yourself permission to rest.",
+        "Use the statement once or twice with an easy exhale, and seek qualified help if sleep problems are frequent, severe, or affecting daily health."
+      ],
+      example: "A wrestler writes, ‘I do not have to force this; lying quietly is still rest, and I can follow my plan tomorrow.’"
+    },
+    "sleep-recovery-6": {
+      why: "Recovery includes mental, emotional, social, spiritual, and physical habits across the whole week, not a single post-practice trick. A small coordinated plan can support readiness while keeping nutrition, hydration, pain care, and treatment within qualified guidance.",
+      steps: [
+        "Choose a few checklist habits that genuinely fit your values, schedule, care plan, and access to support.",
+        "Assign each selected habit a specific time or trigger, keeping spiritual practices optional and physical practices comfortable and approved.",
+        "Report concerns promptly and change clinician-, dietitian-, or athletic-trainer-guided plans only with the appropriate professional."
+      ],
+      example: "An athlete plans two minutes of comfortable breathing after homework, follows the team dietitian’s hydration plan, and checks in when mood stays low."
+    },
+    "injury-recovery-1": {
+      why: "An injury may change how you participate, but medically cleared learning and connection can preserve a sense of progress. Rest and treatment are productive actions, and no worksheet activity should compete with restrictions from an athletic trainer or qualified clinician.",
+      steps: [
+        "Review the current restrictions exactly as provided by your athletic trainer or qualified clinician before considering any activity.",
+        "For each category, list only options that the clinician has cleared, using rest or ‘not cleared’ whenever that is the correct answer.",
+        "Confirm the plan with your care team and coach, then stop and report any new, worsening, or concerning symptoms."
+      ],
+      example: "A wrestler cleared only for observation studies one neutral sequence on video, completes assigned rehabilitation, and marks all mat work ‘not cleared.’"
+    },
+    "injury-recovery-2": {
+      why: "Injury can bring grief, anger, fear, relief, or uncertainty, and honest acknowledgment is healthier than forcing a positive story. Meaning can develop gradually through learning, support, or values-based choices without pretending the injury was beneficial.",
+      steps: [
+        "Describe what the experience is like today, including mixed feelings, without judging yourself for having them.",
+        "Write a balanced response statement focused on what you can control while still recognizing what is difficult or unknown.",
+        "List possible learning, connection, or support opportunities, and include a trusted person or professional you can contact if coping becomes hard."
+      ],
+      example: "An athlete writes, ‘I hate missing competition, and I can use this week to follow rehab, stay with the team, and ask for help when I need it.’"
+    },
+    "injury-recovery-3": {
+      why: "Responsible comeback stories can provide hope by showing that recovery often involves patience, rehabilitation, setbacks, and support. Their timeline is not your clearance standard, so focus on process lessons rather than copying dates or comparing injuries.",
+      steps: [
+        "Choose credible athlete examples whose recovery information comes from reliable interviews, teams, or medical reporting.",
+        "Identify the process behaviors shown, such as reporting symptoms, completing rehabilitation, accepting a gradual progression, or using support.",
+        "Write one lesson that applies to your attitude or communication while leaving all medical decisions to your own qualified care team."
+      ],
+      example: "A wrestler studies an athlete who reported a setback and paused progression, then notes that honest communication protected the long-term return."
+    },
+    "injury-recovery-4": {
+      why: "Safe recovery requires distinguishing clinician-explained rehabilitation sensations from symptoms that mean stop and report. Studying responsible examples should normalize communication and sound decisions, never competing through pain or hiding symptoms.",
+      steps: [
+        "Find examples of athletes who communicated symptoms, followed restrictions, or delayed return when their medical team advised it.",
+        "List the exact safe decisions and communication habits you can learn from those examples.",
+        "Review your own stop-and-report signs with an athletic trainer or qualified clinician instead of diagnosing or grading symptoms yourself."
+      ],
+      example: "An athlete notes that a wrestler reported new numbness, stopped the session, and waited for clinical reassessment before resuming progression."
+    },
+    "injury-recovery-5": {
+      why: "Return confidence grows from verified clearance, completed rehabilitation, graded wrestling exposure, and a clear communication plan. Readiness never requires accepting reinjury risk silently; courage includes stopping and reporting symptoms when the plan says to do so.",
+      steps: [
+        "Complete the checklist with your athletic trainer or qualified clinician and leave any unverified item unchecked.",
+        "Record current restrictions and the graded steps you have completed, including how your coach will apply accommodations.",
+        "Write clinician-approved stop signs and a commitment to report them immediately, then return only at the level for which you are cleared."
+      ],
+      example: "A wrestler cleared for controlled drilling records the restriction ‘no live goes,’ names swelling or sharp pain as stop signs, and tells the coach before practice."
+    }
+  };
+  window.MINDSET_CURRICULUM_UNIT_CONTEXT = {
+    ...window.MINDSET_CURRICULUM_UNIT_CONTEXT || {},
+    "clarity": {
+      overview: "Clarity turns a large technique library into a small, usable competition plan. The first three worksheets select reliable actions and recall cues for neutral, bottom, and top; the final two prepare answers for recurring positions and distractions.",
+      approach: "Complete the unit with your coach, test each answer in situational practice, and revise it when evidence or rules change."
+    },
+    "controlled-aggression": {
+      overview: "Controlled aggression develops decisive initiation, sustained legal offense, and composed pressure without sacrificing safety or sportsmanship. The worksheets build a performance identity and readiness cues, then connect them to coach-approved scenarios, role-model study, and organized media prompts.",
+      approach: "Keep every choice observable, rules-compliant, and within your useful energy level, then judge it by technical execution rather than intimidation."
+    },
+    "sleep-recovery": {
+      overview: "Sleep and recovery are supported by repeatable opportunities, familiar routines, and coordinated care rather than hacks or guarantees. These worksheets move from environment and competition-night planning to settling skills and a sustainable whole-person recovery plan.",
+      approach: "Test small changes consistently, track what is practical, and involve a guardian or qualified professional for persistent concerns, nutrition, supplements, pain, or treatment."
+    },
+    "injury-recovery": {
+      overview: "Injury recovery combines honest coping, continued connection, and medically directed rehabilitation. The worksheets identify only cleared forms of progress, build realistic hope from safe examples, strengthen symptom communication, and organize a graded return-to-play plan.",
+      approach: "Work at the pace set by your athletic trainer or qualified clinician, treat rest as valid progress, and report symptoms instead of concealing or self-diagnosing them."
+    }
+  };
+})();
+
 /* ====== mindset.jsx ====== */
 (() => {
   const { useEffect, useMemo, useRef, useState } = React;
   const MINDSET_CURRICULUM_UNITS = window.MINDSET_CURRICULUM_UNITS || [];
+  const MINDSET_CURRICULUM_CONTEXT = window.MINDSET_CURRICULUM_CONTEXT || {};
+  const MINDSET_CURRICULUM_UNIT_CONTEXT = window.MINDSET_CURRICULUM_UNIT_CONTEXT || {};
   const MINDSET_STORAGE_KEY = "wkb_mindset_workbook_v1";
   const MINDSET_RESTORE_RECOVERY_KEY = "wkb_mindset_workbook_before_restore_v1";
   const MINDSET_BACKUP_TYPE = "wkb-mindset-workbook";
@@ -2981,6 +3687,12 @@
   function curriculumOptionValue(option) {
     return isRecord(option) ? option.value : option;
   }
+  function CurriculumLessonGuide({ lesson }) {
+    const guide = MINDSET_CURRICULUM_CONTEXT[lesson.id];
+    if (!guide) return null;
+    const headingId = "wb-curriculum-guide-" + lesson.id;
+    return /* @__PURE__ */ React.createElement("section", { className: "wb-lesson-guide", "aria-labelledby": headingId }, /* @__PURE__ */ React.createElement("header", { className: "wb-lesson-guide-header" }, /* @__PURE__ */ React.createElement("span", { className: "wb-lesson-guide-icon", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 21, stroke: 2 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "wb-guide-eyebrow" }, "Worksheet guide"), /* @__PURE__ */ React.createElement("h3", { id: headingId }, "Understand the work before you answer"))), /* @__PURE__ */ React.createElement("div", { className: "wb-lesson-guide-grid" }, /* @__PURE__ */ React.createElement("article", { className: "wb-guide-why" }, /* @__PURE__ */ React.createElement("h4", null, "Why this matters"), /* @__PURE__ */ React.createElement("p", null, guide.why)), /* @__PURE__ */ React.createElement("article", { className: "wb-guide-steps" }, /* @__PURE__ */ React.createElement("h4", null, "How to use this worksheet"), /* @__PURE__ */ React.createElement("ol", null, guide.steps.map((step) => /* @__PURE__ */ React.createElement("li", { key: step }, step)))), /* @__PURE__ */ React.createElement("article", { className: "wb-guide-example" }, /* @__PURE__ */ React.createElement("h4", null, "Wrestling example"), /* @__PURE__ */ React.createElement("p", null, guide.example), /* @__PURE__ */ React.createElement("small", null, "Use the example as a model for specificity, not as a required answer."))));
+  }
   function CurriculumField({ lessonId, field, value, onChange }) {
     const id = "wb-curriculum-" + lessonId + "-" + field.id;
     const hintId = id + "-hint";
@@ -3062,7 +3774,7 @@
           onBack: closeLesson,
           backLabel: "Development program"
         }
-      ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: "Worksheet progress" }), (selectedLesson.notice || selectedLesson.sensitive) && /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" + (selectedLesson.sensitive ? " wb-curriculum-notice-sensitive" : "") }, /* @__PURE__ */ React.createElement(Icon, { name: selectedLesson.sensitive ? "brain" : "check", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, selectedLesson.notice || "These sensitive responses are optional.", selectedLesson.sensitive && " Anyone using this same browser profile can view saved responses, so use a personal browser profile on shared devices.")), selectedLesson.linkedModule ? /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-linked-worksheet" }, /* @__PURE__ */ React.createElement("h3", null, "Use the complete core tool"), /* @__PURE__ */ React.createElement("p", null, "This source worksheet is already built as a dedicated phone-first tool, so your plan stays in one place."), /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "button", onClick: () => onOpenLinked(selectedLesson.linkedModule) }, "Open ", linkedLabels[selectedLesson.linkedModule] || "core tool", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))) : /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-curriculum-form", "aria-label": selectedLesson.title + " worksheet fields" }, (selectedLesson.fields || []).map((field) => /* @__PURE__ */ React.createElement(
+      ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: "Worksheet progress" }), /* @__PURE__ */ React.createElement(CurriculumLessonGuide, { lesson: selectedLesson }), (selectedLesson.notice || selectedLesson.sensitive) && /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" + (selectedLesson.sensitive ? " wb-curriculum-notice-sensitive" : "") }, /* @__PURE__ */ React.createElement(Icon, { name: selectedLesson.sensitive ? "brain" : "check", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, selectedLesson.notice || "These sensitive responses are optional.", selectedLesson.sensitive && " Anyone using this same browser profile can view saved responses, so use a personal browser profile on shared devices.")), selectedLesson.linkedModule ? /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-linked-worksheet" }, /* @__PURE__ */ React.createElement("h3", null, "Use the complete core tool"), /* @__PURE__ */ React.createElement("p", null, "This source worksheet is already built as a dedicated phone-first tool, so your plan stays in one place."), /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "button", onClick: () => onOpenLinked(selectedLesson.linkedModule) }, "Open ", linkedLabels[selectedLesson.linkedModule] || "core tool", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))) : /* @__PURE__ */ React.createElement("section", { className: "wb-form-section wb-curriculum-form", "aria-label": selectedLesson.title + " worksheet fields" }, (selectedLesson.fields || []).map((field) => /* @__PURE__ */ React.createElement(
         CurriculumField,
         {
           key: field.id,
@@ -3079,12 +3791,13 @@
         headingId: "wb-curriculum-title",
         title: "Complete Development Program",
         eyebrow: MINDSET_CURRICULUM_LESSONS.length + " guided worksheets · " + MINDSET_CURRICULUM_UNITS.length + " units",
-        description: "Work in order or choose the area that fits today. Every fillable exercise from the source packet is represented here, with safety-sensitive language updated for athletes.",
+        description: "Work in order or choose the area that fits today. Each worksheet includes the performance concept, completion steps, and a wrestling example before the response fields.",
         onBack
       }
-    ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: overallProgress.complete, total: overallProgress.total, label: "Program fields completed" }), /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, "This is an educational reflection tool, not medical or mental-health care. Follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.")), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-units" }, MINDSET_CURRICULUM_UNITS.map((unit) => {
+    ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: overallProgress.complete, total: overallProgress.total, label: "Program fields completed" }), /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, "The guide sections paraphrase the teaching context from the worksheet packet. This is an educational reflection tool, not medical or mental-health care; follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.")), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-units" }, MINDSET_CURRICULUM_UNITS.map((unit) => {
       const progress = curriculumUnitProgress(unit, curriculum, linkedProgress);
-      return /* @__PURE__ */ React.createElement("details", { className: "wb-curriculum-unit", id: "wb-curriculum-unit-" + unit.id, key: unit.id, open: openUnitIds.indexOf(unit.id) >= 0, onToggle: (event) => setUnitOpen(unit.id, event.currentTarget.open) }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, unit.title), /* @__PURE__ */ React.createElement("small", null, unit.lessons.length, " worksheets · ", unit.description)), /* @__PURE__ */ React.createElement("span", null, progress.complete, " / ", progress.total)), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: unit.title + " progress" }), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-lesson-list" }, unit.lessons.map((lesson) => {
+      const unitGuide = MINDSET_CURRICULUM_UNIT_CONTEXT[unit.id];
+      return /* @__PURE__ */ React.createElement("details", { className: "wb-curriculum-unit", id: "wb-curriculum-unit-" + unit.id, key: unit.id, open: openUnitIds.indexOf(unit.id) >= 0, onToggle: (event) => setUnitOpen(unit.id, event.currentTarget.open) }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, unit.title), /* @__PURE__ */ React.createElement("small", null, unit.lessons.length, " worksheets · ", unit.description)), /* @__PURE__ */ React.createElement("span", null, progress.complete, " / ", progress.total)), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: unit.title + " progress" }), unitGuide && /* @__PURE__ */ React.createElement("section", { className: "wb-unit-guide", "aria-label": unit.title + " unit roadmap" }, /* @__PURE__ */ React.createElement("span", null, "Unit roadmap"), /* @__PURE__ */ React.createElement("p", null, unitGuide.overview), /* @__PURE__ */ React.createElement("small", null, unitGuide.approach)), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-lesson-list" }, unit.lessons.map((lesson) => {
         const lessonProgress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
         return /* @__PURE__ */ React.createElement("button", { className: "wb-curriculum-lesson-button", id: "wb-curriculum-open-" + lesson.id, type: "button", key: lesson.id, onClick: () => openLesson(lesson.id), "data-testid": "curriculum-open-" + lesson.id }, /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-week" }, lesson.weekLabel || "Week " + lesson.week), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, lesson.title), /* @__PURE__ */ React.createElement("small", null, lesson.objective)), /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-lesson-progress" }, lessonProgress.complete, "/", lessonProgress.total, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 16, stroke: 2.2 })));
       })));
@@ -3750,8 +4463,8 @@
         {
           module: "development",
           title: "Complete Development Program",
-          description: MINDSET_CURRICULUM_LESSONS.length + " guided worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units.",
-          summary: "Self-knowledge, goals, toughness, motivation, present moment, pressure, confidence, clarity, controlled aggression, sleep, and injury recovery.",
+          description: MINDSET_CURRICULUM_LESSONS.length + " context-rich worksheets across " + MINDSET_CURRICULUM_UNITS.length + " curriculum units.",
+          summary: "Every worksheet explains why the topic matters, how to complete it, and what a specific wrestling application can look like.",
           progress: developmentProgress.complete,
           progressTotal: developmentProgress.total,
           buttonLabel: developmentProgress.complete ? "Resume program" : "Explore full program",

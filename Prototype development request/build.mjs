@@ -8,6 +8,9 @@ const sources = [
   "components.jsx",
   "docs.jsx",
   "mindset-curriculum.jsx",
+  "mindset-context-foundations.jsx",
+  "mindset-context-performance.jsx",
+  "mindset-context-competition.jsx",
   "mindset.jsx",
   "app.jsx",
 ];
