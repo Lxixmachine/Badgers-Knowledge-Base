@@ -1,0 +1,23 @@
+name: Verify site
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Prototype development request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Prototype development request/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Verify generated files are current
+        run: git diff --exit-code -- app.compiled.js "Badgers Knowledge Base.html" "Badgers Knowledge Base (standalone).html"

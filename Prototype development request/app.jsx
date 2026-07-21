@@ -33,16 +33,27 @@ function moveId(order, fullIds, dragId, overId) {
   return base;
 }
 
+function accentForeground(value) {
+  const match = typeof value === "string" && value.trim().match(/^#([0-9a-f]{6})$/i);
+  if (!match) return "#fff";
+  const channels = match[1].match(/.{2}/g).map((part) => parseInt(part, 16) / 255);
+  const linear = channels.map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
+  const luminance = 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  const whiteContrast = 1.05 / (luminance + 0.05);
+  const blackContrast = (luminance + 0.05) / 0.05;
+  return whiteContrast >= blackContrast ? "#fff" : "#000";
+}
+
 /* visual direction presets (theme + accent together) */
 const DIRECTIONS = {
-  "Black & Cardinal": { theme: "dark",  accent: "#E23B3F" },
+  "Black & Cardinal": { theme: "dark",  accent: "#C5050C" },
   "White Court":      { theme: "light", accent: "#C5050C" },
-  "Locker Room":      { theme: "ink",   accent: "#E23B3F" },
+  "Locker Room":      { theme: "ink",   accent: "#C5050C" },
 };
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "direction": "Black & Cardinal",
-  "accent": "#E23B3F",
+  "accent": "#C5050C",
   "theme": "dark",
   "layout": "Grid",
   "gridCols": "Auto",
@@ -79,19 +90,37 @@ function App() {
   const { CATEGORIES, ENTRIES, GATE, VERSION } = window.WKB;
 
   // ---- access gate ----
-  const gateOn = !!(GATE && (GATE.athlete || GATE.coach));
-  const [role, setRole] = useState(() => gateOn ? (sessionStorage.getItem("wkb_role") || null) : "athlete");
+  const athleteGateOn = !!(GATE && GATE.athlete);
+  const coachAccessOn = !!(GATE && GATE.coach);
+  const [role, setRole] = useState(() => {
+    const stored = sessionStorage.getItem("wkb_role");
+    if (stored === "coach" && coachAccessOn) return "coach";
+    if (athleteGateOn) return stored === "athlete" ? "athlete" : null;
+    return "athlete";
+  });
+  const [showCoachLogin, setShowCoachLogin] = useState(false);
   const coachMode = role === "coach";
-  const canEdit = coachMode || !gateOn;
+  const canEdit = coachMode;
   function unlock(code) {
     if (GATE.coach && code === GATE.coach) { setRole("coach"); sessionStorage.setItem("wkb_role", "coach"); return true; }
     if (GATE.athlete && code === GATE.athlete) { setRole("athlete"); sessionStorage.setItem("wkb_role", "athlete"); return true; }
     return false;
   }
-  function signOut() { sessionStorage.removeItem("wkb_role"); setRole(null); }
+  function unlockCoach(code) {
+    if (!GATE.coach || code !== GATE.coach) return false;
+    setRole("coach");
+    setShowCoachLogin(false);
+    sessionStorage.setItem("wkb_role", "coach");
+    return true;
+  }
+  function signOut() {
+    sessionStorage.removeItem("wkb_role");
+    setShowCoachLogin(false);
+    setRole(athleteGateOn ? null : "athlete");
+  }
 
   const [query, setQuery] = useState("");
-  const [view, setView] = useState("all");           // all | <catId> | saved | progress
+  const [view, setView] = useState("all");           // all | <catId> | saved | progress | workbook
   const [openId, setOpenId] = useState(() => {
     // deep link: #e=<entryId> opens that entry (e.g. a link a coach texts the team)
     const m = window.location.hash.match(/^#e=(.+)$/);
@@ -100,6 +129,20 @@ function App() {
   const [showAdd, setShowAdd] = useState(false);
   const [editEntry, setEditEntry] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
+  const [mobileNavMode, setMobileNavMode] = useState(() => typeof window.matchMedia === "function" && window.matchMedia("(max-width: 920px)").matches);
+  const sideRef = React.useRef(null);
+  const mainRef = React.useRef(null);
+  const hamburgerRef = React.useRef(null);
+  const navCloseRef = React.useRef(null);
+  const navWasOpenRef = React.useRef(false);
+
+  function closeMobileNav() {
+    if (mobileNavMode) {
+      if (mainRef.current) mainRef.current.inert = false;
+      if (hamburgerRef.current) hamburgerRef.current.focus({ preventScroll: true });
+    }
+    setNavOpen(false);
+  }
 
   const [saved, setSaved] = useState(() => loadSet(LS.saved));
   const [learned, setLearned] = useState(() => loadSet(LS.learned));
@@ -134,11 +177,41 @@ function App() {
       if (showAdd) setShowAdd(false);
       else if (editEntry) setEditEntry(null);
       else if (openId) setOpenId(null);
-      else if (navOpen) setNavOpen(false);
+      else if (navOpen) closeMobileNav();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [showAdd, editEntry, openId, navOpen]);
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return undefined;
+    const query = window.matchMedia("(max-width: 920px)");
+    const update = () => setMobileNavMode(query.matches);
+    update();
+    if (typeof query.addEventListener === "function") query.addEventListener("change", update);
+    else query.addListener(update);
+    return () => {
+      if (typeof query.removeEventListener === "function") query.removeEventListener("change", update);
+      else query.removeListener(update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (sideRef.current) sideRef.current.inert = mobileNavMode && !navOpen;
+    if (mainRef.current) mainRef.current.inert = mobileNavMode && navOpen;
+    if (mobileNavMode && navOpen) {
+      window.requestAnimationFrame(() => {
+        // Give Chromium a frame to apply `inert` before moving focus out of main.
+        window.requestAnimationFrame(() => {
+          const target = navCloseRef.current || sideRef.current;
+          if (target) target.focus();
+        });
+      });
+    } else if (mobileNavMode && navWasOpenRef.current) {
+      window.requestAnimationFrame(() => hamburgerRef.current && hamburgerRef.current.focus());
+    }
+    navWasOpenRef.current = navOpen;
+  }, [mobileNavMode, navOpen]);
 
   // apply theme + accent + structural vars to root
   useEffect(() => {
@@ -146,6 +219,7 @@ function App() {
     r.setAttribute("data-theme", t.theme);
     r.setAttribute("data-density", t.density);
     r.style.setProperty("--accent", t.accent);
+    r.style.setProperty("--accent-ink", accentForeground(t.accent));
     r.style.setProperty("--card-radius", t.cardRadius + "px");
     r.style.setProperty("--card-rest-shadow", t.cardShadow ? "var(--shadow)" : "none");
     r.style.setProperty("--detail-width", `min(${t.detailWidth}px, 100%)`);
@@ -247,7 +321,8 @@ function App() {
   }
 
   const openEntry = openId ? allEntries.find((e) => e.id === openId) : null;
-  const learnedCount = learned.size;
+  const learnedCount = allEntries.reduce((count, entry) => count + (learned.has(entry.id) ? 1 : 0), 0);
+  const savedCount = allEntries.reduce((count, entry) => count + (saved.has(entry.id) ? 1 : 0), 0);
   const totalCount = allEntries.length;
   const pct = totalCount ? Math.round((learnedCount / totalCount) * 100) : 0;
 
@@ -257,7 +332,7 @@ function App() {
       count: allEntries.filter((e) => e.category === c.id).length })),
   ];
 
-  function go(v) { setView(v); setQuery(""); setNavOpen(false); }
+  function go(v) { setView(v); setQuery(""); closeMobileNav(); }
 
   // ---- publish: regenerate content.js for re-upload ----
   function extFor(film) {
@@ -396,15 +471,17 @@ function App() {
   }
 
   // ---- gate screen ----
-  if (gateOn && !role) {
+  if (athleteGateOn && !role) {
     return <LoginGate team={t.brandTeam} onUnlock={unlock} />;
   }
 
-  const viewTitle = view === "all" ? t.allTitle
+  const viewTitle = view === "workbook" ? "Mindset Workbook"
+    : view === "all" ? t.allTitle
     : view === "saved" ? "Saved"
     : view === "progress" ? "My Progress"
     : catOf(view).label;
-  const viewSub = view === "all" ? t.allSub
+  const viewSub = view === "workbook" ? "Personal practice tools stored in this browser profile."
+    : view === "all" ? t.allSub
     : view === "saved" ? "Everything you've starred to come back to."
     : view === "progress" ? "What you've locked in this season."
     : { technique: "Positions and finishes drilled in the room.",
@@ -422,7 +499,11 @@ function App() {
   return (
     <div className="shell">
       {/* ---------- Sidebar ---------- */}
-      <aside className={"side" + (navOpen ? " side--open" : "")}>
+      <aside ref={sideRef} id="site-navigation" className={"side" + (navOpen ? " side--open" : "")}
+             tabIndex="-1" aria-hidden={mobileNavMode && !navOpen ? "true" : undefined}>
+        <button ref={navCloseRef} className="side__close" type="button" onClick={closeMobileNav} aria-label="Close menu">
+          <Icon name="close" size={20} stroke={2.2} />
+        </button>
         <div className="brand">
           <div className="brand__mark">W</div>
           <div className="brand__text">
@@ -430,7 +511,7 @@ function App() {
             <span className="brand__sub">{t.brandSub}</span>
           </div>
         </div>
-        {gateOn && (
+        {(athleteGateOn || coachAccessOn) && (
           <div className="rolebar">
             <span className={"rolebar__tag" + (coachMode ? " rolebar__tag--coach" : "")}>
               {coachMode ? "Coach — editing" : "Athlete"}
@@ -442,7 +523,12 @@ function App() {
                   Publish / Settings
                 </button>
               )}
-              <button className="rolebar__out" onClick={signOut}>Sign out</button>
+              {!coachMode && coachAccessOn && (
+                <button className="rolebar__out" onClick={() => setShowCoachLogin(true)}>Coach sign in</button>
+              )}
+              {(athleteGateOn || coachMode) && (
+                <button className="rolebar__out" onClick={signOut}>{athleteGateOn ? "Sign out" : "Exit coach mode"}</button>
+              )}
             </span>
           </div>
         )}
@@ -468,14 +554,20 @@ function App() {
             );
           })}
           <span className="nav__head">You</span>
+          <button className={"navitem navitem--workbook" + (view === "workbook" ? " navitem--on" : "")}
+                  onClick={() => go("workbook")} data-testid="mindset-workbook-nav"
+                  aria-current={view === "workbook" ? "page" : undefined}>
+            <Icon name="brain" size={18} stroke={2} /><span className="navitem__l">Mindset Workbook</span>
+            <span className="navitem__private">Local</span>
+          </button>
           <button className={"navitem" + (view === "saved" ? " navitem--on" : "")} onClick={() => go("saved")}>
             <Icon name="star" size={18} stroke={2} /><span className="navitem__l">Saved</span>
-            <span className="navitem__c">{saved.size}</span>
+            <span className="navitem__c">{savedCount}</span>
           </button>
           {t.showYouNav && (
             <button className={"navitem" + (view === "progress" ? " navitem--on" : "")} onClick={() => go("progress")}>
               <Icon name="check" size={18} stroke={2.2} /><span className="navitem__l">My Progress</span>
-              <span className="navitem__c">{learned.size}</span>
+              <span className="navitem__c">{learnedCount}</span>
             </button>
           )}
         </nav>
@@ -491,26 +583,41 @@ function App() {
           </div>
         )}
       </aside>
-      {navOpen && <div className="scrim" onClick={() => setNavOpen(false)} />}
+      {navOpen && <button className="scrim" type="button" tabIndex="-1" onClick={closeMobileNav} aria-label="Close menu" />}
 
       {/* ---------- Main ---------- */}
-      <main className="main">
+      <main ref={mainRef} className="main">
         <header className="top">
-          <button className="hamb" onClick={() => setNavOpen(true)} aria-label="Menu">
+          <button ref={hamburgerRef} className="hamb" onClick={() => setNavOpen(true)} aria-label="Open menu"
+                  aria-expanded={navOpen} aria-controls="site-navigation">
             <span/><span/><span/>
           </button>
-          <div className="searchbar">
-            <Icon name="search" size={19} stroke={2} />
-            <input className="searchbar__in" value={query} onChange={(e) => setQuery(e.target.value)}
-                   placeholder="Search moves, drills, mindset…" />
-            {query && <button className="searchbar__x" onClick={() => setQuery("")}><Icon name="close" size={16} /></button>}
-          </div>
-          <button className="addbtn" onClick={() => setShowAdd(true)} style={{ display: canEdit ? undefined : "none" }}>
+          {view === "workbook" ? (
+            <div className="top__workbook" aria-label="Mindset Workbook">
+              <Icon name="brain" size={20} stroke={2} />
+              <span>Mindset Workbook</span>
+              <em>Stored in this browser profile</em>
+            </div>
+          ) : (
+            <label className="searchbar">
+              <span className="sr-only">Search the knowledge base</span>
+              <Icon name="search" size={19} stroke={2} />
+              <input className="searchbar__in" value={query} onChange={(e) => setQuery(e.target.value)}
+                     placeholder="Search moves, drills, mindset…" />
+              {query && <button type="button" className="searchbar__x" onClick={() => setQuery("")} aria-label="Clear search"><Icon name="close" size={16} /></button>}
+            </label>
+          )}
+          <button className="addbtn" onClick={() => setShowAdd(true)}
+                  style={{ display: canEdit && view !== "workbook" ? undefined : "none" }}>
             <Icon name="plus" size={18} stroke={2.4} /><span>Add Entry</span>
           </button>
         </header>
 
-        <div className="content">
+        <div className={"content" + (view === "workbook" ? " content--workbook" : "")}>
+          {view === "workbook" ? (
+            <MindsetWorkbook />
+          ) : (
+          <>
           <div className="phead">
             <div>
               <h1 className="phead__title">{viewTitle}</h1>
@@ -518,6 +625,20 @@ function App() {
             </div>
             <div className="phead__count">{results.length} {results.length === 1 ? "entry" : "entries"}</div>
           </div>
+
+          {view === "all" && !query.trim() && (
+            <section className="wb-launch" aria-labelledby="wb-launch-title">
+              <div className="wb-launch__mark"><Icon name="brain" size={27} stroke={1.9} /></div>
+              <div className="wb-launch__copy">
+                <span className="wb-eyebrow">Personal mindset practice</span>
+                <h2 id="wb-launch-title">Turn the worksheets into your plan</h2>
+                <p>Five short, phone-first tools with automatic saving, match reviews, and a backup you control.</p>
+              </div>
+              <button className="wb-primary wb-launch__button" onClick={() => go("workbook")}>
+                Open Mindset Workbook <Icon name="chevron" size={17} stroke={2.2} />
+              </button>
+            </section>
+          )}
 
           {/* quick category chips (mobile-friendly + desktop) */}
           {view !== "saved" && view !== "progress" && (
@@ -565,6 +686,8 @@ function App() {
               ))}
             </div>
           )}
+          </>
+          )}
         </div>
       </main>
 
@@ -578,6 +701,9 @@ function App() {
       )}
       {showAdd && <AddEntryForm onClose={() => setShowAdd(false)} onAdd={addEntry} />}
       {editEntry && <AddEntryForm initial={editEntry} onClose={() => setEditEntry(null)} onAdd={saveEdit} />}
+      {showCoachLogin && (
+        <LoginGate team={t.brandTeam} onUnlock={unlockCoach} coachOnly onClose={() => setShowCoachLogin(false)} />
+      )}
 
       {/* ---------- Tweaks ---------- */}
       <TweaksPanel>
@@ -647,7 +773,7 @@ function App() {
   );
 }
 
-function LoginGate({ team, onUnlock }) {
+function LoginGate({ team, onUnlock, coachOnly = false, onClose = null }) {
   const [code, setCode] = useState("");
   const [err, setErr] = useState(false);
   function submit(e) {
@@ -655,16 +781,17 @@ function LoginGate({ team, onUnlock }) {
     if (!onUnlock(code.trim())) { setErr(true); setCode(""); }
   }
   return (
-    <div className="gate">
+    <div className="gate" data-testid={coachOnly ? "coach-login-gate" : "athlete-login-gate"}>
       <form className="gate__card" onSubmit={submit}>
         <div className="gate__mark">W</div>
         <h1 className="gate__team">{team}</h1>
-        <p className="gate__sub">Team passcode required to enter the knowledge base.</p>
+        <p className="gate__sub">{coachOnly ? "Enter the coach passcode to unlock editing tools." : "Team passcode required to enter the knowledge base."}</p>
         <input className={"gate__in" + (err ? " gate__in--err" : "")} type="password"
                value={code} autoFocus placeholder="Passcode"
                onChange={(e) => { setCode(e.target.value); setErr(false); }} />
         {err && <span className="gate__err">That passcode didn't match. Try again.</span>}
-        <button className="gate__btn" type="submit">Enter</button>
+        <button className="gate__btn" type="submit">{coachOnly ? "Unlock coach tools" : "Enter"}</button>
+        {onClose && <button className="rolebar__out" type="button" onClick={onClose}>Cancel</button>}
       </form>
     </div>
   );

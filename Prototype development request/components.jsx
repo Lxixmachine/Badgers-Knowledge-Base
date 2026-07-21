@@ -29,7 +29,7 @@ const ICON_PATHS = {
 };
 function Icon({ name, size = 22, stroke = 1.9, fill = false, style, className }) {
   return (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill={fill ? "currentColor" : (name === "grip" ? "currentColor" : "none")}
+    <svg className={className} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill={fill ? "currentColor" : (name === "grip" ? "currentColor" : "none")}
          stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" style={style}>
       {ICON_PATHS[name]}
     </svg>
@@ -42,23 +42,100 @@ function LevelTag({ level }) {
   return <span className={"level level--" + level.toLowerCase()}>{level}</span>;
 }
 
+const DIALOG_FOCUSABLE = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden']):not([hidden])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function deferFocus(callback) {
+  if (typeof window.requestAnimationFrame === "function") window.requestAnimationFrame(callback);
+  else window.setTimeout(callback, 0);
+}
+
+function dialogFocusableElements(panel) {
+  return panel ? Array.from(panel.querySelectorAll(DIALOG_FOCUSABLE)) : [];
+}
+
+function useDialogFocus(panelRef, initialFocusRef, onClose, suspendedRef, returnFocusOverrideRef) {
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+
+  useEffect(() => {
+    const returnTarget = returnFocusOverrideRef && returnFocusOverrideRef.current
+      ? returnFocusOverrideRef.current
+      : document.activeElement;
+    const panel = panelRef.current;
+    if (!panel) return undefined;
+
+    deferFocus(() => {
+      const initialTarget = initialFocusRef && initialFocusRef.current;
+      const target = initialTarget || dialogFocusableElements(panel)[0] || panel;
+      if (target && typeof target.focus === "function") target.focus();
+    });
+
+    function handleDialogKey(event) {
+      if (suspendedRef && suspendedRef.current) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeRef.current();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusable = dialogFocusableElements(panel);
+      if (!focusable.length) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !panel.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !panel.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleDialogKey);
+    return () => {
+      document.removeEventListener("keydown", handleDialogKey);
+      deferFocus(() => {
+        if (returnTarget && document.contains(returnTarget) && typeof returnTarget.focus === "function") returnTarget.focus();
+      });
+    };
+  }, []);
+}
+
 /* ---------------- Entry card ---------------- */
 function EntryCard({ entry, cat, saved, learned, onOpen, onSave, list, show = {}, drag = null, dragging = false }) {
   const films = normalizeFilms(entry);
   const { summary = true, level = true, film = true } = show;
   return (
-    <article className={"card" + (list ? " card--list" : "") + (dragging ? " card--dragging" : "") + (drag ? " card--draggable" : "")}
+    <article data-entry-card-id={entry.id} className={"card" + (list ? " card--list" : "") + (dragging ? " card--dragging" : "") + (drag ? " card--draggable" : "")}
              onClick={() => onOpen(entry)} {...(drag || {})}>
       {drag && <span className="card__grip" title="Drag to reorder" onClick={(e) => e.stopPropagation()}><Icon name="grip" size={16} stroke={2} /></span>}
       {film && films.length > 0 && !list && <VideoThumb entry={entry} />}
       <div className="card__body">
         <div className="card__top">
-          <span className="card__cat" style={{ color: "var(--accent)" }}>
+          <span className="card__cat" style={{ color: "var(--accent-tx)" }}>
             <Icon name={cat.icon} size={15} stroke={2} />{cat.label}
           </span>
           {learned && <span className="card__learned"><Icon name="check" size={13} stroke={2.6} />Learned</span>}
         </div>
-        <h3 className="card__title">{entry.title}</h3>
+        <h3 className="card__title">
+          <button className="card__open" type="button" onClick={(event) => { event.stopPropagation(); onOpen(entry); }}>
+            {entry.title}
+          </button>
+        </h3>
         {summary && <p className="card__summary">{entry.summary}</p>}
         <div className="card__foot">
           <div className="card__tags">
@@ -76,12 +153,46 @@ function EntryCard({ entry, cat, saved, learned, onOpen, onSave, list, show = {}
   );
 }
 
+function EntryDeleteConfirm({ entryTitle, onDelete, onCancel }) {
+  const panelRef = useRef(null);
+  const cancelRef = useRef(null);
+  useDialogFocus(panelRef, cancelRef, onCancel);
+
+  return (
+    <div className="confirm" onClick={(event) => { event.stopPropagation(); onCancel(); }}>
+      <div
+        className="confirm__box"
+        ref={panelRef}
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="entry-delete-title"
+        aria-describedby="entry-delete-description"
+        tabIndex="-1"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <h4 className="confirm__title" id="entry-delete-title">Delete this entry?</h4>
+        <p className="confirm__text" id="entry-delete-description">“{entryTitle}” will be removed from the database. This can’t be undone.</p>
+        <div className="confirm__row">
+          <button className="action action--danger" onClick={onDelete}>
+            <Icon name="trash" size={17} stroke={2.2} />Delete
+          </button>
+          <button ref={cancelRef} className="action action--ghost" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------- Detail view ---------------- */
 function DetailView({ entry, cat, saved, learned, onClose, onSave, onLearn, onEdit, onDelete, show = {}, canEdit = true }) {
   const ref = useRef(null);
+  const closeButtonRef = useRef(null);
   const [confirm, setConfirm] = useState(false);
   const [copied, setCopied] = useState(false);
+  const confirmOpenRef = useRef(false);
+  confirmOpenRef.current = confirm;
   const { film = true, coachNotes = true, tags = true, steps = true } = show;
+  useDialogFocus(ref, closeButtonRef, onClose, confirmOpenRef);
   useEffect(() => { if (ref.current) ref.current.scrollTop = 0; setConfirm(false); }, [entry.id]);
   const entryTags = Array.isArray(entry.tags) ? entry.tags : [];
   const quoteCat = entry.category === "culture" && /quote/i.test(entryTags.join(" "));
@@ -96,20 +207,20 @@ function DetailView({ entry, cat, saved, learned, onClose, onSave, onLearn, onEd
   }
   return (
     <div className="detail" onClick={onClose}>
-      <div className="detail__panel" ref={ref} onClick={(e) => e.stopPropagation()}>
+      <div className="detail__panel" ref={ref} role="dialog" aria-modal="true" aria-labelledby="entry-detail-title" tabIndex="-1" onClick={(e) => e.stopPropagation()}>
         <div className="detail__tools">
           <button className="detail__tool" onClick={copyLink} aria-label="Copy link" title={copied ? "Link copied!" : "Copy link to this entry"}>
-            <Icon name={copied ? "check" : "link"} size={18} stroke={2} style={copied ? { color: "#3fae6b" } : undefined} />
+            <Icon name={copied ? "check" : "link"} size={18} stroke={2} style={copied ? { color: "var(--success-tx)" } : undefined} />
           </button>
           {canEdit && <button className="detail__tool" onClick={() => onEdit(entry)} aria-label="Edit" title="Edit"><Icon name="edit" size={19} stroke={2} /></button>}
           {canEdit && <button className="detail__tool detail__tool--danger" onClick={() => setConfirm(true)} aria-label="Delete" title="Delete"><Icon name="trash" size={18} stroke={2} /></button>}
-          <button className="detail__tool" onClick={onClose} aria-label="Close"><Icon name="close" size={20} /></button>
+          <button ref={closeButtonRef} className="detail__tool" onClick={onClose} aria-label="Close"><Icon name="close" size={20} /></button>
         </div>
         <div className="detail__inner">
-          <span className="detail__cat" style={{ color: "var(--accent)" }}>
+          <span className="detail__cat" style={{ color: "var(--accent-tx)" }}>
             <Icon name={cat.icon} size={16} stroke={2} />{cat.label}
           </span>
-          <h2 className="detail__title">{entry.title}</h2>
+          <h2 className="detail__title" id="entry-detail-title">{entry.title}</h2>
           <div className="detail__meta">
             <LevelTag level={entry.level} />
             <span className="detail__author">Added by {entry.author}</span>
@@ -165,18 +276,7 @@ function DetailView({ entry, cat, saved, learned, onClose, onSave, onLearn, onEd
         </div>
       </div>
       {confirm && (
-        <div className="confirm" onClick={(e) => { e.stopPropagation(); setConfirm(false); }}>
-          <div className="confirm__box" onClick={(e) => e.stopPropagation()}>
-            <h4 className="confirm__title">Delete this entry?</h4>
-            <p className="confirm__text">“{entry.title}” will be removed from the database. This can’t be undone.</p>
-            <div className="confirm__row">
-              <button className="action action--danger" onClick={() => { onDelete(entry.id); }}>
-                <Icon name="trash" size={17} stroke={2.2} />Delete
-              </button>
-              <button className="action action--ghost" onClick={() => setConfirm(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
+        <EntryDeleteConfirm entryTitle={entry.title} onDelete={() => onDelete(entry.id)} onCancel={() => setConfirm(false)} />
       )}
     </div>
   );
@@ -185,6 +285,14 @@ function DetailView({ entry, cat, saved, learned, onClose, onSave, onLearn, onEd
 /* ---------------- Add / edit entry form ---------------- */
 function AddEntryForm({ onClose, onAdd, initial }) {
   const edit = !!initial;
+  const panelRef = useRef(null);
+  const titleInputRef = useRef(null);
+  const returnFocusOverrideRef = useRef(null);
+  if (edit && !returnFocusOverrideRef.current && typeof document !== "undefined") {
+    const matchingCard = Array.from(document.querySelectorAll("[data-entry-card-id]"))
+      .find((card) => card.getAttribute("data-entry-card-id") === initial.id);
+    returnFocusOverrideRef.current = matchingCard && matchingCard.querySelector(".card__open");
+  }
   const [title, setTitle] = useState(initial ? initial.title : "");
   const [category, setCategory] = useState(initial ? initial.category : "technique");
   const [level, setLevel] = useState(initial ? initial.level : "Fundamental");
@@ -196,6 +304,7 @@ function AddEntryForm({ onClose, onAdd, initial }) {
   const [stepsText, setStepsText] = useState(initial && Array.isArray(initial.steps) ? initial.steps.join("\n") : "");
   const [coachNotes, setCoachNotes] = useState(initial ? (initial.coachNotes || "") : "");
   const valid = title.trim() && summary.trim();
+  useDialogFocus(panelRef, titleInputRef, onClose, null, returnFocusOverrideRef);
 
   function submit() {
     if (!valid) return;
@@ -237,15 +346,15 @@ function AddEntryForm({ onClose, onAdd, initial }) {
 
   return (
     <div className="detail" onClick={onClose}>
-      <div className="detail__panel detail__panel--form" onClick={(e) => e.stopPropagation()}>
+      <div className="detail__panel detail__panel--form" ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="entry-form-title" tabIndex="-1" onClick={(e) => e.stopPropagation()}>
         <button className="detail__close" onClick={onClose} aria-label="Close"><Icon name="close" size={22} /></button>
         <div className="detail__inner">
-          <span className="detail__cat" style={{ color: "var(--accent)" }}>{edit ? "Edit Entry" : "New Entry"}</span>
-          <h2 className="detail__title">{edit ? "Edit This Entry" : "Add to the Database"}</h2>
+          <span className="detail__cat" style={{ color: "var(--accent-tx)" }}>{edit ? "Edit Entry" : "New Entry"}</span>
+          <h2 className="detail__title" id="entry-form-title">{edit ? "Edit This Entry" : "Add to the Database"}</h2>
 
           <label className="f">
             <span className="f__l">Title</span>
-            <input className="f__in" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Ankle Pick from a Tie" />
+            <input ref={titleInputRef} className="f__in" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Ankle Pick from a Tie" />
           </label>
 
           <div className="f__row">
@@ -295,7 +404,7 @@ function AddEntryForm({ onClose, onAdd, initial }) {
           <DocBuilder docs={docs} setDocs={setDocs} />
         </div>
         <div className="detail__actions">
-          <button className={"action" + (valid ? "" : " action--disabled")} onClick={submit}>
+          <button className={"action" + (valid ? "" : " action--disabled")} onClick={submit} disabled={!valid}>
             <Icon name={edit ? "check" : "plus"} size={18} stroke={2.4} />{edit ? "Save Changes" : "Add Entry"}
           </button>
           <button className="action action--ghost" onClick={onClose}>Cancel</button>

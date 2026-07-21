@@ -204,30 +204,6 @@ window.WKB_PUBLISHED = {
       "docs": []
     },
     {
-      "id": "u-1782405043284",
-      "title": "Wrestling Mindset Worksheets",
-      "category": "mindset",
-      "level": "Fundamental",
-      "author": "Coach Cassioppi",
-      "tags": [],
-      "films": [],
-      "docs": [
-        {
-          "id": "d1782405029600y6c0",
-          "label": "Wrestling Mindset Worksheets",
-          "url": "https://docs.google.com/document/d/18O7Lj-WjcaTx0T6ZR1hQvfZoxvtP8LzTGYG7Vr2phUQ/edit?usp=sharing",
-          "fileKey": null,
-          "fileName": null,
-          "mime": null
-        }
-      ],
-      "hasVideo": false,
-      "summary": "Full Set of Wrestling Mindset Worksheets",
-      "steps": [],
-      "coachNotes": null,
-      "userAdded": true
-    },
-    {
       "id": "u-1782404647031",
       "title": "Atomic Habits Notes",
       "category": "mindset",
