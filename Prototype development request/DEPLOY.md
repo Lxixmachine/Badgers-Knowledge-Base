@@ -14,9 +14,12 @@ A small website made of these files (keep them together in one folder):
 - `index.html` (and its copy `Badgers Knowledge Base.html`) ← the page itself
 - `content.js` ← **the only file you replace to update content**
 - `app.compiled.js` ← the app code, pre-built so the site loads fast
-- `app.jsx`, `components.jsx`, `data.jsx`, `docs.jsx`, `film.jsx`, `tweaks-panel.jsx` ← the editable source. If you (or Claude) ever change these, ask Claude to "recompile the bundle" so `app.compiled.js` picks up the change.
+- `app.jsx`, `mindset.jsx`, `components.jsx`, `data.jsx`, `docs.jsx`, `film.jsx`, `tweaks-panel.jsx` ← the editable source
+- `package.json`, `build.mjs`, `test.mjs` ← the repeatable build and test workflow
 
-Athlete progress ("Saved" / "Learned") is stored in each athlete's own browser. Your published entries are shared by everyone.
+After changing source, run `npm install` once, then `npm test`. That command rebuilds `app.compiled.js`, refreshes both alternate HTML copies, and checks the workbook, local server, and rendered interactions.
+
+Athlete progress and Mindset Workbook responses are stored in the current browser profile. They are not published, but another person using the same browser profile can view them. Published entries are shared by everyone.
 
 ---
 
@@ -25,8 +28,10 @@ Athlete progress ("Saved" / "Learned") is stored in each athlete's own browser. 
 The easiest free option is **Netlify Drop**:
 
 1. Go to **app.netlify.com/drop**
-2. Drag the whole folder onto the page.
+2. Run `npm test`, then drag the generated `dist` folder onto the page.
 3. You get a live link like `your-team.netlify.app`. Share that with your athletes.
+
+Before each deploy, run `npm test` so generated files cannot be stale. Deploy only `dist/`; it contains the live files without source code or `node_modules/`.
 
 (Cloudflare Pages and GitHub Pages work the same way if you prefer.)
 
@@ -45,7 +50,8 @@ gate: {
 
 - Pick a team passcode your athletes will remember.
 - Pick a separate coach passcode only you know.
-- Set `athlete: ""` to turn the gate off entirely (open to anyone with the link).
+- Set `athlete: ""` to make athlete access open to anyone with the link. Visitors remain in read-only athlete mode; use **Coach sign in** in the sidebar to unlock editing with the coach passcode.
+- Set `coach: ""` to disable browser-based editing. An empty coach passcode never makes public visitors editors.
 
 > Note: this is a shared-passcode gate — a simple "members only" door, not bank-grade security. For a team resource it's plenty. If you ever need real per-athlete accounts, that's a bigger build.
 
@@ -76,5 +82,6 @@ Optional: after publishing, use **Clear my local drafts** so your device matches
 |---|---|
 | Change what athletes see | Edit in-app → Publish → replace `content.js` → redeploy |
 | Change passcodes | Edit `content.js` (or in-app Tweaks → Publishing) |
-| Turn off the login | Set `athlete: ""` in `content.js` |
+| Make athlete access public | Set `athlete: ""`; coaches still use **Coach sign in** |
+| Disable browser-based editing | Set `coach: ""` in `content.js` |
 | Reset my own device | Tweaks → Publishing → Clear my local drafts |

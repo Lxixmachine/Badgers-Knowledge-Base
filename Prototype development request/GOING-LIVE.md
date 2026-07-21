@@ -39,9 +39,9 @@ with the new download.
 3. On the new repo's page, click **uploading an existing file**.
 4. Drag in everything from your project folder **except**:
    - `file_1782245949642_cer8uk.mp4` and `file_1782245970850_9lox2c.mp4` (just fixed in Step 0)
-   - `Badgers Knowledge Base.html` and the `Badgers Knowledge Base/` folder (exact duplicates of `index.html` / `tweaks-panel.jsx`)
+   - `node_modules/` (Netlify installs dependencies from `package-lock.json`)
 
-   Make sure `index.html`, `content.js`, and `app.compiled.js` are included — those three are what the live site actually runs on.
+   Make sure `index.html`, `content.js`, `app.compiled.js`, `mindset.jsx`, `package.json`, `package-lock.json`, and `build.mjs` are included. The build refreshes the generated bundle and both alternate HTML copies.
 5. Scroll down, click **Commit changes**.
 
 Now your content is versioned and backed up — not just a folder on one laptop.
@@ -57,8 +57,9 @@ than starting over, so any domain work you've already done carries forward.
    **Link site to a Git repository** (sometimes labeled **Link repository**).
 2. Authorize Netlify to access GitHub, pick `badgers-knowledge-base`.
 3. Build settings:
-   - Build command: *(leave blank)*
-   - Publish directory: `/` (root)
+   - Base directory: `Prototype development request`
+   - Build command: `npm run build`
+   - Publish directory: `dist`
 4. Save. Netlify redeploys from GitHub immediately.
 
 Don't have a site yet? **Add new site → Import an existing project → Deploy with GitHub**,
