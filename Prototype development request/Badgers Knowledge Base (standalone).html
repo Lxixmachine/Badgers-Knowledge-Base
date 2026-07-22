@@ -443,7 +443,8 @@ input,select,textarea{font-family:inherit}
 .wb-dashboard-header>p{max-width:420px;color:var(--tx3);font-size:13px;text-align:right}
 .wb-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .wb-module-card{display:flex;flex-direction:column;gap:16px;min-width:0;padding:21px;border:1px solid var(--line);border-radius:16px;background:var(--surf);box-shadow:var(--card-rest-shadow);transition:border-color .15s,transform .15s,box-shadow .15s}
-.wb-module-card[data-module-card="development"]{grid-column:1/-1;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf) 72%)}
+.wb-module-card[data-module-card="development"],.wb-module-card[data-module-card="goal-system"]{grid-column:1/-1;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf) 72%)}
+.wb-module-card[data-module-card="goal-system"]{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 15%,var(--surf)),var(--surf) 68%)}
 .wb-module-card:hover{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));transform:translateY(-2px);box-shadow:var(--shadow)}
 .wb-module-card-heading{display:flex;align-items:flex-start;gap:13px}
 .wb-module-card-icon{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:11px;background:color-mix(in srgb,var(--accent) 12%,var(--surf2));color:var(--accent-tx)}
@@ -537,6 +538,11 @@ textarea.wb-field-control{min-height:82px}
 .wb-unit-guide>span{display:block;color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
 .wb-unit-guide p{margin-top:4px;color:var(--tx2);font-size:12.5px;line-height:1.5}
 .wb-unit-guide small{display:block;margin-top:7px;color:var(--tx3);font-size:11px;line-height:1.45}
+.wb-goal-curriculum-bridge{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:12px 12px 0;padding:14px 15px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--accent) 8%,var(--bg2))}
+.wb-goal-curriculum-bridge>div{display:flex;min-width:0;flex-direction:column;gap:3px}
+.wb-goal-curriculum-bridge strong{color:var(--tx);font-size:12.5px}
+.wb-goal-curriculum-bridge span{color:var(--tx3);font-size:11.5px;line-height:1.4}
+.wb-goal-curriculum-bridge button{flex-shrink:0}
 .wb-curriculum-lesson-list{display:flex;flex-direction:column;padding:12px}
 .wb-curriculum-lesson-button{width:100%;display:grid;grid-template-columns:82px minmax(0,1fr) auto;align-items:center;gap:13px;padding:13px 10px;border-radius:10px;text-align:left;transition:background .14s,color .14s}
 .wb-curriculum-lesson-button:hover{background:var(--surf2)}
@@ -617,6 +623,72 @@ textarea.wb-field-control{min-height:82px}
 .wb-history-details dt{color:var(--tx3);font-weight:700}
 .wb-history-details dd{color:var(--tx2);white-space:pre-wrap}
 .wb-history-details ol,.wb-history-details ul{padding-left:17px}
+.wb-goal-roadmap{overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:16px;background:linear-gradient(130deg,color-mix(in srgb,var(--accent) 11%,var(--surf)),var(--surf) 66%)}
+.wb-goal-roadmap-heading{display:flex;align-items:center;gap:11px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.wb-goal-roadmap-heading>svg{flex-shrink:0;color:var(--accent-tx)}
+.wb-goal-roadmap h3,.wb-goal-worksheet-link h3,.wb-goal-section-header h3,.wb-goal-section-header h4{font-family:"Oswald",sans-serif;font-size:20px;line-height:1.2;text-transform:uppercase;letter-spacing:.025em}
+.wb-goal-roadmap ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;counter-reset:goal-loop}
+.wb-goal-roadmap li{counter-increment:goal-loop;display:grid;grid-template-columns:31px minmax(0,1fr);gap:4px 10px;min-width:0;padding:18px 20px;border-left:1px solid var(--line)}
+.wb-goal-roadmap li:first-child{border-left:0}
+.wb-goal-roadmap li::before{content:counter(goal-loop);grid-row:1/3;width:29px;height:29px;display:grid;place-items:center;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-family:"Oswald",sans-serif;font-size:13px;font-weight:700}
+.wb-goal-roadmap li strong{color:var(--tx);font-size:13px}
+.wb-goal-roadmap li span{color:var(--tx3);font-size:11.5px;line-height:1.45}
+.wb-goal-worksheet-link{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(290px,.8fr);align-items:center;gap:24px;padding:21px;border:1px solid var(--line);border-radius:16px;background:var(--surf)}
+.wb-goal-worksheet-link>div:first-child>p:last-child{margin-top:5px;color:var(--tx2);font-size:13px;line-height:1.55}
+.wb-goal-worksheet-progress{display:flex;flex-direction:column;gap:13px}
+.wb-goal-section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.wb-goal-section-header>div>p{margin-top:4px;color:var(--tx3);font-size:13px;line-height:1.5}
+.wb-goal-section-header>button{flex-shrink:0}
+.wb-goal-actions{display:flex;flex-direction:column;gap:12px;margin-top:17px}
+.wb-goal-action-card{overflow:hidden;border:1px solid var(--line);border-radius:13px;background:var(--bg2)}
+.wb-goal-action-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--accent) 5%,var(--surf))}
+.wb-goal-action-header>div{display:flex;min-width:0;flex-direction:column;gap:2px}
+.wb-goal-action-header>div>span{color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.wb-goal-action-header>div>strong{overflow:hidden;color:var(--tx);font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.wb-goal-action-header .wb-danger-button{min-height:38px;padding:0 11px}
+.wb-goal-action-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(140px,.65fr) minmax(130px,.5fr);gap:14px;padding:16px}
+.wb-goal-action-grid>.wb-field:nth-child(4){grid-column:1/2}
+.wb-goal-action-grid>.wb-field:nth-child(5){grid-column:2/4}
+.wb-goal-empty-action{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:17px;padding:17px;border:1px dashed var(--line2);border-radius:12px;background:var(--bg2)}
+.wb-goal-empty-action p{color:var(--tx3);font-size:12.5px;line-height:1.5}
+.wb-goal-scoreboard{display:flex;flex-direction:column;gap:18px;border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 7%,var(--surf)),var(--surf) 48%)}
+.wb-goal-active-focus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 32%,var(--line));border-radius:12px;background:var(--bg2)}
+.wb-goal-active-focus>div{display:flex;min-width:0;flex-direction:column;gap:4px;padding:14px 15px;border-left:1px solid var(--line)}
+.wb-goal-active-focus>div:first-child{border-left:0}
+.wb-goal-active-focus span{color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.wb-goal-active-focus strong{color:var(--tx);font-size:13px;overflow-wrap:anywhere}
+.wb-goal-active-focus small{color:var(--tx3);font-size:11px;line-height:1.4}
+.wb-goal-score-total{display:flex;min-width:112px;flex-direction:column;align-items:flex-end;flex-shrink:0;padding:10px 12px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:11px;background:var(--bg2)}
+.wb-goal-score-total strong{font-family:"Oswald",sans-serif;font-size:21px;color:var(--accent-tx)}
+.wb-goal-score-total span{color:var(--tx3);font-size:10.5px;font-weight:700;text-transform:uppercase}
+.wb-goal-score-list{display:flex;flex-direction:column;gap:9px}
+.wb-goal-score-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.wb-goal-score-copy{display:flex;min-width:0;flex-direction:column;gap:4px}
+.wb-goal-score-copy strong{color:var(--tx);font-size:13.5px;overflow-wrap:anywhere}
+.wb-goal-score-copy span{color:var(--tx3);font-size:11.5px}
+.wb-goal-score-copy progress{width:100%;height:6px;margin-top:3px;overflow:hidden;border:0;border-radius:999px;background:var(--surf2);color:var(--accent);appearance:none}
+.wb-goal-score-copy progress::-webkit-progress-bar{background:var(--surf2)}
+.wb-goal-score-copy progress::-webkit-progress-value{background:var(--accent)}
+.wb-goal-score-copy progress::-moz-progress-bar{background:var(--accent)}
+.wb-goal-count{display:grid;grid-template-columns:44px 56px 44px;align-items:center;gap:6px}
+.wb-goal-count-button{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:10px;background:var(--surf);color:var(--tx);font-size:22px;font-weight:700;transition:border-color .14s,background .14s}
+.wb-goal-count-button:hover:not(:disabled){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surf))}
+.wb-goal-count-button:disabled{opacity:.38;cursor:not-allowed}
+.wb-goal-count>output{display:flex;flex-direction:column;align-items:center;color:var(--tx)}
+.wb-goal-count>output strong{font-family:"Oswald",sans-serif;font-size:19px}
+.wb-goal-count>output small{color:var(--tx3);font-size:9.5px;text-transform:uppercase}
+.wb-goal-review-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0}
+.wb-goal-check{position:relative;display:block;cursor:pointer}
+.wb-goal-check input{position:absolute;opacity:0;pointer-events:none}
+.wb-goal-check span{min-height:48px;display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:10px;background:var(--bg2);color:var(--tx2);font-size:12.5px;font-weight:700}
+.wb-goal-check span svg{width:20px;height:20px;padding:3px;border:1px solid var(--line2);border-radius:6px;color:transparent;flex-shrink:0}
+.wb-goal-check input:checked+span{border-color:color-mix(in srgb,var(--accent) 55%,var(--line2));background:color-mix(in srgb,var(--accent) 12%,var(--surf));color:var(--tx)}
+.wb-goal-check input:checked+span svg{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.wb-goal-check input:focus-visible+span{outline:3px solid color-mix(in srgb,var(--accent) 72%,#fff);outline-offset:3px}
+.wb-goal-share{display:flex;flex-direction:column;gap:17px}
+.wb-goal-score-share{display:flex;flex-direction:column;gap:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+textarea.wb-goal-summary{min-height:250px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:12.5px}
+.wb-goal-history-card .wb-history-details ul{display:flex;flex-direction:column;gap:4px}
 .wb-workbook-footer{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;padding-top:4px}
 .wb-privacy-notice,.wb-data-tools{min-width:0;padding:20px;border:1px solid var(--line);border-radius:15px;background:var(--surf)}
 .wb-privacy-notice{display:flex;align-items:flex-start;gap:12px}
@@ -635,6 +707,10 @@ textarea.wb-field-control{min-height:82px}
   .wb-field-grid-four{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wb-takedown-grid,.wb-check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wb-takedown-card:last-child{grid-column:1/-1}
+  .wb-goal-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wb-goal-action-grid>.wb-field:nth-child(4),.wb-goal-action-grid>.wb-field:nth-child(5){grid-column:auto}
+  .wb-goal-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wb-goal-review-grid>.wb-field:last-child{grid-column:1/-1}
   .wb-workbook-footer{grid-template-columns:1fr}
 }
 
@@ -663,8 +739,21 @@ textarea.wb-field-control{min-height:82px}
   .wb-curriculum-check-grid{grid-template-columns:1fr}
   .wb-takedown-card:last-child{grid-column:auto}
   .wb-quick-readout{position:static}
+  .wb-goal-roadmap ol,.wb-goal-worksheet-link,.wb-goal-action-grid,.wb-goal-review-grid{grid-template-columns:1fr}
+  .wb-goal-roadmap li,.wb-goal-roadmap li:first-child{border-left:0;border-top:1px solid var(--line)}
+  .wb-goal-roadmap li:first-child{border-top:0}
+  .wb-goal-worksheet-link{gap:17px}
+  .wb-goal-review-grid>.wb-field:last-child{grid-column:auto}
+  .wb-goal-active-focus{grid-template-columns:1fr}
+  .wb-goal-active-focus>div,.wb-goal-active-focus>div:first-child{border-left:0;border-top:1px solid var(--line)}
+  .wb-goal-active-focus>div:first-child{border-top:0}
+  .wb-goal-score-row{grid-template-columns:1fr}
+  .wb-goal-count{justify-self:start}
+  .wb-goal-section-header,.wb-goal-empty-action{align-items:flex-start;flex-direction:column}
+  .wb-goal-section-header>button,.wb-goal-empty-action>button{width:100%}
   .wb-workbook-footer{gap:12px}
   .wb-field-control{font-size:16px}
+  textarea.wb-goal-summary{font-size:16px}
 }
 @media(max-width:420px){
   .wb-launch__mark{width:46px;height:46px}
@@ -682,6 +771,12 @@ textarea.wb-field-control{min-height:82px}
   .wb-curriculum-lesson-progress{grid-column:2;justify-self:start}
   .wb-curriculum-pager{grid-template-columns:1fr 1fr}
   .wb-curriculum-pager>span{grid-column:1/-1;grid-row:1}
+  .wb-goal-action-header{align-items:flex-start;flex-direction:column}
+  .wb-goal-action-header .wb-danger-button{width:100%}
+  .wb-goal-curriculum-bridge{align-items:stretch;flex-direction:column}
+  .wb-goal-curriculum-bridge button{width:100%}
+  .wb-goal-score-total{align-items:flex-start;width:100%}
+  .wb-goal-count{width:100%;grid-template-columns:44px minmax(56px,1fr) 44px}
   .wb-privacy-notice{padding:17px}
 }
 @media(prefers-reduced-motion:reduce){
@@ -4405,10 +4500,27 @@ window.WKB_PUBLISHED = {
   const MINDSET_STORAGE_KEY = "wkb_mindset_workbook_v1";
   const MINDSET_RESTORE_RECOVERY_KEY = "wkb_mindset_workbook_before_restore_v1";
   const MINDSET_BACKUP_TYPE = "wkb-mindset-workbook";
-  const MINDSET_SCHEMA_VERSION = 1;
+  const MINDSET_LEGACY_SCHEMA_VERSION = 1;
+  const MINDSET_SCHEMA_VERSION = 2;
   const MINDSET_MAX_BACKUP_BYTES = 4 * 1024 * 1024;
   const MINDSET_MAX_HISTORY_ENTRIES = 200;
   const MINDSET_MAX_TEXT_LENGTH = 1e3;
+  const MINDSET_MAX_GOAL_ACTIONS = 8;
+  const MINDSET_MAX_GOAL_WEEKLY_TARGET = 14;
+  const MINDSET_MAX_GOAL_REVIEWS = 104;
+  const MINDSET_MAX_GOAL_SHORT_TEXT_LENGTH = 180;
+  const MINDSET_MAX_GOAL_ID_LENGTH = 100;
+  const GOAL_ACTION_CATEGORIES = [
+    { value: "technique", label: "Technique" },
+    { value: "mindset", label: "Mindset" },
+    { value: "strength", label: "Strength" },
+    { value: "recovery", label: "Recovery" },
+    { value: "nutrition", label: "Nutrition" },
+    { value: "school", label: "School or career" },
+    { value: "personal", label: "Personal" },
+    { value: "other", label: "Other" }
+  ];
+  const GOAL_ACTION_CATEGORY_VALUES = new Set(GOAL_ACTION_CATEGORIES.map((category) => category.value));
   const BASELINE_GROUPS = [
     {
       id: "goal-setting",
@@ -4562,6 +4674,24 @@ window.WKB_PUBLISHED = {
     const day = String(now.getDate()).padStart(2, "0");
     return now.getFullYear() + "-" + month + "-" + day;
   }
+  function localWeekStartValue() {
+    const start = /* @__PURE__ */ new Date();
+    const daysSinceMonday = (start.getDay() + 6) % 7;
+    start.setDate(start.getDate() - daysSinceMonday);
+    const month = String(start.getMonth() + 1).padStart(2, "0");
+    const day = String(start.getDate()).padStart(2, "0");
+    return start.getFullYear() + "-" + month + "-" + day;
+  }
+  function nextGoalWeekValue(value) {
+    const parts = String(value || "").split("-").map(Number);
+    if (parts.length !== 3 || parts.some((part) => !Number.isFinite(part))) return localWeekStartValue();
+    const next = new Date(parts[0], parts[1] - 1, parts[2]);
+    next.setDate(next.getDate() + 7);
+    const month = String(next.getMonth() + 1).padStart(2, "0");
+    const day = String(next.getDate()).padStart(2, "0");
+    const nextValue = next.getFullYear() + "-" + month + "-" + day;
+    return nextValue < localWeekStartValue() ? localWeekStartValue() : nextValue;
+  }
   function makeMindsetId(prefix) {
     return prefix + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
   }
@@ -4592,6 +4722,47 @@ window.WKB_PUBLISHED = {
       challenge: "",
       weeklyAction: "",
       why: ""
+    };
+  }
+  function makeGoalAction() {
+    return {
+      id: makeMindsetId("goal-action"),
+      title: "",
+      category: "technique",
+      weeklyTarget: 3,
+      cue: "",
+      proof: ""
+    };
+  }
+  function makeGoalCurrentWeek(weekOf = localWeekStartValue()) {
+    return {
+      weekOf,
+      completions: {},
+      win: "",
+      obstacle: "",
+      adjustment: "",
+      checkInCompleted: false
+    };
+  }
+  function makeGoalSystem() {
+    return {
+      goal: {
+        title: "",
+        why: "",
+        successDefinition: "",
+        targetDate: ""
+      },
+      actions: [],
+      currentWeek: makeGoalCurrentWeek(),
+      accountability: {
+        partnerName: "",
+        method: "",
+        reviewDay: "",
+        reviewTime: "",
+        checkInPrompt: "",
+        resetPlan: ""
+      },
+      reviews: []
     };
   }
   function makePreMatchReset() {
@@ -4656,6 +4827,70 @@ window.WKB_PUBLISHED = {
       nextAction: draft.nextAction
     };
   }
+  function copyGoalFocus(goal) {
+    return {
+      title: goal.title,
+      why: goal.why,
+      successDefinition: goal.successDefinition,
+      targetDate: goal.targetDate
+    };
+  }
+  function copyGoalAction(action) {
+    return {
+      id: action.id,
+      title: action.title,
+      category: action.category,
+      weeklyTarget: action.weeklyTarget,
+      cue: action.cue,
+      proof: action.proof
+    };
+  }
+  function copyGoalCurrentWeek(currentWeek) {
+    return {
+      weekOf: currentWeek.weekOf,
+      completions: Object.keys(currentWeek.completions).reduce((result, id) => {
+        result[id] = currentWeek.completions[id];
+        return result;
+      }, {}),
+      win: currentWeek.win,
+      obstacle: currentWeek.obstacle,
+      adjustment: currentWeek.adjustment,
+      checkInCompleted: currentWeek.checkInCompleted
+    };
+  }
+  function copyGoalAccountability(accountability) {
+    return {
+      partnerName: accountability.partnerName,
+      method: accountability.method,
+      reviewDay: accountability.reviewDay,
+      reviewTime: accountability.reviewTime,
+      checkInPrompt: accountability.checkInPrompt,
+      resetPlan: accountability.resetPlan
+    };
+  }
+  function copyGoalReview(review) {
+    return {
+      id: review.id,
+      weekOf: review.weekOf,
+      goal: copyGoalFocus(review.goal),
+      actions: review.actions.map((action) => ({ ...copyGoalAction(action), completed: action.completed })),
+      win: review.win,
+      obstacle: review.obstacle,
+      adjustment: review.adjustment,
+      checkInCompleted: review.checkInCompleted,
+      createdAt: review.createdAt,
+      updatedAt: review.updatedAt
+    };
+  }
+  function copyGoalSystem(goalSystem) {
+    return {
+      goal: copyGoalFocus(goalSystem.goal),
+      actions: goalSystem.actions.map(copyGoalAction),
+      currentWeek: copyGoalCurrentWeek(goalSystem.currentWeek),
+      accountability: copyGoalAccountability(goalSystem.accountability),
+      reviews: goalSystem.reviews.map(copyGoalReview)
+    };
+  }
   function makeEmptyMindsetWorkbook() {
     return {
       type: MINDSET_BACKUP_TYPE,
@@ -4670,7 +4905,8 @@ window.WKB_PUBLISHED = {
       postMatchDraft: makePostMatchDraft(),
       suspendedPostMatchDraft: null,
       postMatchReviews: [],
-      curriculum: { responses: {} }
+      curriculum: { responses: {} },
+      goalSystem: makeGoalSystem()
     };
   }
   function isRecord(value) {
@@ -4732,6 +4968,46 @@ window.WKB_PUBLISHED = {
       (key) => MINDSET_CURRICULUM_RESPONSE_KEYS.has(key) && isSafeString(value.responses[key])
     );
   }
+  function validGoalFocus(value) {
+    return isRecord(value) && isString(value.title) && value.title.length <= MINDSET_MAX_GOAL_SHORT_TEXT_LENGTH && isSafeString(value.why) && isSafeString(value.successDefinition) && isString(value.targetDate) && value.targetDate.length <= 20;
+  }
+  function isGoalId(value) {
+    return isString(value) && value.length > 0 && value.length <= MINDSET_MAX_GOAL_ID_LENGTH && /^[a-z0-9][a-z0-9-]*$/i.test(value);
+  }
+  function isGoalShortString(value) {
+    return isString(value) && value.length <= MINDSET_MAX_GOAL_SHORT_TEXT_LENGTH;
+  }
+  function validGoalAction(value) {
+    return isRecord(value) && isGoalId(value.id) && isGoalShortString(value.title) && GOAL_ACTION_CATEGORY_VALUES.has(value.category) && Number.isInteger(value.weeklyTarget) && value.weeklyTarget >= 1 && value.weeklyTarget <= MINDSET_MAX_GOAL_WEEKLY_TARGET && isGoalShortString(value.cue) && isGoalShortString(value.proof);
+  }
+  function validGoalCurrentWeek(value, actions) {
+    if (!isRecord(value) || !isString(value.weekOf) || value.weekOf.length > 20 || !isRecord(value.completions)) return false;
+    if (!["win", "obstacle", "adjustment"].every((key) => isSafeString(value[key])) || typeof value.checkInCompleted !== "boolean") return false;
+    const actionMap = actions.reduce((result, action) => {
+      result[action.id] = action;
+      return result;
+    }, {});
+    return Object.keys(value.completions).every((id) => {
+      const action = actionMap[id];
+      const completed = value.completions[id];
+      return !!action && Number.isInteger(completed) && completed >= 0 && completed <= action.weeklyTarget;
+    });
+  }
+  function validGoalAccountability(value) {
+    return isRecord(value) && ["partnerName", "method", "reviewDay", "reviewTime"].every((key) => isGoalShortString(value[key])) && isSafeString(value.checkInPrompt) && isSafeString(value.resetPlan);
+  }
+  function validGoalReviewAction(value) {
+    return validGoalAction(value) && Number.isInteger(value.completed) && value.completed >= 0 && value.completed <= value.weeklyTarget;
+  }
+  function validGoalReview(value) {
+    return isRecord(value) && isGoalId(value.id) && isString(value.weekOf) && value.weekOf.length <= 20 && validGoalFocus(value.goal) && Array.isArray(value.actions) && value.actions.length <= MINDSET_MAX_GOAL_ACTIONS && value.actions.every(validGoalReviewAction) && entriesHaveUniqueIds(value.actions) && ["win", "obstacle", "adjustment"].every((key) => isSafeString(value[key])) && typeof value.checkInCompleted === "boolean" && isGoalShortString(value.createdAt) && isGoalShortString(value.updatedAt);
+  }
+  function validGoalSystem(value) {
+    if (!isRecord(value) || !validGoalFocus(value.goal) || !Array.isArray(value.actions) || value.actions.length > MINDSET_MAX_GOAL_ACTIONS) return false;
+    if (!value.actions.every(validGoalAction) || !entriesHaveUniqueIds(value.actions)) return false;
+    if (!validGoalCurrentWeek(value.currentWeek, value.actions) || !validGoalAccountability(value.accountability)) return false;
+    return Array.isArray(value.reviews) && value.reviews.length <= MINDSET_MAX_GOAL_REVIEWS && value.reviews.every(validGoalReview) && entriesHaveUniqueIds(value.reviews);
+  }
   function validSuspendedWeeklyDraft(value) {
     return value === void 0 || value === null || validWeeklyDraft(value) && value.editingId === null;
   }
@@ -4749,7 +5025,7 @@ window.WKB_PUBLISHED = {
   function validateMindsetWorkbook(value) {
     if (!isRecord(value)) return "The selected file does not contain a workbook object.";
     if (value.type !== MINDSET_BACKUP_TYPE) return "This file is not a Mindset Workbook backup.";
-    if (value.version !== MINDSET_SCHEMA_VERSION) return "This backup uses an unsupported workbook version.";
+    if (value.version !== MINDSET_LEGACY_SCHEMA_VERSION && value.version !== MINDSET_SCHEMA_VERSION) return "This backup uses an unsupported workbook version.";
     if (value.updatedAt !== null && !isSafeString(value.updatedAt)) return "The backup has an invalid update timestamp.";
     if (!validBaseline(value.baseline)) return "The backup has an invalid baseline section.";
     if (!validGamePlan(value.gamePlan)) return "The backup has an invalid game-plan section.";
@@ -4765,6 +5041,7 @@ window.WKB_PUBLISHED = {
       return "The backup has an invalid post-match history.";
     }
     if (!validCurriculum(value.curriculum)) return "The backup has an invalid development-program section.";
+    if (value.version === MINDSET_SCHEMA_VERSION && !validGoalSystem(value.goalSystem)) return "The backup has an invalid goal-system section.";
     return null;
   }
   function normalizeMindsetWorkbook(value) {
@@ -4828,7 +5105,8 @@ window.WKB_PUBLISHED = {
           if (MINDSET_CURRICULUM_RESPONSE_KEYS.has(key)) result[key] = value.curriculum.responses[key];
           return result;
         }, {})
-      }
+      },
+      goalSystem: value.version === MINDSET_SCHEMA_VERSION ? copyGoalSystem(value.goalSystem) : makeGoalSystem()
     };
   }
   function loadMindsetWorkbook() {
@@ -4907,6 +5185,98 @@ window.WKB_PUBLISHED = {
   function hasWeeklyDraftContent(draft) {
     return weeklyDraftCompletion(draft).complete > 0;
   }
+  function goalNamedActions(goalSystem) {
+    return goalSystem.actions.filter((action) => nonEmpty(action.title));
+  }
+  function goalWeekStats(goalSystem) {
+    const actions = goalNamedActions(goalSystem);
+    const totals = actions.reduce((result, action) => {
+      result.target += action.weeklyTarget;
+      result.completed += Math.min(goalSystem.currentWeek.completions[action.id] || 0, action.weeklyTarget);
+      return result;
+    }, { completed: 0, target: 0 });
+    return {
+      ...totals,
+      percent: totals.target ? Math.round(totals.completed / totals.target * 100) : 0,
+      actions
+    };
+  }
+  function goalSystemProgress(goalSystem) {
+    const namedActions = goalNamedActions(goalSystem);
+    let complete = [goalSystem.goal.title, goalSystem.goal.why, goalSystem.goal.successDefinition, goalSystem.goal.targetDate].filter(nonEmpty).length;
+    if (namedActions.length) complete += 1;
+    if (namedActions.length && namedActions.every((action) => nonEmpty(action.cue))) complete += 1;
+    if (namedActions.length && namedActions.every((action) => nonEmpty(action.proof))) complete += 1;
+    if (nonEmpty(goalSystem.accountability.partnerName)) complete += 1;
+    if (nonEmpty(goalSystem.accountability.method) && nonEmpty(goalSystem.accountability.reviewDay)) complete += 1;
+    if (nonEmpty(goalSystem.accountability.checkInPrompt) && nonEmpty(goalSystem.accountability.resetPlan)) complete += 1;
+    return { complete, total: 10 };
+  }
+  function goalReviewFromSystem(goalSystem, id = makeMindsetId("goal-review"), timestamp = (/* @__PURE__ */ new Date()).toISOString()) {
+    return {
+      id,
+      weekOf: goalSystem.currentWeek.weekOf,
+      goal: copyGoalFocus(goalSystem.goal),
+      actions: goalNamedActions(goalSystem).map((action) => ({
+        ...copyGoalAction(action),
+        completed: Math.min(goalSystem.currentWeek.completions[action.id] || 0, action.weeklyTarget)
+      })),
+      win: goalSystem.currentWeek.win,
+      obstacle: goalSystem.currentWeek.obstacle,
+      adjustment: goalSystem.currentWeek.adjustment,
+      checkInCompleted: goalSystem.currentWeek.checkInCompleted,
+      createdAt: timestamp,
+      updatedAt: timestamp
+    };
+  }
+  function goalSummaryLines(goal, weekOf, actions, win, obstacle, adjustment, checkInCompleted) {
+    const completed = actions.reduce((total, action) => total + action.completed, 0);
+    const target = actions.reduce((total, action) => total + action.weeklyTarget, 0);
+    const lines = ["GOAL CHECK-IN — Week of " + displayDate(weekOf)];
+    if (nonEmpty(goal.title)) lines.push("Goal: " + goal.title.trim());
+    if (nonEmpty(goal.why)) lines.push("Why it matters: " + goal.why.trim());
+    if (nonEmpty(goal.successDefinition)) lines.push("Success looks like: " + goal.successDefinition.trim());
+    if (nonEmpty(goal.targetDate)) lines.push("Target date: " + displayDate(goal.targetDate));
+    if (actions.length) {
+      lines.push("", "Action score: " + completed + "/" + target + " planned reps (" + (target ? Math.round(completed / target * 100) : 0) + "%)");
+      actions.forEach((action) => lines.push("- " + action.title.trim() + ": " + action.completed + "/" + action.weeklyTarget));
+    }
+    if (nonEmpty(win)) lines.push("", "Win: " + win.trim());
+    if (nonEmpty(obstacle)) lines.push("Barrier: " + obstacle.trim());
+    if (nonEmpty(adjustment)) lines.push("Next adjustment: " + adjustment.trim());
+    lines.push("Accountability check-in shared: " + (checkInCompleted ? "Yes" : "Not yet"));
+    return lines;
+  }
+  function goalSystemSummary(goalSystem) {
+    const stats = goalWeekStats(goalSystem);
+    const actions = stats.actions.map((action) => ({ ...action, completed: goalSystem.currentWeek.completions[action.id] || 0 }));
+    const lines = goalSummaryLines(
+      goalSystem.goal,
+      goalSystem.currentWeek.weekOf,
+      actions,
+      goalSystem.currentWeek.win,
+      goalSystem.currentWeek.obstacle,
+      goalSystem.currentWeek.adjustment,
+      goalSystem.currentWeek.checkInCompleted
+    );
+    const accountability = goalSystem.accountability;
+    const schedule = [accountability.reviewDay, accountability.reviewTime, accountability.method].filter(nonEmpty).join(" · ");
+    if (schedule) lines.push("Next check-in: " + schedule);
+    if (nonEmpty(accountability.partnerName)) lines.push("With: " + accountability.partnerName.trim());
+    if (nonEmpty(accountability.checkInPrompt)) lines.push("Support request: " + accountability.checkInPrompt.trim());
+    return lines.join("\n");
+  }
+  function goalReviewSummary(review) {
+    return goalSummaryLines(
+      review.goal,
+      review.weekOf,
+      review.actions,
+      review.win,
+      review.obstacle,
+      review.adjustment,
+      review.checkInCompleted
+    ).join("\n");
+  }
   function postDraftCompletion(draft) {
     let complete = [draft.event, draft.date, draft.opponent, draft.result, draft.reflection, draft.nextAction].filter(nonEmpty).length;
     complete += draft.improvements.filter(nonEmpty).length;
@@ -4958,7 +5328,7 @@ window.WKB_PUBLISHED = {
     const next = selected.indexOf(option) >= 0 ? selected.filter((item) => item !== option) : selected.concat(option);
     return next.join("\n");
   }
-  function TextField({ id, label, value, onChange, placeholder, multiline = false, rows = 3, type = "text", required = false }) {
+  function TextField({ id, label, value, onChange, placeholder, multiline = false, rows = 3, type = "text", required = false, maxLength }) {
     const controlProps = {
       id,
       className: "wb-field-control",
@@ -4966,9 +5336,12 @@ window.WKB_PUBLISHED = {
       onChange: (event) => onChange(event.target.value),
       placeholder,
       required,
-      maxLength: type === "date" ? void 0 : multiline ? MINDSET_MAX_TEXT_LENGTH : 180
+      maxLength: type === "date" || type === "time" ? void 0 : maxLength || (multiline ? MINDSET_MAX_TEXT_LENGTH : 180)
     };
     return /* @__PURE__ */ React.createElement("label", { className: "wb-field", htmlFor: id }, /* @__PURE__ */ React.createElement("span", { className: "wb-field-label" }, label, !required && /* @__PURE__ */ React.createElement("span", { className: "wb-field-optional" }, "Optional")), multiline ? /* @__PURE__ */ React.createElement("textarea", { ...controlProps, rows }) : /* @__PURE__ */ React.createElement("input", { ...controlProps, type }));
+  }
+  function SelectField({ id, label, value, onChange, options, required = false }) {
+    return /* @__PURE__ */ React.createElement("label", { className: "wb-field", htmlFor: id }, /* @__PURE__ */ React.createElement("span", { className: "wb-field-label" }, label, !required && /* @__PURE__ */ React.createElement("span", { className: "wb-field-optional" }, "Optional")), /* @__PURE__ */ React.createElement("select", { id, className: "wb-field-control", value, onChange: (event) => onChange(event.target.value), required }, !required && /* @__PURE__ */ React.createElement("option", { value: "" }, "Choose one"), options.map((option) => /* @__PURE__ */ React.createElement("option", { value: option.value, key: option.value }, option.label))));
   }
   function RatingField({ id, label, value, onChange }) {
     return /* @__PURE__ */ React.createElement("fieldset", { className: "wb-rating", "aria-describedby": id + "-help" }, /* @__PURE__ */ React.createElement("legend", { className: "wb-field-label" }, label), /* @__PURE__ */ React.createElement("span", { className: "wb-rating-help", id: id + "-help" }, "1 is low; 5 is high. Leave blank if you do not want to rate it."), /* @__PURE__ */ React.createElement("div", { className: "wb-rating-options" }, [1, 2, 3, 4, 5].map((rating) => /* @__PURE__ */ React.createElement("label", { className: "wb-rating-option", key: rating }, /* @__PURE__ */ React.createElement(
@@ -4998,7 +5371,7 @@ window.WKB_PUBLISHED = {
         "data-mindset-module-card": module,
         "data-testid": "mindset-module-card-" + module
       },
-      /* @__PURE__ */ React.createElement("div", { className: "wb-module-card-heading" }, /* @__PURE__ */ React.createElement("span", { className: "wb-module-card-icon", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: module === "baseline" || module === "development" ? "brain" : module === "game-plan" ? "target" : module === "pre-match" ? "flag" : "check", size: 22, stroke: 2 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, title), /* @__PURE__ */ React.createElement("p", null, description))),
+      /* @__PURE__ */ React.createElement("div", { className: "wb-module-card-heading" }, /* @__PURE__ */ React.createElement("span", { className: "wb-module-card-icon", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: module === "baseline" || module === "development" ? "brain" : module === "game-plan" || module === "goal-system" ? "target" : module === "pre-match" ? "flag" : "check", size: 22, stroke: 2 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", null, title), /* @__PURE__ */ React.createElement("p", null, description))),
       /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress, total: progressTotal, label: "Progress" }),
       /* @__PURE__ */ React.createElement("p", { className: "wb-module-card-summary" }, summary),
       history && /* @__PURE__ */ React.createElement("p", { className: "wb-module-card-history" }, history),
@@ -5038,7 +5411,7 @@ window.WKB_PUBLISHED = {
     const multiline = field.type !== "short" && field.type !== "date" && field.type !== "time";
     return /* @__PURE__ */ React.createElement("label", { className: "wb-field wb-curriculum-field", htmlFor: id }, label, field.hint && /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-field-hint", id: hintId }, field.hint), multiline ? /* @__PURE__ */ React.createElement("textarea", { id, className: "wb-field-control", value, onChange: (event) => onChange(event.target.value), placeholder: field.placeholder || "Add your response", rows: field.rows || 4, maxLength: MINDSET_MAX_TEXT_LENGTH, "aria-describedby": field.hint ? hintId : void 0 }) : /* @__PURE__ */ React.createElement("input", { id, className: "wb-field-control", type: inputType, value, onChange: (event) => onChange(event.target.value), placeholder: field.placeholder || "Add your response", maxLength: inputType === "text" ? 180 : void 0, "aria-describedby": field.hint ? hintId : void 0 }));
   }
-  function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, linkedProgress, selectedLessonId, showLesson, onOpenLesson, onCloseLesson }) {
+  function CurriculumProgram({ curriculum, onChange, onBack, onOpenLinked, onOpenGoalSystem, linkedProgress, selectedLessonId, showLesson, onOpenLesson, onCloseLesson }) {
     const selectedLesson = showLesson && selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
     const [openUnitIds, setOpenUnitIds] = useState(() => {
       const initialLesson = selectedLessonId ? MINDSET_CURRICULUM_LESSON_MAP[selectedLessonId] : null;
@@ -5121,7 +5494,7 @@ window.WKB_PUBLISHED = {
     ), /* @__PURE__ */ React.createElement(ProgressMeter, { value: overallProgress.complete, total: overallProgress.total, label: "Program fields completed" }), /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" }, /* @__PURE__ */ React.createElement(Icon, { name: "brain", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, "The guide sections paraphrase the teaching context from the worksheet packet. This is an educational reflection tool, not medical or mental-health care; follow your athletic trainer, physician, coaches, and support team for injury, sleep, or safety concerns.")), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-units" }, MINDSET_CURRICULUM_UNITS.map((unit) => {
       const progress = curriculumUnitProgress(unit, curriculum, linkedProgress);
       const unitGuide = MINDSET_CURRICULUM_UNIT_CONTEXT[unit.id];
-      return /* @__PURE__ */ React.createElement("details", { className: "wb-curriculum-unit", id: "wb-curriculum-unit-" + unit.id, key: unit.id, open: openUnitIds.indexOf(unit.id) >= 0, onToggle: (event) => setUnitOpen(unit.id, event.currentTarget.open) }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, unit.title), /* @__PURE__ */ React.createElement("small", null, unit.lessons.length, " worksheets · ", unit.description)), /* @__PURE__ */ React.createElement("span", null, progress.complete, " / ", progress.total)), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: unit.title + " progress" }), unitGuide && /* @__PURE__ */ React.createElement("section", { className: "wb-unit-guide", "aria-label": unit.title + " unit roadmap" }, /* @__PURE__ */ React.createElement("span", null, "Unit roadmap"), /* @__PURE__ */ React.createElement("p", null, unitGuide.overview), /* @__PURE__ */ React.createElement("small", null, unitGuide.approach)), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-lesson-list" }, unit.lessons.map((lesson) => {
+      return /* @__PURE__ */ React.createElement("details", { className: "wb-curriculum-unit", id: "wb-curriculum-unit-" + unit.id, key: unit.id, open: openUnitIds.indexOf(unit.id) >= 0, onToggle: (event) => setUnitOpen(unit.id, event.currentTarget.open) }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, unit.title), /* @__PURE__ */ React.createElement("small", null, unit.lessons.length, " worksheets · ", unit.description)), /* @__PURE__ */ React.createElement("span", null, progress.complete, " / ", progress.total)), /* @__PURE__ */ React.createElement(ProgressMeter, { value: progress.complete, total: progress.total, label: unit.title + " progress" }), unitGuide && /* @__PURE__ */ React.createElement("section", { className: "wb-unit-guide", "aria-label": unit.title + " unit roadmap" }, /* @__PURE__ */ React.createElement("span", null, "Unit roadmap"), /* @__PURE__ */ React.createElement("p", null, unitGuide.overview), /* @__PURE__ */ React.createElement("small", null, unitGuide.approach)), unit.id === "goal-setting" && /* @__PURE__ */ React.createElement("section", { className: "wb-goal-curriculum-bridge", "aria-label": "Goal Setting weekly action tool" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Ready to use this every week?"), /* @__PURE__ */ React.createElement("span", null, "Carry one goal and its actions into your personal scoreboard and accountability summary.")), /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "button", onClick: onOpenGoalSystem }, "Open My Goal System", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 }))), /* @__PURE__ */ React.createElement("div", { className: "wb-curriculum-lesson-list" }, unit.lessons.map((lesson) => {
         const lessonProgress = curriculumLessonProgress(lesson, curriculum, linkedProgress);
         return /* @__PURE__ */ React.createElement("button", { className: "wb-curriculum-lesson-button", id: "wb-curriculum-open-" + lesson.id, type: "button", key: lesson.id, onClick: () => openLesson(lesson.id), "data-testid": "curriculum-open-" + lesson.id }, /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-week" }, lesson.weekLabel || "Week " + lesson.week), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, lesson.title), /* @__PURE__ */ React.createElement("small", null, lesson.objective)), /* @__PURE__ */ React.createElement("span", { className: "wb-curriculum-lesson-progress" }, lessonProgress.complete, "/", lessonProgress.total, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 16, stroke: 2.2 })));
       })));
@@ -5218,6 +5591,168 @@ window.WKB_PUBLISHED = {
         multiline: true
       }
     )))));
+  }
+  function GoalScoreboard({ goalSystem, onChange, onSaveWeek, displayedSummary, currentSummary, summaryLabel, summaryRef, copyStatus, onCopySummary, onShowCurrentSummary }) {
+    const [message, setMessage] = useState("");
+    const stats = goalWeekStats(goalSystem);
+    const currentWeek = goalSystem.currentWeek;
+    function setCurrentWeekField(key, value) {
+      onChange({ ...goalSystem, currentWeek: { ...currentWeek, [key]: value } });
+    }
+    function setActionCount(action, nextCount) {
+      const completions = { ...currentWeek.completions };
+      const safeCount = Math.max(0, Math.min(action.weeklyTarget, nextCount));
+      if (safeCount) completions[action.id] = safeCount;
+      else delete completions[action.id];
+      onChange({ ...goalSystem, currentWeek: { ...currentWeek, completions } });
+    }
+    function saveWeek(event) {
+      event.preventDefault();
+      if (![goalSystem.goal.title, goalSystem.goal.why, goalSystem.goal.successDefinition, goalSystem.goal.targetDate].every(nonEmpty)) {
+        setMessage("Complete the focus goal, why, success definition, and target date before saving this week.");
+        return;
+      }
+      if (!stats.actions.length) {
+        setMessage("Add at least one named weekly action before saving this week.");
+        return;
+      }
+      if (!stats.completed && !nonEmpty(currentWeek.win) && !nonEmpty(currentWeek.obstacle) && !nonEmpty(currentWeek.adjustment) && !currentWeek.checkInCompleted) {
+        setMessage("Record at least one completed action or reflection before saving. A zero-action week can still be saved by naming the barrier or next adjustment.");
+        return;
+      }
+      const replacesSavedWeek = goalSystem.reviews.some((review) => review.weekOf === currentWeek.weekOf);
+      if (!replacesSavedWeek && goalSystem.reviews.length >= MINDSET_MAX_GOAL_REVIEWS) {
+        setMessage("Your weekly goal history is full. Download a workbook backup, then delete an older goal review before saving another.");
+        return;
+      }
+      onSaveWeek();
+      setMessage("Weekly review saved. Your goal and action plan are still ready for the next week.");
+    }
+    return /* @__PURE__ */ React.createElement("form", { className: "wb-form-section wb-goal-scoreboard", "aria-labelledby": "wb-goal-scoreboard-title", onSubmit: saveWeek }, /* @__PURE__ */ React.createElement("div", { className: "wb-goal-section-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Act, score, adjust"), /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-scoreboard-title" }, "This week's scoreboard"), /* @__PURE__ */ React.createElement("p", null, "Count the controllable work you completed. A missed rep is information for the next adjustment, not a verdict.")), /* @__PURE__ */ React.createElement("div", { className: "wb-goal-score-total", "aria-label": stats.completed + " of " + stats.target + " planned action repetitions complete" }, /* @__PURE__ */ React.createElement("strong", null, stats.completed, "/", stats.target), /* @__PURE__ */ React.createElement("span", null, stats.percent, "% complete"))), nonEmpty(goalSystem.goal.title) && /* @__PURE__ */ React.createElement("aside", { className: "wb-goal-active-focus", "aria-label": "Active goal and accountability schedule" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", null, "Active goal"), /* @__PURE__ */ React.createElement("strong", null, goalSystem.goal.title), nonEmpty(goalSystem.goal.successDefinition) && /* @__PURE__ */ React.createElement("small", null, goalSystem.goal.successDefinition), nonEmpty(goalSystem.goal.targetDate) && /* @__PURE__ */ React.createElement("small", null, "Target ", displayDate(goalSystem.goal.targetDate))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", null, "Next check-in"), /* @__PURE__ */ React.createElement("strong", null, [goalSystem.accountability.reviewDay, goalSystem.accountability.reviewTime].filter(nonEmpty).join(" · ") || "Choose a review day below"), nonEmpty(goalSystem.accountability.partnerName) && /* @__PURE__ */ React.createElement("small", null, "With ", goalSystem.accountability.partnerName, nonEmpty(goalSystem.accountability.method) ? " via " + goalSystem.accountability.method : ""))), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-week-of", type: "date", label: "Week beginning", value: currentWeek.weekOf, onChange: (value) => setCurrentWeekField("weekOf", value), required: true }), stats.actions.length ? /* @__PURE__ */ React.createElement("div", { className: "wb-goal-score-list" }, stats.actions.map((action) => {
+      var _a;
+      const completed = currentWeek.completions[action.id] || 0;
+      return /* @__PURE__ */ React.createElement("article", { className: "wb-goal-score-row", key: action.id }, /* @__PURE__ */ React.createElement("div", { className: "wb-goal-score-copy" }, /* @__PURE__ */ React.createElement("strong", null, action.title), /* @__PURE__ */ React.createElement("span", null, ((_a = GOAL_ACTION_CATEGORIES.find((category) => category.value === action.category)) == null ? void 0 : _a.label) || "Action", " · target ", action.weeklyTarget, "/week"), /* @__PURE__ */ React.createElement("progress", { max: action.weeklyTarget, value: completed, "aria-label": action.title + ": " + completed + " of " + action.weeklyTarget + " complete" })), /* @__PURE__ */ React.createElement("div", { className: "wb-goal-count", role: "group", "aria-label": action.title + " completion controls" }, /* @__PURE__ */ React.createElement("button", { className: "wb-goal-count-button", type: "button", disabled: completed <= 0, onClick: () => setActionCount(action, completed - 1), "aria-label": "Remove one completed rep for " + action.title + ", currently " + completed + " of " + action.weeklyTarget }, "−"), /* @__PURE__ */ React.createElement("output", { "aria-live": "polite", "aria-atomic": "true" }, /* @__PURE__ */ React.createElement("strong", null, completed), /* @__PURE__ */ React.createElement("small", null, "of ", action.weeklyTarget)), /* @__PURE__ */ React.createElement("button", { className: "wb-goal-count-button", type: "button", disabled: completed >= action.weeklyTarget, onClick: () => setActionCount(action, completed + 1), "aria-label": "Mark one completed rep for " + action.title + ", currently " + completed + " of " + action.weeklyTarget }, "+")));
+    })) : /* @__PURE__ */ React.createElement("p", { className: "wb-empty-copy" }, "Add a named weekly action below, then its counter will appear here."), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid wb-goal-review-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-week-win", label: "A win from this week", value: currentWeek.win, onChange: (value) => setCurrentWeekField("win", value), placeholder: "What worked or moved me forward?", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-week-obstacle", label: "The main barrier", value: currentWeek.obstacle, onChange: (value) => setCurrentWeekField("obstacle", value), placeholder: "What made the plan harder to follow?", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-week-adjustment", label: "My next adjustment", value: currentWeek.adjustment, onChange: (value) => setCurrentWeekField("adjustment", value), placeholder: "One specific change for next week", multiline: true })), /* @__PURE__ */ React.createElement("section", { className: "wb-goal-score-share", "aria-labelledby": "wb-goal-score-share-title" }, /* @__PURE__ */ React.createElement("div", { className: "wb-goal-section-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h4", { id: "wb-goal-score-share-title" }, "Copy → share → save"), /* @__PURE__ */ React.createElement("p", null, "Review the summary, send only what you are comfortable sharing, mark the check-in, then save the week.")), /* @__PURE__ */ React.createElement("span", { className: "wb-editing-badge" }, summaryLabel)), /* @__PURE__ */ React.createElement("label", { className: "wb-field", htmlFor: "wb-goal-share-summary" }, /* @__PURE__ */ React.createElement("span", { className: "wb-field-label" }, "Accountability summary"), /* @__PURE__ */ React.createElement("textarea", { ref: summaryRef, id: "wb-goal-share-summary", className: "wb-field-control wb-goal-summary", value: displayedSummary, readOnly: true, rows: "10" })), /* @__PURE__ */ React.createElement("div", { className: "wb-form-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: () => onCopySummary(currentSummary, "Current week summary") }, /* @__PURE__ */ React.createElement(Icon, { name: "link", size: 18, stroke: 2 }), "Copy current check-in"), displayedSummary !== currentSummary && /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: onShowCurrentSummary }, "Show current week")), /* @__PURE__ */ React.createElement("p", { className: "wb-form-message", role: "status", "aria-live": "polite" }, copyStatus)), /* @__PURE__ */ React.createElement("label", { className: "wb-goal-check", htmlFor: "wb-goal-check-in-complete" }, /* @__PURE__ */ React.createElement("input", { id: "wb-goal-check-in-complete", type: "checkbox", checked: currentWeek.checkInCompleted, onChange: (event) => setCurrentWeekField("checkInCompleted", event.target.checked) }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 17, stroke: 2.4 }), "I shared this week's check-in with my accountability person.")), /* @__PURE__ */ React.createElement("div", { className: "wb-form-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "submit" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 18, stroke: 2.4 }), "Save weekly review")), /* @__PURE__ */ React.createElement("p", { className: "wb-form-message", role: "status", "aria-live": "polite" }, message));
+  }
+  function GoalSystemModule({ goalSystem, worksheetProgress, onChange, onSaveWeek, onReopenReview, onDeleteReview, onOpenWorksheets, onBack, backLabel }) {
+    const currentSummary = goalSystemSummary(goalSystem);
+    const [displayedSummary, setDisplayedSummary] = useState(currentSummary);
+    const [summaryLabel, setSummaryLabel] = useState("Current week summary");
+    const [copyStatus, setCopyStatus] = useState("");
+    const summaryRef = useRef(null);
+    const previousActionCountRef = useRef(goalSystem.actions.length);
+    const namedActions = goalNamedActions(goalSystem);
+    const [scoreboardFirst] = useState(() => nonEmpty(goalSystem.goal.title) && namedActions.length > 0);
+    useEffect(() => {
+      setDisplayedSummary(currentSummary);
+      setSummaryLabel("Current week summary");
+    }, [currentSummary]);
+    useEffect(() => {
+      if (goalSystem.actions.length > previousActionCountRef.current) {
+        const latest = goalSystem.actions[goalSystem.actions.length - 1];
+        window.requestAnimationFrame(() => {
+          const control = latest ? document.getElementById("wb-goal-action-title-" + latest.id) : null;
+          if (control) control.focus();
+        });
+      }
+      previousActionCountRef.current = goalSystem.actions.length;
+    }, [goalSystem.actions.length]);
+    function setGoalField(key, value) {
+      onChange({ ...goalSystem, goal: { ...goalSystem.goal, [key]: value } });
+    }
+    function addAction() {
+      if (goalSystem.actions.length >= MINDSET_MAX_GOAL_ACTIONS) return;
+      onChange({ ...goalSystem, actions: goalSystem.actions.concat(makeGoalAction()) });
+    }
+    function setAction(id, key, value) {
+      let nextTarget = null;
+      const actions = goalSystem.actions.map((action) => {
+        if (action.id !== id) return action;
+        if (key === "weeklyTarget") nextTarget = value;
+        return { ...action, [key]: value };
+      });
+      let currentWeek = goalSystem.currentWeek;
+      if (nextTarget !== null && (currentWeek.completions[id] || 0) > nextTarget) {
+        currentWeek = { ...currentWeek, completions: { ...currentWeek.completions, [id]: nextTarget } };
+      }
+      onChange({ ...goalSystem, actions, currentWeek });
+    }
+    function removeAction(action, index) {
+      if (!window.confirm("Remove this action from your current plan? Saved weekly reviews will keep its history.")) return;
+      const completions = { ...goalSystem.currentWeek.completions };
+      delete completions[action.id];
+      onChange({
+        ...goalSystem,
+        actions: goalSystem.actions.filter((item) => item.id !== action.id),
+        currentWeek: { ...goalSystem.currentWeek, completions }
+      });
+      window.requestAnimationFrame(() => {
+        const previous = goalSystem.actions[index - 1];
+        const target = previous ? document.getElementById("wb-goal-action-title-" + previous.id) : document.getElementById("wb-goal-add-action");
+        if (target) target.focus();
+      });
+    }
+    function setAccountabilityField(key, value) {
+      onChange({ ...goalSystem, accountability: { ...goalSystem.accountability, [key]: value } });
+    }
+    async function copySummary(text, label) {
+      setDisplayedSummary(text);
+      setSummaryLabel(label);
+      try {
+        if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") throw new Error("Clipboard unavailable");
+        await navigator.clipboard.writeText(text);
+        setCopyStatus(label + " copied. Paste it into a text, email, or message.");
+      } catch (error) {
+        setCopyStatus("Automatic copy is unavailable here. The summary is selected so you can copy it manually.");
+        window.requestAnimationFrame(() => {
+          if (!summaryRef.current) return;
+          summaryRef.current.focus();
+          summaryRef.current.select();
+        });
+      }
+    }
+    function showCurrentSummary() {
+      setDisplayedSummary(currentSummary);
+      setSummaryLabel("Current week summary");
+      setCopyStatus("");
+    }
+    const scoreboard = /* @__PURE__ */ React.createElement(
+      GoalScoreboard,
+      {
+        goalSystem,
+        onChange,
+        onSaveWeek,
+        displayedSummary,
+        currentSummary,
+        summaryLabel,
+        summaryRef,
+        copyStatus,
+        onCopySummary: copySummary,
+        onShowCurrentSummary: showCurrentSummary
+      }
+    );
+    return /* @__PURE__ */ React.createElement("section", { className: "wb-module wb-goal-system", "aria-labelledby": "wb-goal-system-title" }, /* @__PURE__ */ React.createElement(
+      ModuleHeader,
+      {
+        headingId: "wb-goal-system-title",
+        title: "My Goal System",
+        eyebrow: "One goal · weekly actions · supportive accountability",
+        description: "Turn one meaningful goal into work you can score each week, review honestly, and share with someone you trust. Everything stays in this browser profile and in your workbook backups.",
+        onBack,
+        backLabel
+      }
+    ), scoreboardFirst && scoreboard, /* @__PURE__ */ React.createElement("section", { className: "wb-goal-roadmap", "aria-labelledby": "wb-goal-roadmap-title" }, /* @__PURE__ */ React.createElement("div", { className: "wb-goal-roadmap-heading" }, /* @__PURE__ */ React.createElement(Icon, { name: "target", size: 23, stroke: 2 }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "The loop"), /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-roadmap-title" }, "Direction becomes accountability"))), /* @__PURE__ */ React.createElement("ol", null, /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Define one focus."), /* @__PURE__ */ React.createElement("span", null, "Name the goal, why it matters, and what success will look like.")), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Score controllable actions."), /* @__PURE__ */ React.createElement("span", null, "Track the work you can actually choose, not only wins or outcomes.")), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Review and share."), /* @__PURE__ */ React.createElement("span", null, "Save the week, adjust without shame, and send a concise check-in.")))), /* @__PURE__ */ React.createElement("section", { className: "wb-goal-worksheet-link", "aria-labelledby": "wb-goal-worksheet-title" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Build the foundation first"), /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-worksheet-title" }, "Five Goal Setting worksheets"), /* @__PURE__ */ React.createElement("p", null, "The full worksheets help you clarify long-term purpose, commitments, actions, accountability, and reminders. Use this system to carry that thinking into each week.")), /* @__PURE__ */ React.createElement("div", { className: "wb-goal-worksheet-progress" }, /* @__PURE__ */ React.createElement(ProgressMeter, { value: worksheetProgress.complete, total: worksheetProgress.total, label: "Goal Setting worksheet fields" }), /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: onOpenWorksheets }, "Open Goal Setting worksheets", /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 17, stroke: 2.2 })))), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", id: "wb-goal-foundation", "aria-labelledby": "wb-goal-foundation-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-foundation-title" }, "1. Define one focus goal"), /* @__PURE__ */ React.createElement("p", null, "Choose one goal for the next several weeks. Keep the outcome meaningful, then use your weekly actions as the score you control."), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-title", label: "My focus goal", value: goalSystem.goal.title, onChange: (value) => setGoalField("title", value), placeholder: "Example: Become dependable from bottom by the conference meet", multiline: true, required: true, maxLength: MINDSET_MAX_GOAL_SHORT_TEXT_LENGTH }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-why", label: "Why this matters to me", value: goalSystem.goal.why, onChange: (value) => setGoalField("why", value), placeholder: "The personal reason I am willing to work for it", multiline: true, required: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-success", label: "How I will know I made progress", value: goalSystem.goal.successDefinition, onChange: (value) => setGoalField("successDefinition", value), placeholder: "Observable evidence, skill standard, or result", multiline: true, required: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-target-date", type: "date", label: "Target date", value: goalSystem.goal.targetDate, onChange: (value) => setGoalField("targetDate", value), required: true }))), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-goal-actions-title" }, /* @__PURE__ */ React.createElement("div", { className: "wb-goal-section-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-actions-title" }, "2. Build the weekly action plan"), /* @__PURE__ */ React.createElement("p", null, "Use a verb, a realistic weekly target, a cue for when it happens, and simple proof that tells you it was done.")), /* @__PURE__ */ React.createElement("button", { id: "wb-goal-add-action", className: "wb-secondary-button", type: "button", onClick: addAction, disabled: goalSystem.actions.length >= MINDSET_MAX_GOAL_ACTIONS }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 18, stroke: 2.2 }), "Add action")), /* @__PURE__ */ React.createElement("aside", { className: "wb-curriculum-notice" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 20, stroke: 2 }), /* @__PURE__ */ React.createElement("p", null, "Example: “Complete 10 minutes of bottom-position work after practice Tuesday and Thursday; proof is a note in my practice log.” Training, recovery, and nutrition actions should follow your coach and care-team guidance.")), goalSystem.actions.length ? /* @__PURE__ */ React.createElement("div", { className: "wb-goal-actions" }, goalSystem.actions.map((action, index) => /* @__PURE__ */ React.createElement("article", { className: "wb-goal-action-card", key: action.id }, /* @__PURE__ */ React.createElement("header", { className: "wb-goal-action-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", null, "Action ", index + 1), /* @__PURE__ */ React.createElement("strong", null, nonEmpty(action.title) ? action.title : "Name this action")), /* @__PURE__ */ React.createElement("button", { className: "wb-danger-button", type: "button", onClick: () => removeAction(action, index), "aria-label": "Remove action " + (index + 1) }, /* @__PURE__ */ React.createElement(Icon, { name: "trash", size: 17, stroke: 2 }), "Remove")), /* @__PURE__ */ React.createElement("div", { className: "wb-goal-action-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-action-title-" + action.id, label: "Controllable action", value: action.title, onChange: (value) => setAction(action.id, "title", value), placeholder: "The exact work I will do", required: true }), /* @__PURE__ */ React.createElement(SelectField, { id: "wb-goal-action-category-" + action.id, label: "Area", value: action.category, onChange: (value) => setAction(action.id, "category", value), options: GOAL_ACTION_CATEGORIES, required: true }), /* @__PURE__ */ React.createElement("label", { className: "wb-field", htmlFor: "wb-goal-action-target-" + action.id }, /* @__PURE__ */ React.createElement("span", { className: "wb-field-label" }, "Target per week"), /* @__PURE__ */ React.createElement("select", { id: "wb-goal-action-target-" + action.id, className: "wb-field-control", value: action.weeklyTarget, onChange: (event) => setAction(action.id, "weeklyTarget", Number(event.target.value)) }, Array.from({ length: MINDSET_MAX_GOAL_WEEKLY_TARGET }, (_, number) => number + 1).map((target) => /* @__PURE__ */ React.createElement("option", { value: target, key: target }, target, " ", target === 1 ? "time" : "times")))), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-action-cue-" + action.id, label: "When or where", value: action.cue, onChange: (value) => setAction(action.id, "cue", value), placeholder: "Example: after practice Tue/Thu" }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-action-proof-" + action.id, label: "Proof it is complete", value: action.proof, onChange: (value) => setAction(action.id, "proof", value), placeholder: "Example: practice-log note" }))))) : /* @__PURE__ */ React.createElement("div", { className: "wb-goal-empty-action" }, /* @__PURE__ */ React.createElement("p", null, "No weekly actions yet. Start with the smallest action that would make the goal more likely."), /* @__PURE__ */ React.createElement("button", { className: "wb-primary-button", type: "button", onClick: addAction }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 18, stroke: 2.2 }), "Add my first action")), /* @__PURE__ */ React.createElement("p", { className: "wb-form-message" }, goalSystem.actions.length, " of ", MINDSET_MAX_GOAL_ACTIONS, " action slots used. Three to five focused actions is usually enough.")), /* @__PURE__ */ React.createElement("section", { className: "wb-form-section", "aria-labelledby": "wb-goal-accountability-title" }, /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-accountability-title" }, "3. Set supportive accountability"), /* @__PURE__ */ React.createElement("p", null, "Choose someone who can help you review the plan honestly without policing, shaming, or taking ownership away from you."), /* @__PURE__ */ React.createElement("div", { className: "wb-field-grid" }, /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-partner", label: "Trusted person", value: goalSystem.accountability.partnerName, onChange: (value) => setAccountabilityField("partnerName", value), placeholder: "Name or role" }), /* @__PURE__ */ React.createElement(SelectField, { id: "wb-goal-method", label: "Check-in method", value: goalSystem.accountability.method, onChange: (value) => setAccountabilityField("method", value), options: [
+      { value: "Text message", label: "Text message" },
+      { value: "Phone or video call", label: "Phone or video call" },
+      { value: "In person", label: "In person" },
+      { value: "Team chat", label: "Team chat" },
+      { value: "Email", label: "Email" },
+      { value: "Other", label: "Other" }
+    ] }), /* @__PURE__ */ React.createElement(SelectField, { id: "wb-goal-review-day", label: "Review day", value: goalSystem.accountability.reviewDay, onChange: (value) => setAccountabilityField("reviewDay", value), options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => ({ value: day, label: day })) }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-review-time", type: "time", label: "Review time", value: goalSystem.accountability.reviewTime, onChange: (value) => setAccountabilityField("reviewTime", value) }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-support-request", label: "The exact support I am asking for", value: goalSystem.accountability.checkInPrompt, onChange: (value) => setAccountabilityField("checkInPrompt", value), placeholder: "Example: Ask what I learned and what I will adjust—do not lecture me", multiline: true }), /* @__PURE__ */ React.createElement(TextField, { id: "wb-goal-reset-plan", label: "My shame-free reset plan", value: goalSystem.accountability.resetPlan, onChange: (value) => setAccountabilityField("resetPlan", value), placeholder: "What I will do after a missed day or difficult week", multiline: true }))), !scoreboardFirst && scoreboard, /* @__PURE__ */ React.createElement("section", { className: "wb-history", "aria-labelledby": "wb-goal-history-title" }, /* @__PURE__ */ React.createElement("header", { className: "wb-history-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { id: "wb-goal-history-title" }, "Weekly goal history"), /* @__PURE__ */ React.createElement("p", null, goalSystem.reviews.length, " saved ", goalSystem.reviews.length === 1 ? "review" : "reviews"))), !goalSystem.reviews.length && /* @__PURE__ */ React.createElement("p", { className: "wb-empty-copy" }, "Saved weekly goal reviews will appear here with the exact action plan and scores from that week."), !!goalSystem.reviews.length && /* @__PURE__ */ React.createElement("div", { className: "wb-history-list" }, goalSystem.reviews.map((review) => {
+      const completed = review.actions.reduce((total, action) => total + action.completed, 0);
+      const target = review.actions.reduce((total, action) => total + action.weeklyTarget, 0);
+      return /* @__PURE__ */ React.createElement("article", { className: "wb-history-card wb-goal-history-card", key: review.id }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h4", null, "Week of ", displayDate(review.weekOf)), /* @__PURE__ */ React.createElement("p", null, review.goal.title || "Goal review")), /* @__PURE__ */ React.createElement("span", null, completed, "/", target)), /* @__PURE__ */ React.createElement("dl", { className: "wb-history-details" }, /* @__PURE__ */ React.createElement("dt", null, "Actions"), /* @__PURE__ */ React.createElement("dd", null, /* @__PURE__ */ React.createElement("ul", null, review.actions.map((action) => /* @__PURE__ */ React.createElement("li", { key: action.id }, action.title, ": ", action.completed, "/", action.weeklyTarget)))), nonEmpty(review.win) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Win"), /* @__PURE__ */ React.createElement("dd", null, review.win)), nonEmpty(review.obstacle) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Barrier"), /* @__PURE__ */ React.createElement("dd", null, review.obstacle)), nonEmpty(review.adjustment) && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("dt", null, "Adjustment"), /* @__PURE__ */ React.createElement("dd", null, review.adjustment)), /* @__PURE__ */ React.createElement("dt", null, "Shared"), /* @__PURE__ */ React.createElement("dd", null, review.checkInCompleted ? "Yes" : "Not marked shared")), /* @__PURE__ */ React.createElement("div", { className: "wb-history-actions" }, /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: () => onReopenReview(review.id) }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 17, stroke: 2 }), "Reopen"), /* @__PURE__ */ React.createElement("button", { className: "wb-secondary-button", type: "button", onClick: () => copySummary(goalReviewSummary(review), "Saved week of " + displayDate(review.weekOf)) }, /* @__PURE__ */ React.createElement(Icon, { name: "link", size: 17, stroke: 2 }), "Copy summary"), /* @__PURE__ */ React.createElement("button", { className: "wb-danger-button", type: "button", onClick: () => onDeleteReview(review.id) }, /* @__PURE__ */ React.createElement(Icon, { name: "trash", size: 17, stroke: 2 }), "Delete")));
+    }))));
   }
   function WeeklyModule({ draft, entries, onDraftChange, onSave, onEdit, onDelete, onCancelEdit, onBack }) {
     const [formMessage, setFormMessage] = useState("");
@@ -5464,6 +5999,10 @@ window.WKB_PUBLISHED = {
     const postProgress = postMatchCurriculumProgress(workbook.postMatchDraft, workbook.postMatchReviews);
     const linkedCurriculumProgress = { "game-plan": planCompletion, "pre-match": resetProgress, "post-match": postProgress };
     const developmentProgress = curriculumProgramProgress(workbook.curriculum, linkedCurriculumProgress);
+    const goalProgress = goalSystemProgress(workbook.goalSystem);
+    const goalWeekProgress = goalWeekStats(workbook.goalSystem);
+    const goalSettingUnit = MINDSET_CURRICULUM_UNITS.find((unit) => unit.id === "goal-setting");
+    const goalWorksheetProgress = goalSettingUnit ? curriculumUnitProgress(goalSettingUnit, workbook.curriculum, linkedCurriculumProgress) : { complete: 0, total: 0 };
     function updateWorkbook(value) {
       dirtyRef.current = true;
       setWorkbook(value);
@@ -5490,24 +6029,109 @@ window.WKB_PUBLISHED = {
     function openModule(module) {
       setReturnToCurriculumFromLinked(false);
       setActiveModule(module);
-      const headingIds = { development: showCurriculumLesson && curriculumLessonId ? "wb-curriculum-lesson-title" : "wb-curriculum-title", baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
+      const headingIds = { "goal-system": "wb-goal-system-title", development: showCurriculumLesson && curriculumLessonId ? "wb-curriculum-lesson-title" : "wb-curriculum-title", baseline: "wb-baseline-title", "game-plan": "wb-game-plan-title", weekly: "wb-weekly-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
       scrollWorkbookToTop(headingIds[module]);
     }
+    function openGoalSettingWorksheets() {
+      setReturnToCurriculumFromLinked(false);
+      setCurriculumLessonId("goal-setting-1");
+      setShowCurriculumLesson(false);
+      setActiveModule("development");
+      scrollWorkbookToTop("wb-curriculum-title");
+    }
     function openCurriculumLinkedModule(module) {
-      setReturnToCurriculumFromLinked(true);
+      setReturnToCurriculumFromLinked("lesson");
       setActiveModule(module);
       const headingIds = { "game-plan": "wb-game-plan-title", "pre-match": "wb-pre-match-title", "post-match": "wb-post-match-title" };
       scrollWorkbookToTop(headingIds[module]);
+    }
+    function openCurriculumGoalSystem() {
+      setReturnToCurriculumFromLinked("goal-unit");
+      setCurriculumLessonId("goal-setting-1");
+      setShowCurriculumLesson(false);
+      setActiveModule("goal-system");
+      scrollWorkbookToTop("wb-goal-system-title");
     }
     function returnToCurriculumLesson() {
       setReturnToCurriculumFromLinked(false);
       setActiveModule("development");
       scrollWorkbookToTop("wb-curriculum-lesson-title");
     }
+    function returnToGoalSettingUnit() {
+      setReturnToCurriculumFromLinked(false);
+      setCurriculumLessonId("goal-setting-1");
+      setShowCurriculumLesson(false);
+      setActiveModule("development");
+      scrollWorkbookToTop("wb-curriculum-title");
+    }
     function closeModule() {
       setReturnToCurriculumFromLinked(false);
       setActiveModule(null);
       scrollWorkbookToTop("wb-dashboard-title");
+    }
+    function saveGoalWeek() {
+      const savedWeek = workbook.goalSystem.reviews.find((review) => review.weekOf === workbook.goalSystem.currentWeek.weekOf);
+      if (!savedWeek && workbook.goalSystem.reviews.length >= MINDSET_MAX_GOAL_REVIEWS) {
+        setNotice("Weekly goal history is full. Download a backup and delete an older goal review before saving another.");
+        return;
+      }
+      updateWorkbook((current) => {
+        const goalSystem = current.goalSystem;
+        const existing = goalSystem.reviews.find((review2) => review2.weekOf === goalSystem.currentWeek.weekOf);
+        const review = goalReviewFromSystem(goalSystem, existing ? existing.id : void 0);
+        if (existing) review.createdAt = existing.createdAt;
+        const reviews = existing ? [review].concat(goalSystem.reviews.filter((item) => item.id !== existing.id)) : [review].concat(goalSystem.reviews);
+        return {
+          ...current,
+          goalSystem: {
+            ...goalSystem,
+            currentWeek: makeGoalCurrentWeek(nextGoalWeekValue(goalSystem.currentWeek.weekOf)),
+            reviews
+          }
+        };
+      });
+      setNotice("Weekly goal review saved. Your standing goal and action plan were kept for the next week.");
+    }
+    function deleteGoalReview(id) {
+      if (!window.confirm("Delete this saved weekly goal review? This cannot be undone.")) return;
+      updateWorkbook((current) => ({
+        ...current,
+        goalSystem: { ...current.goalSystem, reviews: current.goalSystem.reviews.filter((review) => review.id !== id) }
+      }));
+      setNotice("Weekly goal review deleted.");
+    }
+    function reopenGoalReview(id) {
+      const saved = workbook.goalSystem.reviews.find((review) => review.id === id);
+      if (!saved) return;
+      if (!window.confirm("Reopen this saved week? It will replace your current goal, action plan, and unsaved weekly score so you can correct and save it again.")) return;
+      updateWorkbook((current) => {
+        const review = current.goalSystem.reviews.find((item) => item.id === id);
+        if (!review) return current;
+        const actions = review.actions.map(copyGoalAction);
+        const completions = review.actions.reduce((result, action) => {
+          if (action.completed) result[action.id] = action.completed;
+          return result;
+        }, {});
+        return {
+          ...current,
+          goalSystem: {
+            ...current.goalSystem,
+            goal: copyGoalFocus(review.goal),
+            actions,
+            currentWeek: {
+              weekOf: review.weekOf,
+              completions,
+              win: review.win,
+              obstacle: review.obstacle,
+              adjustment: review.adjustment,
+              checkInCompleted: review.checkInCompleted
+            },
+            reviews: current.goalSystem.reviews.filter((item) => item.id !== id)
+          }
+        };
+      });
+      setNotice("Saved week reopened. Make your correction, then save the weekly review again.");
+      scrollWorkbookToTop("wb-goal-scoreboard-title");
     }
     function saveWeeklyCheckIn() {
       updateWorkbook((current) => {
@@ -5750,8 +6374,22 @@ window.WKB_PUBLISHED = {
     const firstTakedown = workbook.gamePlan.takedowns.find((item) => nonEmpty(item.shot));
     const resetReadoutCount = resetProgress.complete;
     let activeContent = null;
-    const linkedModuleBack = returnToCurriculumFromLinked ? returnToCurriculumLesson : closeModule;
-    const linkedModuleBackLabel = returnToCurriculumFromLinked ? "Development worksheet" : void 0;
+    const linkedModuleBack = returnToCurriculumFromLinked === "goal-unit" ? returnToGoalSettingUnit : returnToCurriculumFromLinked ? returnToCurriculumLesson : closeModule;
+    const linkedModuleBackLabel = returnToCurriculumFromLinked === "goal-unit" ? "Goal Setting worksheets" : returnToCurriculumFromLinked ? "Development worksheet" : void 0;
+    if (activeModule === "goal-system") activeContent = /* @__PURE__ */ React.createElement(
+      GoalSystemModule,
+      {
+        goalSystem: workbook.goalSystem,
+        worksheetProgress: goalWorksheetProgress,
+        onChange: (value) => setSection("goalSystem", value),
+        onSaveWeek: saveGoalWeek,
+        onReopenReview: reopenGoalReview,
+        onDeleteReview: deleteGoalReview,
+        onOpenWorksheets: openGoalSettingWorksheets,
+        onBack: linkedModuleBack,
+        backLabel: linkedModuleBackLabel
+      }
+    );
     if (activeModule === "development") activeContent = /* @__PURE__ */ React.createElement(
       CurriculumProgram,
       {
@@ -5759,6 +6397,7 @@ window.WKB_PUBLISHED = {
         onChange: (value) => setSection("curriculum", value),
         onBack: closeModule,
         onOpenLinked: openCurriculumLinkedModule,
+        onOpenGoalSystem: openCurriculumGoalSystem,
         linkedProgress: linkedCurriculumProgress,
         selectedLessonId: curriculumLessonId,
         showLesson: showCurriculumLesson,
@@ -5774,7 +6413,7 @@ window.WKB_PUBLISHED = {
     if (activeModule === "weekly") activeContent = /* @__PURE__ */ React.createElement(WeeklyModule, { draft: workbook.weeklyDraft, entries: workbook.weeklyCheckIns, onDraftChange: (value) => setSection("weeklyDraft", value), onSave: saveWeeklyCheckIn, onEdit: editWeeklyCheckIn, onDelete: deleteWeeklyCheckIn, onCancelEdit: cancelWeeklyEdit, onBack: closeModule });
     if (activeModule === "pre-match") activeContent = /* @__PURE__ */ React.createElement(PreMatchModule, { reset: workbook.preMatchReset, onChange: (value) => setSection("preMatchReset", value), onBack: linkedModuleBack, backLabel: linkedModuleBackLabel });
     if (activeModule === "post-match") activeContent = /* @__PURE__ */ React.createElement(PostMatchModule, { draft: workbook.postMatchDraft, entries: workbook.postMatchReviews, onDraftChange: (value) => setSection("postMatchDraft", value), onSave: savePostMatchReview, onEdit: editPostMatchReview, onDelete: deletePostMatchReview, onCancelEdit: cancelPostMatchEdit, onBack: linkedModuleBack, backLabel: linkedModuleBackLabel });
-    return /* @__PURE__ */ React.createElement("div", { className: "wb-workbook" }, /* @__PURE__ */ React.createElement("header", { className: "wb-workbook-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Device-local athlete workspace"), /* @__PURE__ */ React.createElement("h1", null, "Mindset Workbook"), /* @__PURE__ */ React.createElement("p", null, "Use the complete worksheet program, quick match tools, and saved plans in one phone-first workspace.")), /* @__PURE__ */ React.createElement("div", { className: "wb-save-status wb-save-status-" + saveStatus.kind, role: "status", "aria-live": "polite", "aria-atomic": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: saveStatus.kind === "error" ? "close" : "check", size: 17, stroke: 2.3 }), /* @__PURE__ */ React.createElement("span", null, saveStatus.message))), /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("div", { className: "wb-workbook" }, /* @__PURE__ */ React.createElement("header", { className: "wb-workbook-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Device-local athlete workspace"), /* @__PURE__ */ React.createElement("h1", null, "Mindset Workbook"), /* @__PURE__ */ React.createElement("p", null, "Use the complete worksheet program, your personal goal system, quick match tools, and saved plans in one phone-first workspace.")), /* @__PURE__ */ React.createElement("div", { className: "wb-save-status wb-save-status-" + saveStatus.kind, role: "status", "aria-live": "polite", "aria-atomic": "true" }, /* @__PURE__ */ React.createElement(Icon, { name: saveStatus.kind === "error" ? "close" : "check", size: 17, stroke: 2.3 }), /* @__PURE__ */ React.createElement("span", null, saveStatus.message))), /* @__PURE__ */ React.createElement(
       "div",
       {
         className: "wb-workbook-main",
@@ -5783,6 +6422,19 @@ window.WKB_PUBLISHED = {
         "data-testid": "mindset-active-module-" + (activeModule || "dashboard")
       },
       activeContent || /* @__PURE__ */ React.createElement("section", { className: "wb-dashboard", "aria-labelledby": "wb-dashboard-title" }, /* @__PURE__ */ React.createElement("header", { className: "wb-dashboard-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "wb-eyebrow" }, "Your local workbook"), /* @__PURE__ */ React.createElement("h2", { id: "wb-dashboard-title", tabIndex: "-1" }, "Choose a module")), /* @__PURE__ */ React.createElement("p", null, "Responses are not published, but anyone using this same browser profile can view them.")), /* @__PURE__ */ React.createElement("div", { className: "wb-module-grid" }, /* @__PURE__ */ React.createElement(
+        DashboardCard,
+        {
+          module: "goal-system",
+          title: "My Goal System",
+          description: "One focus goal, a weekly action scoreboard, supportive accountability, and saved reviews.",
+          summary: nonEmpty(workbook.goalSystem.goal.title) ? workbook.goalSystem.goal.title + (goalWeekProgress.target ? " · " + goalWeekProgress.completed + " of " + goalWeekProgress.target + " action reps complete this week." : " · Add weekly actions to start scoring the work.") : "Turn the Goal Setting worksheets into one personal plan you can use every week.",
+          history: workbook.goalSystem.reviews.length + " saved weekly " + (workbook.goalSystem.reviews.length === 1 ? "review" : "reviews"),
+          progress: goalProgress.complete,
+          progressTotal: goalProgress.total,
+          buttonLabel: nonEmpty(workbook.goalSystem.goal.title) ? "Open my scoreboard" : "Build my goal system",
+          onOpen: () => openModule("goal-system")
+        }
+      ), /* @__PURE__ */ React.createElement(
         DashboardCard,
         {
           module: "development",

@@ -139,10 +139,13 @@ async function loadMindsetCore() {
   const instrumented = source + `\nObject.assign(window.__mindsetTest, {
     makeEmptyMindsetWorkbook, validateMindsetWorkbook, normalizeMindsetWorkbook,
     baselineStats, gamePlanCompletion, weeklyDraftCompletion, postDraftCompletion,
-    makeWeeklyDraft, makePostMatchDraft, postMatchCurriculumProgress, curriculumProgramProgress,
+    makeWeeklyDraft, makePostMatchDraft, makeGoalAction, makeGoalCurrentWeek, makeGoalSystem,
+    goalWeekStats, goalSystemProgress, goalReviewFromSystem, goalSystemSummary, goalReviewSummary,
+    postMatchCurriculumProgress, curriculumProgramProgress,
     MINDSET_CURRICULUM_LESSONS, MINDSET_CURRICULUM_RESPONSE_KEYS,
     MINDSET_CURRICULUM_CONTEXT, MINDSET_CURRICULUM_UNIT_CONTEXT,
-    MINDSET_MAX_HISTORY_ENTRIES, MINDSET_MAX_TEXT_LENGTH
+    MINDSET_SCHEMA_VERSION, MINDSET_MAX_HISTORY_ENTRIES, MINDSET_MAX_TEXT_LENGTH,
+    MINDSET_MAX_GOAL_ACTIONS, MINDSET_MAX_GOAL_WEEKLY_TARGET, MINDSET_MAX_GOAL_REVIEWS
   });`;
   const context = {
     window: { __mindsetTest: {}, localStorage: { getItem: () => null, setItem() {}, removeItem() {} } },
@@ -177,17 +180,27 @@ async function testWorkbookValidation() {
   const core = await loadMindsetCore();
   const empty = core.makeEmptyMindsetWorkbook();
   assert.equal(core.validateMindsetWorkbook(empty), null);
+  assert.equal(empty.version, 2);
+  assert.equal(empty.goalSystem.actions.length, 0);
+  assert.equal(empty.goalSystem.reviews.length, 0);
   assert.equal(empty.postMatchDraft.checklist.firstMove, false);
 
   const legacyBackup = structuredClone(empty);
+  legacyBackup.version = 1;
+  legacyBackup.baseline.notes["goal-clear"] = "Preserve this version-one response";
   delete legacyBackup.suspendedWeeklyDraft;
   delete legacyBackup.suspendedPostMatchDraft;
   delete legacyBackup.curriculum;
+  delete legacyBackup.goalSystem;
   assert.equal(core.validateMindsetWorkbook(legacyBackup), null);
   const normalizedLegacyBackup = core.normalizeMindsetWorkbook(legacyBackup);
+  assert.equal(normalizedLegacyBackup.version, core.MINDSET_SCHEMA_VERSION);
+  assert.equal(normalizedLegacyBackup.baseline.notes["goal-clear"], "Preserve this version-one response");
   assert.equal(normalizedLegacyBackup.suspendedWeeklyDraft, null);
   assert.equal(normalizedLegacyBackup.suspendedPostMatchDraft, null);
   assert.equal(Object.keys(normalizedLegacyBackup.curriculum.responses).length, 0);
+  assert.equal(normalizedLegacyBackup.goalSystem.actions.length, 0);
+  assert.equal(normalizedLegacyBackup.goalSystem.reviews.length, 0);
 
   const backupWithSuspendedDrafts = structuredClone(empty);
   backupWithSuspendedDrafts.suspendedWeeklyDraft = {
@@ -257,6 +270,139 @@ async function testWorkbookValidation() {
   tooLong.gamePlan.tiePreference = "x".repeat(core.MINDSET_MAX_TEXT_LENGTH + 1);
   assert.match(core.validateMindsetWorkbook(tooLong), /invalid game-plan section/i);
 
+  const goalBackup = structuredClone(empty);
+  const goalAction = {
+    id: "goal-action-1",
+    title: "Drill first-move sequence",
+    category: "technique",
+    weeklyTarget: 3,
+    cue: "After practice Tuesday and Thursday",
+    proof: "Practice-log note",
+  };
+  goalBackup.goalSystem.goal = {
+    title: "Win bottom position",
+    why: "Stay dangerous and dependable late in matches",
+    successDefinition: "Escape within twenty seconds against live resistance",
+    targetDate: "2026-10-31",
+  };
+  goalBackup.goalSystem.actions = [goalAction];
+  goalBackup.goalSystem.currentWeek = {
+    weekOf: "2026-07-20",
+    completions: { [goalAction.id]: 2 },
+    win: "Hit the sequence under pressure",
+    obstacle: "Rushed the hand clear",
+    adjustment: "Slow the first hand movement",
+    checkInCompleted: true,
+  };
+  goalBackup.goalSystem.accountability = {
+    partnerName: "Coach",
+    method: "Text message",
+    reviewDay: "Sunday",
+    reviewTime: "18:00",
+    checkInPrompt: "Ask me what I learned and what I will adjust",
+    resetPlan: "Restart with the next smallest planned action",
+  };
+  const goalReview = core.goalReviewFromSystem(goalBackup.goalSystem, "goal-review-1", "2026-07-20T18:00:00.000Z");
+  goalBackup.goalSystem.reviews = [goalReview];
+  assert.equal(core.validateMindsetWorkbook(goalBackup), null);
+  assert.equal(core.goalWeekStats(goalBackup.goalSystem).percent, 67);
+  assert.equal(core.goalSystemProgress(goalBackup.goalSystem).complete, 10);
+
+  const displayFixtureDate = (value) => {
+    const [year, month, day] = value.split("-").map(Number);
+    return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "numeric" })
+      .format(new Date(year, month - 1, day));
+  };
+  const expectedGoalSummary = [
+    "GOAL CHECK-IN — Week of " + displayFixtureDate("2026-07-20"),
+    "Goal: Win bottom position",
+    "Why it matters: Stay dangerous and dependable late in matches",
+    "Success looks like: Escape within twenty seconds against live resistance",
+    "Target date: " + displayFixtureDate("2026-10-31"),
+    "",
+    "Action score: 2/3 planned reps (67%)",
+    "- Drill first-move sequence: 2/3",
+    "",
+    "Win: Hit the sequence under pressure",
+    "Barrier: Rushed the hand clear",
+    "Next adjustment: Slow the first hand movement",
+    "Accountability check-in shared: Yes",
+    "Next check-in: Sunday · 18:00 · Text message",
+    "With: Coach",
+    "Support request: Ask me what I learned and what I will adjust",
+  ].join("\n");
+  assert.equal(core.goalSystemSummary(goalBackup.goalSystem), expectedGoalSummary);
+  assert.equal(core.goalSystemSummary(goalBackup.goalSystem), expectedGoalSummary);
+  assert.match(core.goalReviewSummary(goalReview), /Action score: 2\/3 planned reps \(67%\)/);
+
+  const duplicateGoalActions = structuredClone(goalBackup);
+  duplicateGoalActions.goalSystem.actions.push({ ...duplicateGoalActions.goalSystem.actions[0] });
+  assert.match(core.validateMindsetWorkbook(duplicateGoalActions), /invalid goal-system section/i);
+
+  const duplicateGoalReviews = structuredClone(goalBackup);
+  duplicateGoalReviews.goalSystem.reviews.push({ ...duplicateGoalReviews.goalSystem.reviews[0] });
+  assert.match(core.validateMindsetWorkbook(duplicateGoalReviews), /invalid goal-system section/i);
+
+  for (const invalidCompletions of [
+    { unknown: 1 },
+    { [goalAction.id]: -1 },
+    { [goalAction.id]: 4 },
+    { [goalAction.id]: 1.5 },
+  ]) {
+    const invalidGoalCount = structuredClone(goalBackup);
+    invalidGoalCount.goalSystem.currentWeek.completions = invalidCompletions;
+    assert.match(core.validateMindsetWorkbook(invalidGoalCount), /invalid goal-system section/i);
+  }
+
+  const excessiveGoalTarget = structuredClone(goalBackup);
+  excessiveGoalTarget.goalSystem.actions[0].weeklyTarget = core.MINDSET_MAX_GOAL_WEEKLY_TARGET + 1;
+  assert.match(core.validateMindsetWorkbook(excessiveGoalTarget), /invalid goal-system section/i);
+
+  const excessiveGoalActions = structuredClone(empty);
+  excessiveGoalActions.goalSystem.actions = Array.from({ length: core.MINDSET_MAX_GOAL_ACTIONS + 1 }, (_, index) => ({
+    ...goalAction,
+    id: "goal-action-limit-" + index,
+  }));
+  assert.match(core.validateMindsetWorkbook(excessiveGoalActions), /invalid goal-system section/i);
+
+  const excessiveGoalReviews = structuredClone(goalBackup);
+  excessiveGoalReviews.goalSystem.reviews = Array.from({ length: core.MINDSET_MAX_GOAL_REVIEWS + 1 }, (_, index) => ({
+    ...goalReview,
+    id: "goal-review-limit-" + index,
+  }));
+  assert.match(core.validateMindsetWorkbook(excessiveGoalReviews), /invalid goal-system section/i);
+
+  const unsafeGoalId = structuredClone(goalBackup);
+  unsafeGoalId.goalSystem.actions[0].id = "__proto__";
+  unsafeGoalId.goalSystem.currentWeek.completions = { ["__proto__"]: 1 };
+  assert.match(core.validateMindsetWorkbook(unsafeGoalId), /invalid goal-system section/i);
+
+  const excessiveGoalShortText = structuredClone(goalBackup);
+  excessiveGoalShortText.goalSystem.actions[0].cue = "x".repeat(181);
+  assert.match(core.validateMindsetWorkbook(excessiveGoalShortText), /invalid goal-system section/i);
+
+  const tooLongGoal = structuredClone(goalBackup);
+  tooLongGoal.goalSystem.goal.why = "x".repeat(core.MINDSET_MAX_TEXT_LENGTH + 1);
+  assert.match(core.validateMindsetWorkbook(tooLongGoal), /invalid goal-system section/i);
+
+  const hiddenGoalData = structuredClone(goalBackup);
+  hiddenGoalData.goalSystem.hidden = "must not survive";
+  hiddenGoalData.goalSystem.goal.hidden = "must not survive";
+  hiddenGoalData.goalSystem.actions[0].hidden = "must not survive";
+  hiddenGoalData.goalSystem.currentWeek.hidden = "must not survive";
+  hiddenGoalData.goalSystem.accountability.hidden = "must not survive";
+  hiddenGoalData.goalSystem.reviews[0].hidden = "must not survive";
+  hiddenGoalData.goalSystem.reviews[0].actions[0].hidden = "must not survive";
+  assert.equal(core.validateMindsetWorkbook(hiddenGoalData), null);
+  const normalizedGoalData = core.normalizeMindsetWorkbook(hiddenGoalData);
+  assert.equal("hidden" in normalizedGoalData.goalSystem, false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.goal, false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.actions[0], false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.currentWeek, false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.accountability, false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.reviews[0], false);
+  assert.equal("hidden" in normalizedGoalData.goalSystem.reviews[0].actions[0], false);
+
   assert.equal(core.MINDSET_CURRICULUM_LESSONS.length, 70);
   const curriculumLessonIds = core.MINDSET_CURRICULUM_LESSONS.map((lesson) => lesson.id);
   const curriculumContextIds = Object.keys(core.MINDSET_CURRICULUM_CONTEXT);
@@ -302,6 +448,7 @@ async function testWorkbookValidation() {
   assert.equal("hidden" in normalized.weeklyDraft, false);
   assert.equal("hidden" in normalized.postMatchDraft, false);
   assert.equal(core.MINDSET_MAX_HISTORY_ENTRIES, 200);
+  assert.equal(core.MINDSET_MAX_GOAL_REVIEWS, 104);
 }
 
 async function waitForServer(url, child) {
@@ -520,7 +667,7 @@ async function testRenderedWorkbook() {
     trace("verified mobile drawer focus");
 
     await click(window, act, window.document.querySelector('[data-testid="mindset-workbook-nav"]'));
-    assert.equal(window.document.querySelectorAll("[data-mindset-module-card]").length, 6);
+    assert.equal(window.document.querySelectorAll("[data-mindset-module-card]").length, 7);
     assert.match(window.document.querySelector(".wb-dashboard-header").textContent, /same browser profile can view them/i);
     trace("opened workbook dashboard");
 
@@ -551,6 +698,66 @@ async function testRenderedWorkbook() {
     await click(window, act, window.document.querySelector(".wb-back-button"));
     assert.ok(window.document.querySelector('[data-testid="mindset-module-card-baseline"]'));
     trace("verified comprehensive development program");
+
+    await click(window, act, window.document.querySelector('[data-testid="mindset-module-card-goal-system"] .wb-primary-button'));
+    assert.ok(window.document.getElementById("wb-goal-system-title"));
+    await change(window, act, window.document.getElementById("wb-goal-title"), "Become dependable from bottom");
+    await change(window, act, window.document.getElementById("wb-goal-why"), "I want a reliable answer late in close matches");
+    await change(window, act, window.document.getElementById("wb-goal-success"), "Escape within twenty seconds against live resistance");
+    await change(window, act, window.document.getElementById("wb-goal-target-date"), "2026-10-31");
+    await click(window, act, window.document.getElementById("wb-goal-add-action"));
+    const goalActionTitle = window.document.querySelector('[id^="wb-goal-action-title-"]');
+    assert.ok(goalActionTitle, "Adding a goal action should render its controls");
+    await change(window, act, goalActionTitle, "Drill first-move sequence");
+    const renderedGoalActionId = goalActionTitle.id.replace("wb-goal-action-title-", "");
+    await change(window, act, window.document.getElementById("wb-goal-action-target-" + renderedGoalActionId), "2");
+    await change(window, act, window.document.getElementById("wb-goal-action-cue-" + renderedGoalActionId), "After practice Tuesday and Thursday");
+    await change(window, act, window.document.getElementById("wb-goal-action-proof-" + renderedGoalActionId), "Practice-log note");
+    await change(window, act, window.document.getElementById("wb-goal-week-of"), "2026-07-20");
+    await change(window, act, window.document.getElementById("wb-goal-week-win"), "Finished the sequence under pressure");
+    await change(window, act, window.document.getElementById("wb-goal-week-obstacle"), "Rushed the hand clear");
+    await change(window, act, window.document.getElementById("wb-goal-week-adjustment"), "Slow the first hand movement");
+    await change(window, act, window.document.getElementById("wb-goal-partner"), "Coach");
+    await change(window, act, window.document.getElementById("wb-goal-method"), "Text message");
+    await change(window, act, window.document.getElementById("wb-goal-review-day"), "Sunday");
+    const incrementGoalAction = [...window.document.querySelectorAll(".wb-goal-count-button")]
+      .find((button) => /Mark one completed rep/.test(button.getAttribute("aria-label") || ""));
+    await click(window, act, incrementGoalAction);
+    const copyCurrentGoal = [...window.document.querySelectorAll(".wb-goal-score-share .wb-secondary-button")]
+      .find((button) => /Copy current check-in/i.test(button.textContent));
+    await click(window, act, copyCurrentGoal);
+    assert.match(window.document.querySelector(".wb-goal-score-share .wb-form-message").textContent, /copied|automatic copy is unavailable/i);
+    await click(window, act, window.document.getElementById("wb-goal-check-in-complete"));
+    assert.match(window.document.getElementById("wb-goal-share-summary").value, /Action score: 1\/2 planned reps \(50%\)/);
+    assert.match(window.document.getElementById("wb-goal-share-summary").value, /Accountability check-in shared: Yes/);
+    const saveGoalReview = [...window.document.querySelectorAll(".wb-goal-scoreboard .wb-primary-button")]
+      .find((button) => /Save weekly review/i.test(button.textContent));
+    await click(window, act, saveGoalReview);
+    assert.equal(window.document.querySelectorAll(".wb-goal-history-card").length, 1);
+    assert.match(window.document.querySelector(".wb-goal-history-card").textContent, /Drill first-move sequence: 1\/2/);
+    assert.match(window.document.querySelector(".wb-goal-history-card").textContent, /SharedYes/);
+    await click(window, act, [...window.document.querySelectorAll(".wb-goal-history-card .wb-secondary-button")].find((button) => /Reopen/i.test(button.textContent)));
+    assert.equal(window.document.querySelectorAll(".wb-goal-history-card").length, 0);
+    assert.equal(window.document.getElementById("wb-goal-week-of").value, "2026-07-20");
+    assert.match(window.document.querySelector(".wb-goal-count output").textContent, /1of 2/);
+    await click(window, act, [...window.document.querySelectorAll(".wb-goal-scoreboard .wb-primary-button")].find((button) => /Save weekly review/i.test(button.textContent)));
+    assert.equal(window.document.querySelectorAll(".wb-goal-history-card").length, 1);
+
+    await click(window, act, window.document.querySelector('.navitem:not(.navitem--workbook)'));
+    const storedGoalSystem = JSON.parse(window.localStorage.getItem("wkb_mindset_workbook_v1"));
+    assert.equal(storedGoalSystem.version, 2);
+    assert.equal(storedGoalSystem.goalSystem.goal.title, "Become dependable from bottom");
+    assert.equal(storedGoalSystem.goalSystem.actions[0].title, "Drill first-move sequence");
+    assert.equal(storedGoalSystem.goalSystem.actions[0].weeklyTarget, 2);
+    assert.equal(storedGoalSystem.goalSystem.accountability.partnerName, "Coach");
+    assert.equal(storedGoalSystem.goalSystem.reviews.length, 1);
+    assert.equal(storedGoalSystem.goalSystem.reviews[0].actions[0].completed, 1);
+    assert.equal(storedGoalSystem.goalSystem.reviews[0].checkInCompleted, true);
+    assert.equal(Object.keys(storedGoalSystem.goalSystem.currentWeek.completions).length, 0);
+    trace("saved goal system and weekly review on fast exit");
+
+    await click(window, act, window.document.querySelector('[data-testid="mindset-workbook-nav"]'));
+    assert.match(window.document.querySelector('[data-testid="mindset-module-card-goal-system"]').textContent, /Become dependable from bottom/);
 
     await click(window, act, window.document.querySelector('[data-testid="mindset-module-card-baseline"] .wb-primary-button'));
     const baselineQuestions = [...window.document.querySelectorAll(".wb-baseline-question")];

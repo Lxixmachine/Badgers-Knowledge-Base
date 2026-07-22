@@ -443,7 +443,8 @@ input,select,textarea{font-family:inherit}
 .wb-dashboard-header>p{max-width:420px;color:var(--tx3);font-size:13px;text-align:right}
 .wb-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .wb-module-card{display:flex;flex-direction:column;gap:16px;min-width:0;padding:21px;border:1px solid var(--line);border-radius:16px;background:var(--surf);box-shadow:var(--card-rest-shadow);transition:border-color .15s,transform .15s,box-shadow .15s}
-.wb-module-card[data-module-card="development"]{grid-column:1/-1;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf) 72%)}
+.wb-module-card[data-module-card="development"],.wb-module-card[data-module-card="goal-system"]{grid-column:1/-1;background:linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--surf)),var(--surf) 72%)}
+.wb-module-card[data-module-card="goal-system"]{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 15%,var(--surf)),var(--surf) 68%)}
 .wb-module-card:hover{border-color:color-mix(in srgb,var(--accent) 38%,var(--line));transform:translateY(-2px);box-shadow:var(--shadow)}
 .wb-module-card-heading{display:flex;align-items:flex-start;gap:13px}
 .wb-module-card-icon{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:11px;background:color-mix(in srgb,var(--accent) 12%,var(--surf2));color:var(--accent-tx)}
@@ -537,6 +538,11 @@ textarea.wb-field-control{min-height:82px}
 .wb-unit-guide>span{display:block;color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
 .wb-unit-guide p{margin-top:4px;color:var(--tx2);font-size:12.5px;line-height:1.5}
 .wb-unit-guide small{display:block;margin-top:7px;color:var(--tx3);font-size:11px;line-height:1.45}
+.wb-goal-curriculum-bridge{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:12px 12px 0;padding:14px 15px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--accent) 8%,var(--bg2))}
+.wb-goal-curriculum-bridge>div{display:flex;min-width:0;flex-direction:column;gap:3px}
+.wb-goal-curriculum-bridge strong{color:var(--tx);font-size:12.5px}
+.wb-goal-curriculum-bridge span{color:var(--tx3);font-size:11.5px;line-height:1.4}
+.wb-goal-curriculum-bridge button{flex-shrink:0}
 .wb-curriculum-lesson-list{display:flex;flex-direction:column;padding:12px}
 .wb-curriculum-lesson-button{width:100%;display:grid;grid-template-columns:82px minmax(0,1fr) auto;align-items:center;gap:13px;padding:13px 10px;border-radius:10px;text-align:left;transition:background .14s,color .14s}
 .wb-curriculum-lesson-button:hover{background:var(--surf2)}
@@ -617,6 +623,72 @@ textarea.wb-field-control{min-height:82px}
 .wb-history-details dt{color:var(--tx3);font-weight:700}
 .wb-history-details dd{color:var(--tx2);white-space:pre-wrap}
 .wb-history-details ol,.wb-history-details ul{padding-left:17px}
+.wb-goal-roadmap{overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:16px;background:linear-gradient(130deg,color-mix(in srgb,var(--accent) 11%,var(--surf)),var(--surf) 66%)}
+.wb-goal-roadmap-heading{display:flex;align-items:center;gap:11px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.wb-goal-roadmap-heading>svg{flex-shrink:0;color:var(--accent-tx)}
+.wb-goal-roadmap h3,.wb-goal-worksheet-link h3,.wb-goal-section-header h3,.wb-goal-section-header h4{font-family:"Oswald",sans-serif;font-size:20px;line-height:1.2;text-transform:uppercase;letter-spacing:.025em}
+.wb-goal-roadmap ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;counter-reset:goal-loop}
+.wb-goal-roadmap li{counter-increment:goal-loop;display:grid;grid-template-columns:31px minmax(0,1fr);gap:4px 10px;min-width:0;padding:18px 20px;border-left:1px solid var(--line)}
+.wb-goal-roadmap li:first-child{border-left:0}
+.wb-goal-roadmap li::before{content:counter(goal-loop);grid-row:1/3;width:29px;height:29px;display:grid;place-items:center;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-family:"Oswald",sans-serif;font-size:13px;font-weight:700}
+.wb-goal-roadmap li strong{color:var(--tx);font-size:13px}
+.wb-goal-roadmap li span{color:var(--tx3);font-size:11.5px;line-height:1.45}
+.wb-goal-worksheet-link{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(290px,.8fr);align-items:center;gap:24px;padding:21px;border:1px solid var(--line);border-radius:16px;background:var(--surf)}
+.wb-goal-worksheet-link>div:first-child>p:last-child{margin-top:5px;color:var(--tx2);font-size:13px;line-height:1.55}
+.wb-goal-worksheet-progress{display:flex;flex-direction:column;gap:13px}
+.wb-goal-section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.wb-goal-section-header>div>p{margin-top:4px;color:var(--tx3);font-size:13px;line-height:1.5}
+.wb-goal-section-header>button{flex-shrink:0}
+.wb-goal-actions{display:flex;flex-direction:column;gap:12px;margin-top:17px}
+.wb-goal-action-card{overflow:hidden;border:1px solid var(--line);border-radius:13px;background:var(--bg2)}
+.wb-goal-action-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--accent) 5%,var(--surf))}
+.wb-goal-action-header>div{display:flex;min-width:0;flex-direction:column;gap:2px}
+.wb-goal-action-header>div>span{color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.wb-goal-action-header>div>strong{overflow:hidden;color:var(--tx);font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.wb-goal-action-header .wb-danger-button{min-height:38px;padding:0 11px}
+.wb-goal-action-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(140px,.65fr) minmax(130px,.5fr);gap:14px;padding:16px}
+.wb-goal-action-grid>.wb-field:nth-child(4){grid-column:1/2}
+.wb-goal-action-grid>.wb-field:nth-child(5){grid-column:2/4}
+.wb-goal-empty-action{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:17px;padding:17px;border:1px dashed var(--line2);border-radius:12px;background:var(--bg2)}
+.wb-goal-empty-action p{color:var(--tx3);font-size:12.5px;line-height:1.5}
+.wb-goal-scoreboard{display:flex;flex-direction:column;gap:18px;border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 7%,var(--surf)),var(--surf) 48%)}
+.wb-goal-active-focus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 32%,var(--line));border-radius:12px;background:var(--bg2)}
+.wb-goal-active-focus>div{display:flex;min-width:0;flex-direction:column;gap:4px;padding:14px 15px;border-left:1px solid var(--line)}
+.wb-goal-active-focus>div:first-child{border-left:0}
+.wb-goal-active-focus span{color:var(--accent-tx);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.wb-goal-active-focus strong{color:var(--tx);font-size:13px;overflow-wrap:anywhere}
+.wb-goal-active-focus small{color:var(--tx3);font-size:11px;line-height:1.4}
+.wb-goal-score-total{display:flex;min-width:112px;flex-direction:column;align-items:flex-end;flex-shrink:0;padding:10px 12px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:11px;background:var(--bg2)}
+.wb-goal-score-total strong{font-family:"Oswald",sans-serif;font-size:21px;color:var(--accent-tx)}
+.wb-goal-score-total span{color:var(--tx3);font-size:10.5px;font-weight:700;text-transform:uppercase}
+.wb-goal-score-list{display:flex;flex-direction:column;gap:9px}
+.wb-goal-score-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.wb-goal-score-copy{display:flex;min-width:0;flex-direction:column;gap:4px}
+.wb-goal-score-copy strong{color:var(--tx);font-size:13.5px;overflow-wrap:anywhere}
+.wb-goal-score-copy span{color:var(--tx3);font-size:11.5px}
+.wb-goal-score-copy progress{width:100%;height:6px;margin-top:3px;overflow:hidden;border:0;border-radius:999px;background:var(--surf2);color:var(--accent);appearance:none}
+.wb-goal-score-copy progress::-webkit-progress-bar{background:var(--surf2)}
+.wb-goal-score-copy progress::-webkit-progress-value{background:var(--accent)}
+.wb-goal-score-copy progress::-moz-progress-bar{background:var(--accent)}
+.wb-goal-count{display:grid;grid-template-columns:44px 56px 44px;align-items:center;gap:6px}
+.wb-goal-count-button{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:10px;background:var(--surf);color:var(--tx);font-size:22px;font-weight:700;transition:border-color .14s,background .14s}
+.wb-goal-count-button:hover:not(:disabled){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surf))}
+.wb-goal-count-button:disabled{opacity:.38;cursor:not-allowed}
+.wb-goal-count>output{display:flex;flex-direction:column;align-items:center;color:var(--tx)}
+.wb-goal-count>output strong{font-family:"Oswald",sans-serif;font-size:19px}
+.wb-goal-count>output small{color:var(--tx3);font-size:9.5px;text-transform:uppercase}
+.wb-goal-review-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0}
+.wb-goal-check{position:relative;display:block;cursor:pointer}
+.wb-goal-check input{position:absolute;opacity:0;pointer-events:none}
+.wb-goal-check span{min-height:48px;display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:10px;background:var(--bg2);color:var(--tx2);font-size:12.5px;font-weight:700}
+.wb-goal-check span svg{width:20px;height:20px;padding:3px;border:1px solid var(--line2);border-radius:6px;color:transparent;flex-shrink:0}
+.wb-goal-check input:checked+span{border-color:color-mix(in srgb,var(--accent) 55%,var(--line2));background:color-mix(in srgb,var(--accent) 12%,var(--surf));color:var(--tx)}
+.wb-goal-check input:checked+span svg{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.wb-goal-check input:focus-visible+span{outline:3px solid color-mix(in srgb,var(--accent) 72%,#fff);outline-offset:3px}
+.wb-goal-share{display:flex;flex-direction:column;gap:17px}
+.wb-goal-score-share{display:flex;flex-direction:column;gap:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+textarea.wb-goal-summary{min-height:250px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:12.5px}
+.wb-goal-history-card .wb-history-details ul{display:flex;flex-direction:column;gap:4px}
 .wb-workbook-footer{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;padding-top:4px}
 .wb-privacy-notice,.wb-data-tools{min-width:0;padding:20px;border:1px solid var(--line);border-radius:15px;background:var(--surf)}
 .wb-privacy-notice{display:flex;align-items:flex-start;gap:12px}
@@ -635,6 +707,10 @@ textarea.wb-field-control{min-height:82px}
   .wb-field-grid-four{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wb-takedown-grid,.wb-check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wb-takedown-card:last-child{grid-column:1/-1}
+  .wb-goal-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wb-goal-action-grid>.wb-field:nth-child(4),.wb-goal-action-grid>.wb-field:nth-child(5){grid-column:auto}
+  .wb-goal-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wb-goal-review-grid>.wb-field:last-child{grid-column:1/-1}
   .wb-workbook-footer{grid-template-columns:1fr}
 }
 
@@ -663,8 +739,21 @@ textarea.wb-field-control{min-height:82px}
   .wb-curriculum-check-grid{grid-template-columns:1fr}
   .wb-takedown-card:last-child{grid-column:auto}
   .wb-quick-readout{position:static}
+  .wb-goal-roadmap ol,.wb-goal-worksheet-link,.wb-goal-action-grid,.wb-goal-review-grid{grid-template-columns:1fr}
+  .wb-goal-roadmap li,.wb-goal-roadmap li:first-child{border-left:0;border-top:1px solid var(--line)}
+  .wb-goal-roadmap li:first-child{border-top:0}
+  .wb-goal-worksheet-link{gap:17px}
+  .wb-goal-review-grid>.wb-field:last-child{grid-column:auto}
+  .wb-goal-active-focus{grid-template-columns:1fr}
+  .wb-goal-active-focus>div,.wb-goal-active-focus>div:first-child{border-left:0;border-top:1px solid var(--line)}
+  .wb-goal-active-focus>div:first-child{border-top:0}
+  .wb-goal-score-row{grid-template-columns:1fr}
+  .wb-goal-count{justify-self:start}
+  .wb-goal-section-header,.wb-goal-empty-action{align-items:flex-start;flex-direction:column}
+  .wb-goal-section-header>button,.wb-goal-empty-action>button{width:100%}
   .wb-workbook-footer{gap:12px}
   .wb-field-control{font-size:16px}
+  textarea.wb-goal-summary{font-size:16px}
 }
 @media(max-width:420px){
   .wb-launch__mark{width:46px;height:46px}
@@ -682,6 +771,12 @@ textarea.wb-field-control{min-height:82px}
   .wb-curriculum-lesson-progress{grid-column:2;justify-self:start}
   .wb-curriculum-pager{grid-template-columns:1fr 1fr}
   .wb-curriculum-pager>span{grid-column:1/-1;grid-row:1}
+  .wb-goal-action-header{align-items:flex-start;flex-direction:column}
+  .wb-goal-action-header .wb-danger-button{width:100%}
+  .wb-goal-curriculum-bridge{align-items:stretch;flex-direction:column}
+  .wb-goal-curriculum-bridge button{width:100%}
+  .wb-goal-score-total{align-items:flex-start;width:100%}
+  .wb-goal-count{width:100%;grid-template-columns:44px minmax(56px,1fr) 44px}
   .wb-privacy-notice{padding:17px}
 }
 @media(prefers-reduced-motion:reduce){
