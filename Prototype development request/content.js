@@ -1,11 +1,11 @@
 // ============================================================
 //  content.js — PUBLISHED Badger Knowledge Base content
-//  Generated 7/2/2026, 12:02:32 PM
+//  Generated 8/17/2026, 10:36:53 AM
 //  Replace this file on your host and re-deploy to update every athlete.
 // ============================================================
 
 window.WKB_PUBLISHED = {
-  "version": "2026-07-02",
+  "version": "2026-08-17",
   "gate": {
     "athlete": "badgers",
     "coach": "coachonly"
@@ -55,6 +55,28 @@ window.WKB_PUBLISHED = {
     }
   ],
   "entries": [
+    {
+      "id": "u-1786981000493",
+      "title": "Mindset by Carol Dweck",
+      "category": "mindset",
+      "level": "Fundamental",
+      "author": "Coach Cassioppi",
+      "tags": [],
+      "films": [],
+      "docs": [
+        {
+          "id": "d1786980960287wtk4",
+          "label": "Mindset by Carol Dweck",
+          "url": "docs/file_1786980998191_9nc8rh.pdf",
+          "fileName": "Mindset by Carol Dweck.pdf"
+        }
+      ],
+      "hasVideo": false,
+      "summary": "Second Book Club Book",
+      "steps": [],
+      "coachNotes": null,
+      "userAdded": true
+    },
     {
       "id": "u-1782943035321",
       "title": "David Taylor vs. Nick Moore 2014 B1G Finals",
